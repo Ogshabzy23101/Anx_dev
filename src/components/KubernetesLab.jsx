@@ -1,16 +1,17 @@
 import { useState } from "react";
 import {
   kubernetesCommandQuiz,
+  kubernetesCategories,
+  kubernetesCommandCatalog,
   kubernetesFlashcards,
   kubernetesManifestPractice,
   kubernetesMultipleChoice,
-  kubernetesReference,
 } from "../data/kubernetes";
 import CommandQuiz from "./CommandQuiz";
 import FilePractice from "./FilePractice";
-import Flashcards from "./Flashcards";
+import LinuxFlashcards from "./LinuxFlashcards";
+import LinuxReference from "./LinuxReference";
 import MultipleChoiceQuiz from "./MultipleChoiceQuiz";
-import Reference from "./Reference";
 
 const modes = [
   { id: "reference", label: "Reference", icon: "01" },
@@ -94,12 +95,29 @@ export default function KubernetesLab({ progress, setProgress, onWrong }) {
       </nav>
 
       <section className="mode-content">
-        {mode === "reference" && <Reference sections={kubernetesReference} />}
+        {mode === "reference" && (
+          <LinuxReference
+            commands={kubernetesCommandCatalog}
+            categories={kubernetesCategories}
+            searchLabel="search Kubernetes resources and explanations"
+            searchPlaceholder="deployments, RBAC, probes, troubleshooting..."
+            itemNoun="Kubernetes topics"
+            emptyMessage="No Kubernetes topics match these filters."
+            syntaxLabel="Syntax or manifest example"
+            flagsLabel="Common fields or flags"
+            examplesLabel="Manifest or kubectl examples"
+            relatedLabel="Related concepts"
+          />
+        )}
         {mode === "flashcards" && (
-          <Flashcards
+          <LinuxFlashcards
             cards={kubernetesFlashcards}
             mastered={progress.kubernetesMasteredFlashcards}
             onToggleMastered={toggleMastered}
+            categories={kubernetesCategories}
+            searchPlaceholder="pods, storage, rollouts, scheduling..."
+            flipLabel="Flip Kubernetes flashcard"
+            emptyMessage="No Kubernetes flashcards match these filters."
           />
         )}
         {mode === "quiz" && (

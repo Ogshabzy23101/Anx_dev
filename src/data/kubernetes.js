@@ -3,9 +3,19 @@ import {
   kubernetesRules as k,
   requiredString,
   requiredYamlKey,
-} from "../utils/kubernetesValidation";
+} from "../utils/kubernetesValidation.js";
+import { kubernetesExtraPractice } from "./kubernetesExtraPractice.js";
 
-export const kubernetesReference = [
+export {
+  kubernetesCategories,
+  kubernetesCommandCatalog,
+  kubernetesCommandQuiz,
+  kubernetesFlashcards,
+  kubernetesMultipleChoice,
+  kubernetesReference,
+} from "./kubernetesCatalog.js";
+
+const legacyKubernetesReference = [
   {
     category: "Cluster fundamentals",
     commands: [
@@ -67,7 +77,7 @@ export const kubernetesReference = [
   },
 ];
 
-export const kubernetesFlashcards = [
+const legacyKubernetesFlashcards = [
   { id: "k8s-fc-pod", front: "What is a Pod?", back: "The smallest Kubernetes deployable unit, wrapping one or more containers that share networking and storage." },
   { id: "k8s-fc-deployment", front: "What is a Deployment?", back: "A controller that manages ReplicaSets and declarative rolling updates for stateless workloads." },
   { id: "k8s-fc-service", front: "What is the purpose of a Service?", back: "It provides stable discovery and networking for a changing set of selected Pods." },
@@ -85,7 +95,7 @@ export const kubernetesFlashcards = [
   { id: "k8s-fc-apply", front: "What does `kubectl apply` do?", back: "It declaratively creates or updates resources from configuration files." },
 ];
 
-export const kubernetesMultipleChoice = [
+const legacyKubernetesMultipleChoice = [
   ["pod-unit", "What is the smallest deployable Kubernetes unit?", ["Container", "Pod", "Node", "ReplicaSet"], 1, "A Pod is Kubernetes' smallest deployable unit."],
   ["deployment-controller", "Which resource manages rolling updates for stateless Pods?", ["Deployment", "Service", "ConfigMap", "Job"], 0, "Deployments manage ReplicaSets and rolling updates."],
   ["replicaset", "What is the primary job of a ReplicaSet?", ["Route traffic", "Maintain a replica count", "Store secrets", "Schedule CronJobs"], 1, "A ReplicaSet maintains the desired number of matching Pods."],
@@ -119,7 +129,7 @@ export const kubernetesMultipleChoice = [
   explanation,
 }));
 
-export const kubernetesCommandQuiz = [
+const legacyKubernetesCommandQuiz = [
   ["pods", "List all Pods in the current namespace.", ["kubectl get pods", "kubectl get po"]],
   ["pods-dev", "List Pods in the `dev` namespace.", ["kubectl get pods -n dev", "kubectl get pods --namespace dev", "kubectl get po -n dev"]],
   ["services", "List Services in the current namespace.", ["kubectl get services", "kubectl get svc"]],
@@ -164,7 +174,7 @@ const apps = (kind, name) => [
   k.metadataName(name),
 ];
 
-export const kubernetesManifestPractice = [
+const baseKubernetesManifestPractice = [
   {
     id: "k8s-yaml-pod",
     title: "Nginx Pod",
@@ -315,4 +325,9 @@ export const kubernetesManifestPractice = [
     explanation: "A CronJob wraps a Job template and adds a cron schedule.",
     rules: [k.apiVersion("batch/v1"), k.kind("CronJob"), k.metadataName("nightly"), k.value("schedule", "0 0 * * *"), k.key("jobTemplate"), k.image("busybox"), k.value("restartPolicy", "OnFailure")],
   },
+];
+
+export const kubernetesManifestPractice = [
+  ...baseKubernetesManifestPractice,
+  ...kubernetesExtraPractice,
 ];

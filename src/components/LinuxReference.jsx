@@ -10,6 +10,10 @@ export default function LinuxReference({
   searchPlaceholder = "grep, networking, disk space...",
   itemNoun = "commands",
   emptyMessage = "No Linux commands match these filters.",
+  syntaxLabel = "Common syntax",
+  flagsLabel = "Common flags",
+  examplesLabel = "Examples",
+  relatedLabel = "Related commands",
 }) {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("all");
@@ -88,15 +92,15 @@ export default function LinuxReference({
                 <p>{item.professionalExplanation}</p>
               </section>
               <section>
-                <h3>Common syntax</h3>
+                <h3>{syntaxLabel}</h3>
                 <code>{item.commonSyntax}</code>
               </section>
               <section>
-                <h3>Common flags</h3>
+                <h3>{flagsLabel}</h3>
                 <p>{item.commonFlags.length ? item.commonFlags.map((flag) => `\`${flag}\``).join(", ") : "No common flags for this shell form."}</p>
               </section>
               <section className="command-examples">
-                <h3>Examples</h3>
+                <h3>{examplesLabel}</h3>
                 {item.examples.map((example) => <code key={example}>{example}</code>)}
               </section>
               <section className="use-case-panel">
@@ -108,7 +112,7 @@ export default function LinuxReference({
                 <p>{item.commonMistake}</p>
               </section>
               <section>
-                <h3>Related commands</h3>
+                <h3>{relatedLabel}</h3>
                 <p>{item.relatedCommands.join(", ")}</p>
               </section>
             </div>

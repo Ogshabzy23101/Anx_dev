@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   kubernetesCommandQuiz,
+  kubernetesCommandCatalog,
   kubernetesFlashcards,
   kubernetesManifestPractice,
   kubernetesMultipleChoice,
@@ -13,10 +14,27 @@ import {
 
 describe("Kubernetes learning data", () => {
   it("contains the required content volume", () => {
-    expect(kubernetesFlashcards).toHaveLength(15);
-    expect(kubernetesMultipleChoice.length).toBeGreaterThanOrEqual(25);
-    expect(kubernetesCommandQuiz.length).toBeGreaterThanOrEqual(25);
-    expect(kubernetesManifestPractice).toHaveLength(15);
+    expect(kubernetesCommandCatalog).toHaveLength(126);
+    expect(kubernetesFlashcards).toHaveLength(126);
+    expect(kubernetesMultipleChoice).toHaveLength(126);
+    expect(kubernetesCommandQuiz).toHaveLength(126);
+    expect(kubernetesManifestPractice).toHaveLength(35);
+
+    kubernetesCommandCatalog.forEach((item) => {
+      expect(item).toEqual(expect.objectContaining({
+        command: expect.any(String),
+        fullMeaning: expect.any(String),
+        basicExplanation: expect.any(String),
+        professionalExplanation: expect.any(String),
+        commonSyntax: expect.any(String),
+        commonFlags: expect.any(Array),
+        examples: expect.any(Array),
+        devOpsUseCase: expect.any(String),
+        commonMistake: expect.any(String),
+        relatedCommands: expect.any(Array),
+        difficulty: expect.stringMatching(/beginner|intermediate|advanced/),
+      }));
+    });
   });
 
   it("covers the required reference topics", () => {
@@ -75,5 +93,38 @@ describe("Kubernetes learning data", () => {
         "container image: nginx",
       ]),
     );
+  });
+
+  it("detects missing RBAC binding requirements", () => {
+    const task = kubernetesManifestPractice.find(
+      (item) => item.id === "k8s-yaml-clusterrolebinding",
+    );
+    const validation = validatePracticeAnswer(
+      "apiVersion: rbac.authorization.k8s.io/v1\nkind: ClusterRoleBinding\nmetadata:\n  name: node-readers\n",
+      task.rules,
+    );
+
+    expect(validation.missing).toEqual(expect.arrayContaining([
+      "subjects:",
+      "Group subject",
+      "subject name: platform",
+      "roleRef:",
+      "ClusterRole reference",
+    ]));
+  });
+
+  it("validates Service and Ingress semantics independently", () => {
+    const service = kubernetesManifestPractice.find(
+      (item) => item.id === "k8s-yaml-loadbalancer",
+    );
+    const ingress = kubernetesManifestPractice.find(
+      (item) => item.id === "k8s-yaml-ingress",
+    );
+
+    expect(validatePracticeAnswer(service.solution, service.rules).isCorrect).toBe(true);
+    expect(validatePracticeAnswer(
+      ingress.solution.replace("path: /api", "path: /wrong"),
+      ingress.rules,
+    ).missing).toContain("ingress path: /api");
   });
 });

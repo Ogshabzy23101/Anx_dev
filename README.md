@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/Ogshabzy23101/Anx_dev/actions/workflows/ci.yml/badge.svg)](https://github.com/Ogshabzy23101/Anx_dev/actions/workflows/ci.yml)
 
-A dark, terminal-inspired React learning app for building hands-on DevOps skills. Phase 9 includes enriched Linux and Docker curricula alongside complete Kubernetes, Helm, Terraform, and Ansible modules, enhanced correction feedback, automated tests, and continuous integration.
+A dark, terminal-inspired React learning app for building hands-on DevOps skills. Phase 10 includes enriched Linux, Docker, and Kubernetes curricula alongside complete Helm, Terraform, and Ansible modules, enhanced correction feedback, automated tests, and continuous integration.
 
 Live site: [https://ogshabzy23101.github.io/Anx_dev/](https://ogshabzy23101.github.io/Anx_dev/)
 
@@ -17,8 +17,9 @@ Live site: [https://ogshabzy23101.github.io/Anx_dev/](https://ogshabzy23101.gith
 - Searchable Docker reference with 80 entries across 20 categories
 - 80 structured Docker flashcards, MCQs, and command/configuration challenges
 - 25 Dockerfile, `.dockerignore`, and Compose exercises with requirement-based validation
-- Complete Kubernetes reference, flashcards, MCQ, and kubectl command practice
-- Fifteen Kubernetes manifest exercises with YAML-aware requirement checks
+- Searchable Kubernetes reference with 126 entries across 42 categories
+- 126 structured Kubernetes flashcards, MCQs, and kubectl challenges
+- 35 Kubernetes manifest exercises with YAML-aware requirement checks
 - Complete Helm reference, flashcards, MCQ, and command practice
 - Fifteen Helm chart, values, and Go-template writing exercises
 - Complete Terraform reference, flashcards, MCQ, and CLI command practice
@@ -64,7 +65,7 @@ Run tests in watch mode while developing:
 npm run test:watch
 ```
 
-Tests use Vitest, React Testing Library, `user-event`, and the jsdom browser environment. The current suite contains **83 tests across 24 test files**.
+Tests use Vitest, React Testing Library, `user-event`, and the jsdom browser environment. The current suite contains **89 tests across 25 test files**.
 
 ## Linux enrichment
 
@@ -103,14 +104,15 @@ Docker reference and flashcard views support full-text search, category filters,
 
 ## Kubernetes module
 
-The Kubernetes module follows the same learning loop as Linux and Docker:
+Phase 10 applies the enriched Linux and Docker learning pattern to Kubernetes:
 
-- Reference material for cluster architecture, workloads, networking, storage, configuration, RBAC, and kubectl workflows
-- Fifteen flashcards
-- Twenty-five multiple-choice questions
-- Twenty-five kubectl command-writing challenges with accepted aliases and long-form alternatives
-- Fifteen beginner-to-intermediate manifest exercises
+- **126 reference entries** across 42 categories covering architecture, workloads, networking, storage, RBAC, probes, scheduling, scaling, rollouts, troubleshooting, kubectl, and DevOps workflows
+- **126 flashcards** with basic and professional explanations, examples, DevOps use cases, related concepts, categories, and difficulty levels
+- **126 multiple-choice questions** and **126 kubectl command-writing challenges**
+- **35 manifest exercises** covering core workloads, every major Service type, Ingress, storage, RBAC, probes, resources, HPA, init and sidecar containers, configuration injection, ServiceMonitor, NetworkPolicy, and a three-tier application
 - Independent local progress for mastered cards, best MCQ score, kubectl score, completed manifests, and module completion
+
+Kubernetes reference and flashcard views support full-text search, category and difficulty filters, expandable resource cards, manifest or kubectl examples, common mistakes, and DevOps use cases.
 
 ### Kubernetes YAML validation
 
@@ -362,12 +364,12 @@ src/
 
 To add another tool, create a new data module under `src/data`, build its lab component, and connect it to the tool registry and app shell.
 
-## Phase 10
+## Phase 11
 
-Phase 10 should enrich the Kubernetes module using the Linux and Docker depth as the model:
+Phase 11 should enrich the Helm module using the Linux, Docker, and Kubernetes depth as the model:
 
-- Expand Kubernetes reference, flashcards, MCQs, and kubectl challenge banks
-- Add searchable workload, networking, storage, RBAC, operations, and troubleshooting categories
-- Add progressive manifest exercises and richer semantic YAML feedback
-- Add production rollout, probes, resource, scheduling, and incident scenarios
+- Expand Helm reference, flashcards, MCQs, and command-writing banks
+- Add searchable chart, values, templates, release, repository, and troubleshooting categories
+- Add progressive chart exercises using the enriched Kubernetes manifests as a base
+- Add deeper helpers, functions, dependencies, hooks, tests, and packaging workflows
 - Preserve independent progress and GitHub Pages deployment behavior
