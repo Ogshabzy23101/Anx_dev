@@ -2,18 +2,18 @@
 
 [![CI](https://github.com/Ogshabzy23101/Anx_dev/actions/workflows/ci.yml/badge.svg)](https://github.com/Ogshabzy23101/Anx_dev/actions/workflows/ci.yml)
 
-A dark, terminal-inspired React learning app for building hands-on DevOps skills. Phase 7 includes complete Linux, Docker, Kubernetes, Helm, Terraform, and Ansible modules, enhanced correction feedback, automated tests, and continuous integration.
+A dark, terminal-inspired React learning app for building hands-on DevOps skills. Phase 8 includes an enriched Linux curriculum alongside complete Docker, Kubernetes, Helm, Terraform, and Ansible modules, enhanced correction feedback, automated tests, and continuous integration.
 
 Live site: [https://ogshabzy23101.github.io/Anx_dev/](https://ogshabzy23101.github.io/Anx_dev/)
 
 ## Features
 
-- Linux command reference
-- Masterable flashcards
-- Multiple-choice quiz with saved best score
-- Command-writing challenges with alternative accepted answers
+- Searchable Linux reference with 108 commands across 18 categories
+- 108 structured Linux flashcards with difficulty and category filters
+- 108-question Linux multiple-choice bank with saved best score
+- 108 Linux command-writing challenges with accepted alternatives
 - Correction popups with explanations
-- Interactive Linux shell script editor with validation
+- 25 interactive Linux shell script exercises with requirement-based validation
 - Complete Docker reference, flashcards, quizzes, and progress tracking
 - Docker command-writing challenges with accepted alternatives
 - Dockerfile and `.dockerignore` practice with requirement-based validation
@@ -64,7 +64,18 @@ Run tests in watch mode while developing:
 npm run test:watch
 ```
 
-Tests use Vitest, React Testing Library, `user-event`, and the jsdom browser environment. The current suite contains **69 tests across 21 test files**.
+Tests use Vitest, React Testing Library, `user-event`, and the jsdom browser environment. The current suite contains **77 tests across 23 test files**.
+
+## Linux enrichment
+
+Phase 8 makes Linux the deepest learning module in the app:
+
+- **108 reference commands** spanning navigation, files, text processing, search, permissions, identities, processes, monitoring, storage, networking, packages, services, archives, SSH, shell environments, Bash, and troubleshooting
+- **108 flashcards** with beginner and professional explanations, examples, DevOps use cases, related concepts, categories, and difficulty levels
+- **108 multiple-choice questions** and **108 command-writing challenges**
+- **25 script exercises** covering variables, conditions, loops, logs, disk and service checks, HTTP health checks, permissions, archives, user creation, ports, deployment, environment variables, functions, and cleanup traps
+
+Reference commands are presented as expandable cards so detailed explanations remain easy to scan. Linux reference and flashcard views support full-text search plus category and difficulty filtering. Existing module progress remains stored in `localStorage`.
 
 ## Practice validation
 
@@ -351,15 +362,12 @@ src/
 
 To add another tool, create a new data module under `src/data`, build its lab component, and connect it to the tool registry and app shell.
 
-## Phase 8
+## Phase 9
 
-Phase 8 should enrich the Linux module with:
+Phase 9 should enrich the Docker module using the Linux depth as the model:
 
-- Expanded process, networking, storage, users, permissions, services, and troubleshooting content
-- More realistic shell pipelines and command alternatives
-- Bash scripting exercises covering functions, arguments, loops, exit codes, and signals
-- File-system debugging and log-analysis scenarios
-- Larger randomized question banks and progressive difficulty
-- Per-module completion states, streaks, and achievements
-- Accessibility and cross-browser testing
-- Deployment automation and preview environments
+- Expand the Docker reference, flashcards, and quiz banks
+- Add image-layer, cache, registry, Compose, networking, and production troubleshooting scenarios
+- Add progressive Dockerfile and `.dockerignore` exercises
+- Add searchable categories and difficulty filters
+- Preserve independent progress and requirement-based feedback

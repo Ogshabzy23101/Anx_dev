@@ -1,16 +1,16 @@
 import { useState } from "react";
 import {
   linuxCommandQuiz,
+  linuxCommandCatalog,
   linuxFlashcards,
   linuxMultipleChoice,
-  linuxReference,
 } from "../data/linux";
 import { linuxShellPractice } from "../data/linuxPractice";
 import CommandQuiz from "./CommandQuiz";
 import FilePractice from "./FilePractice";
-import Flashcards from "./Flashcards";
+import LinuxFlashcards from "./LinuxFlashcards";
+import LinuxReference from "./LinuxReference";
 import MultipleChoiceQuiz from "./MultipleChoiceQuiz";
-import Reference from "./Reference";
 
 const modes = [
   { id: "reference", label: "Reference", icon: "01" },
@@ -87,9 +87,9 @@ export default function LinuxLab({ progress, setProgress, onWrong }) {
       </nav>
 
       <section className="mode-content">
-        {mode === "reference" && <Reference sections={linuxReference} />}
+        {mode === "reference" && <LinuxReference commands={linuxCommandCatalog} />}
         {mode === "flashcards" && (
-          <Flashcards
+          <LinuxFlashcards
             cards={linuxFlashcards}
             mastered={progress.masteredFlashcards}
             onToggleMastered={toggleMastered}
