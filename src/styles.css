@@ -811,6 +811,12 @@ main {
   color: var(--muted);
 }
 
+.modal-explanation {
+  padding: 10px 12px;
+  border-left: 2px solid var(--amber);
+  background: #18150e;
+}
+
 .modal-actions {
   display: flex;
   flex-wrap: wrap;

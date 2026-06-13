@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/Ogshabzy23101/Anx_dev/actions/workflows/ci.yml/badge.svg)](https://github.com/Ogshabzy23101/Anx_dev/actions/workflows/ci.yml)
 
-A dark, terminal-inspired React learning app for building hands-on DevOps skills. Phase 3 includes complete Linux and Docker learning modules, interactive file practice, automated tests, and continuous integration.
+A dark, terminal-inspired React learning app for building hands-on DevOps skills. Phase 4 includes complete Linux, Docker, and Kubernetes modules, interactive file practice, automated tests, and continuous integration.
 
 Live site: [https://ogshabzy23101.github.io/Anx_dev/](https://ogshabzy23101.github.io/Anx_dev/)
 
@@ -17,6 +17,8 @@ Live site: [https://ogshabzy23101.github.io/Anx_dev/](https://ogshabzy23101.gith
 - Complete Docker reference, flashcards, quizzes, and progress tracking
 - Docker command-writing challenges with accepted alternatives
 - Dockerfile and `.dockerignore` practice with requirement-based validation
+- Complete Kubernetes reference, flashcards, MCQ, and kubectl command practice
+- Fifteen Kubernetes manifest exercises with YAML-aware requirement checks
 - Retry, solution reveal, and side-by-side answer comparison
 - Success and correction modals
 - Local progress persistence via `localStorage`
@@ -55,7 +57,7 @@ Run tests in watch mode while developing:
 npm run test:watch
 ```
 
-Tests use Vitest, React Testing Library, `user-event`, and the jsdom browser environment.
+Tests use Vitest, React Testing Library, `user-event`, and the jsdom browser environment. The current suite contains **34 tests across 11 test files**.
 
 ## Practice validation
 
@@ -67,7 +69,7 @@ Practice tasks are defined in `src/data/linuxPractice.js`. Each task provides:
 
 The validator checks whether every required element appears in the learner's answer. It does not require an exact full-text match, so formatting differences and valid extra commands are accepted. For example, the file-existence exercise checks independently for `if`, `-f app.log`, `then`, and `fi`.
 
-The editor component receives its tasks as data. Linux shell tasks live in `src/data/linuxPractice.js`, while all Docker learning and practice content lives independently in `src/data/docker.js`. Future Compose, Kubernetes YAML, Terraform HCL, Ansible YAML, and Helm values exercises can use the same workflow with tool-specific rules.
+The editor component receives its tasks as data. Linux shell tasks live in `src/data/linuxPractice.js`, Docker content lives in `src/data/docker.js`, and Kubernetes content lives independently in `src/data/kubernetes.js`. Future Compose, Terraform HCL, Ansible YAML, and Helm values exercises can use the same workflow with tool-specific rules.
 
 ## Docker module
 
@@ -80,6 +82,65 @@ The Docker module mirrors the Linux learning flow:
 - Independent local progress for mastered cards, best quiz score, solved commands, and completed files
 
 Dockerfile answers are checked by required instructions and patterns rather than exact text, allowing valid formatting and implementation variations.
+
+## Kubernetes module
+
+The Kubernetes module follows the same learning loop as Linux and Docker:
+
+- Reference material for cluster architecture, workloads, networking, storage, configuration, RBAC, and kubectl workflows
+- Fifteen flashcards
+- Twenty-five multiple-choice questions
+- Twenty-five kubectl command-writing challenges with accepted aliases and long-form alternatives
+- Fifteen beginner-to-intermediate manifest exercises
+- Independent local progress for mastered cards, best MCQ score, kubectl score, completed manifests, and module completion
+
+### Kubernetes YAML validation
+
+Kubernetes tasks use reusable helpers from `src/utils/kubernetesValidation.js`. The validator remains intentionally lightweight: it does not parse a complete Kubernetes object model, but it understands common manifest requirements such as:
+
+- Required YAML keys and strings
+- `apiVersion` and `kind`
+- `metadata.name`
+- `spec.replicas`
+- Container images
+- Service `port` and `targetPort`
+- Ingress paths
+- RBAC verbs
+
+Rules can use regular expressions or custom test functions, leaving a clear path to a full YAML parser and schema validation later. Formatting differences, comments, and valid additional fields are accepted as long as the required semantics are present.
+
+Example Deployment exercise:
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: nginx
+          image: nginx
+```
+
+An incorrect answer opens a correction modal with missing requirements, a short explanation, the expected solution, side-by-side comparison, Retry, and Show solution actions.
+
+## Modules
+
+| Module | Status | Practice format |
+| --- | --- | --- |
+| Linux | Complete | Bash scripts |
+| Docker | Complete | Dockerfile and `.dockerignore` |
+| Kubernetes | Complete | Kubernetes YAML manifests |
+| Terraform, Ansible, Helm, CI/CD, AWS, Observability | Planned | To be added |
 
 ## Continuous integration
 
@@ -138,14 +199,15 @@ src/
 
 To add another tool, create a new data module under `src/data`, build its lab component, and connect it to the tool registry and app shell.
 
-## Phase 4
+## Phase 5
 
-Phase 4 should add:
+Phase 5 should add:
 
-- A complete Kubernetes learning module
-- Kubernetes manifest practice for Pods, Deployments, Services, ConfigMaps, and Ingress
-- YAML-aware structural validation with useful field-level feedback
-- Docker Compose practice and multi-container scenarios
+- A complete Helm module using Kubernetes manifests as its foundation
+- Chart structure, templates, values, release lifecycle, and repository commands
+- `values.yaml` and Go-template writing exercises
+- Rendered-manifest comparison and validation
+- Reuse of Kubernetes kinds, selectors, Services, Ingress, RBAC, and workload concepts
 - Larger randomized question banks
 - Per-module completion states, streaks, and achievements
 - Accessibility and cross-browser testing

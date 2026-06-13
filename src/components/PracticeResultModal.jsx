@@ -31,6 +31,9 @@ export default function PracticeResultModal({
             ? "Your answer contains all required parts."
             : `Missing: ${result.missing.join(", ")}.`}
         </p>
+        {!isSuccess && result.explanation && (
+          <p className="modal-explanation">{result.explanation}</p>
+        )}
 
         <div className="answer-comparison">
           <div>

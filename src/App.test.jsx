@@ -18,3 +18,24 @@ describe("Docker module", () => {
     });
   });
 });
+
+describe("Kubernetes module", () => {
+  it("is available and persists independent flashcard progress", async () => {
+    render(<App />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Kubernetes" }));
+    expect(
+      screen.getByRole("heading", { name: "Kubernetes operations" }),
+    ).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Flashcards" }));
+    fireEvent.click(screen.getByRole("button", { name: "Mark mastered" }));
+
+    await waitFor(() => {
+      const progress = JSON.parse(localStorage.getItem("devops-lab-progress-v1"));
+      expect(progress.kubernetesMasteredFlashcards).toEqual(["k8s-fc-pod"]);
+      expect(progress.dockerMasteredFlashcards).toEqual([]);
+      expect(progress.masteredFlashcards).toEqual([]);
+    });
+  });
+});

@@ -9,6 +9,7 @@ export default function FilePractice({
   labLabel = "shell script lab",
   editorLabel = "Shell script answer",
   resultNoun = "Script",
+  submitLabel = "Validate script",
 }) {
   const [index, setIndex] = useState(0);
   const [answer, setAnswer] = useState(tasks[0].starter);
@@ -27,6 +28,7 @@ export default function FilePractice({
     const nextResult = {
       type: validation.isCorrect ? "success" : "error",
       missing: validation.missing,
+      explanation: task.explanation,
     };
 
     setResult(nextResult);
@@ -90,7 +92,7 @@ export default function FilePractice({
         />
         <div className="editor-actions">
           <button className="primary-button" type="button" onClick={submit} disabled={!answer.trim()}>
-            Validate script
+            {submitLabel}
           </button>
           <button className="ghost-button" type="button" onClick={retry}>
             Retry

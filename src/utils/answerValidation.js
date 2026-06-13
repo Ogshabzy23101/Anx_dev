@@ -15,7 +15,10 @@ export function isCommandCorrect(answer, acceptedAnswers) {
 
 export function validatePracticeAnswer(answer, rules) {
   const missing = rules
-    .filter((rule) => !rule.pattern.test(answer))
+    .filter((rule) => {
+      if (rule.test) return !rule.test(answer);
+      return !rule.pattern.test(answer);
+    })
     .map((rule) => rule.label);
 
   return {

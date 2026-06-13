@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import CorrectionModal from "./components/CorrectionModal";
 import DockerLab from "./components/DockerLab";
+import KubernetesLab from "./components/KubernetesLab";
 import LinuxLab from "./components/LinuxLab";
 import ProgressBar from "./components/ProgressBar";
 import {
@@ -10,8 +11,14 @@ import {
 } from "./data/docker";
 import { linuxCommandQuiz, linuxFlashcards } from "./data/linux";
 import { linuxShellPractice } from "./data/linuxPractice";
+import {
+  kubernetesCommandQuiz,
+  kubernetesFlashcards,
+  kubernetesManifestPractice,
+} from "./data/kubernetes";
 import { tools } from "./data/tools";
 import { useLocalStorage } from "./hooks/useLocalStorage";
+import { calculateModuleProgress } from "./utils/progress";
 
 const initialProgress = {
   masteredFlashcards: [],
@@ -22,6 +29,11 @@ const initialProgress = {
   dockerQuizScore: 0,
   dockerCompletedCommands: [],
   dockerCompletedPractices: [],
+  kubernetesMasteredFlashcards: [],
+  kubernetesQuizScore: 0,
+  kubernetesCompletedCommands: [],
+  kubernetesCommandScore: 0,
+  kubernetesCompletedManifests: [],
 };
 
 export default function App() {
@@ -30,31 +42,67 @@ export default function App() {
   const [progress, setProgress] = useLocalStorage("devops-lab-progress-v1", initialProgress);
 
   const moduleProgress = useMemo(() => {
-    const linux = (
-      progress.masteredFlashcards.length / linuxFlashcards.length +
-      progress.quizScore / 100 +
-      progress.completedCommands.length / linuxCommandQuiz.length +
-      progress.completedPractices.length / linuxShellPractice.length
-    ) / 4 * 100;
+    const linux = calculateModuleProgress({
+      masteredCount: progress.masteredFlashcards.length,
+      flashcardTotal: linuxFlashcards.length,
+      quizScore: progress.quizScore,
+      completedCommandCount: progress.completedCommands.length,
+      commandTotal: linuxCommandQuiz.length,
+      completedPracticeCount: progress.completedPractices.length,
+      practiceTotal: linuxShellPractice.length,
+    });
 
-    const docker = (
-      progress.dockerMasteredFlashcards.length / dockerFlashcards.length +
-      progress.dockerQuizScore / 100 +
-      progress.dockerCompletedCommands.length / dockerCommandQuiz.length +
-      progress.dockerCompletedPractices.length / dockerFilePractice.length
-    ) / 4 * 100;
+    const docker = calculateModuleProgress({
+      masteredCount: progress.dockerMasteredFlashcards.length,
+      flashcardTotal: dockerFlashcards.length,
+      quizScore: progress.dockerQuizScore,
+      completedCommandCount: progress.dockerCompletedCommands.length,
+      commandTotal: dockerCommandQuiz.length,
+      completedPracticeCount: progress.dockerCompletedPractices.length,
+      practiceTotal: dockerFilePractice.length,
+    });
 
-    return { linux, docker };
+    const kubernetes = calculateModuleProgress({
+      masteredCount: progress.kubernetesMasteredFlashcards.length,
+      flashcardTotal: kubernetesFlashcards.length,
+      quizScore: progress.kubernetesQuizScore,
+      completedCommandCount: progress.kubernetesCompletedCommands.length,
+      commandTotal: kubernetesCommandQuiz.length,
+      completedPracticeCount: progress.kubernetesCompletedManifests.length,
+      practiceTotal: kubernetesManifestPractice.length,
+    });
+
+    return { linux, docker, kubernetes };
   }, [progress]);
 
   const activeToolData = tools.find((tool) => tool.id === activeTool);
-  const trackedTool = activeTool === "docker" ? "docker" : "linux";
-  const trackedCards = trackedTool === "docker"
-    ? progress.dockerMasteredFlashcards.length
-    : progress.masteredFlashcards.length;
-  const trackedScore = trackedTool === "docker"
-    ? progress.dockerQuizScore
-    : progress.quizScore;
+  const trackedTool = ["linux", "docker", "kubernetes"].includes(activeTool)
+    ? activeTool
+    : "linux";
+  const progressSummary = {
+    linux: {
+      label: "Linux",
+      cards: progress.masteredFlashcards.length,
+      score: progress.quizScore,
+      commandScore: Math.round(
+        progress.completedCommands.length / linuxCommandQuiz.length * 100,
+      ),
+    },
+    docker: {
+      label: "Docker",
+      cards: progress.dockerMasteredFlashcards.length,
+      score: progress.dockerQuizScore,
+      commandScore: Math.round(
+        progress.dockerCompletedCommands.length / dockerCommandQuiz.length * 100,
+      ),
+    },
+    kubernetes: {
+      label: "Kubernetes",
+      cards: progress.kubernetesMasteredFlashcards.length,
+      score: progress.kubernetesQuizScore,
+      commandScore: progress.kubernetesCommandScore,
+    },
+  }[trackedTool];
 
   return (
     <div className="app-shell">
@@ -85,7 +133,7 @@ export default function App() {
                   {activeTool === tool.id ? ">" : "$"}
                 </span>
                 {tool.label}
-                {!["linux", "docker"].includes(tool.id) && (
+                {!["linux", "docker", "kubernetes"].includes(tool.id) && (
                   <span className="lock-mark" aria-hidden="true">soon</span>
                 )}
               </button>
@@ -94,9 +142,12 @@ export default function App() {
           <div className="sidebar-progress">
             <ProgressBar
               value={moduleProgress[trackedTool]}
-              label={`${trackedTool === "docker" ? "Docker" : "Linux"} progress`}
+              label={`${progressSummary.label} progress`}
             />
-            <p>{trackedCards} cards · {trackedScore}% best quiz</p>
+            <p>
+              {progressSummary.cards} cards · {progressSummary.score}% MCQ ·{" "}
+              {progressSummary.commandScore}% commands
+            </p>
           </div>
         </aside>
 
@@ -105,6 +156,8 @@ export default function App() {
             <LinuxLab progress={progress} setProgress={setProgress} onWrong={setCorrection} />
           ) : activeTool === "docker" ? (
             <DockerLab progress={progress} setProgress={setProgress} onWrong={setCorrection} />
+          ) : activeTool === "kubernetes" ? (
+            <KubernetesLab progress={progress} setProgress={setProgress} onWrong={setCorrection} />
           ) : (
             <section className="empty-tool">
               <div className="terminal-card">
