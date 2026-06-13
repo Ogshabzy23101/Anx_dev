@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/Ogshabzy23101/Anx_dev/actions/workflows/ci.yml/badge.svg)](https://github.com/Ogshabzy23101/Anx_dev/actions/workflows/ci.yml)
 
-A dark, terminal-inspired React learning app for building hands-on DevOps skills. Phase 6 includes complete Linux, Docker, Kubernetes, Helm, and Terraform modules, enhanced correction feedback, automated tests, and continuous integration.
+A dark, terminal-inspired React learning app for building hands-on DevOps skills. Phase 7 includes complete Linux, Docker, Kubernetes, Helm, Terraform, and Ansible modules, enhanced correction feedback, automated tests, and continuous integration.
 
 Live site: [https://ogshabzy23101.github.io/Anx_dev/](https://ogshabzy23101.github.io/Anx_dev/)
 
@@ -23,6 +23,8 @@ Live site: [https://ogshabzy23101.github.io/Anx_dev/](https://ogshabzy23101.gith
 - Fifteen Helm chart, values, and Go-template writing exercises
 - Complete Terraform reference, flashcards, MCQ, and CLI command practice
 - Fifteen Terraform HCL exercises with block and attribute validation
+- Complete Ansible reference, flashcards, MCQ, and command practice
+- Fifteen Ansible playbook and YAML exercises
 - UX-001 feedback showing correct sections, missing sections, expected values, and user values
 - Retry, solution reveal, and side-by-side answer comparison
 - Success and correction modals
@@ -62,7 +64,7 @@ Run tests in watch mode while developing:
 npm run test:watch
 ```
 
-Tests use Vitest, React Testing Library, `user-event`, and the jsdom browser environment. The current suite contains **59 tests across 18 test files**.
+Tests use Vitest, React Testing Library, `user-event`, and the jsdom browser environment. The current suite contains **69 tests across 21 test files**.
 
 ## Practice validation
 
@@ -74,7 +76,7 @@ Practice tasks are defined in `src/data/linuxPractice.js`. Each task provides:
 
 The validator checks whether every required element appears in the learner's answer. It does not require an exact full-text match, so formatting differences and valid extra commands are accepted. For example, the file-existence exercise checks independently for `if`, `-f app.log`, `then`, and `fi`.
 
-The editor component receives its tasks as data. Linux shell tasks live in `src/data/linuxPractice.js`, Docker content lives in `src/data/docker.js`, Kubernetes content lives in `src/data/kubernetes.js`, Helm content lives in `src/data/helm.js`, and Terraform content lives independently in `src/data/terraform.js`. Future Compose and Ansible YAML exercises can use the same workflow with tool-specific rules.
+The editor component receives its tasks as data. Linux shell tasks live in `src/data/linuxPractice.js`; Docker, Kubernetes, Helm, Terraform, and Ansible content each live in their own data modules. Future formats can use the same workflow with tool-specific rules.
 
 ## Docker module
 
@@ -235,6 +237,51 @@ Correction dialogs now provide structured feedback across Linux, Docker, Kuberne
 
 Command feedback compares expected and submitted command tokens. File feedback uses each exercise's declarative validation rules, so every module receives the same diagnostics without duplicating modal logic.
 
+## Ansible module
+
+The Ansible module provides:
+
+- Reference material for control and managed nodes, inventories, playbooks, tasks, modules, variables, facts, handlers, roles, Vault, Galaxy, and idempotency
+- Twenty flashcards
+- Thirty multiple-choice questions
+- Twenty-five Ansible command challenges with accepted long flags and aliases
+- Fifteen YAML exercises covering plays, packages, services, files, variables, handlers, loops, conditions, registered output, roles, group variables, templates, and fully qualified module names
+- Independent local progress for mastered cards, best MCQ score, command score, completed playbooks, and module completion
+
+### Ansible validation
+
+Ansible exercises use helpers from `src/utils/ansibleValidation.js`. Validation checks required YAML and automation concepts without requiring an exact full-text match:
+
+- Play targets through `hosts`
+- Privilege escalation through `become`
+- Task and handler sections
+- Short and `ansible.builtin` module names
+- Package names and service states
+- `notify`, variables, loops, conditions, registration, and debug output
+- Role structure and group variable files
+
+Example nginx playbook:
+
+```yaml
+---
+- hosts: web
+  become: true
+  tasks:
+    - name: Install nginx
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+        update_cache: true
+
+    - name: Start nginx
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: true
+```
+
+Invalid playbooks receive UX-001 requirement diagnostics, expected and submitted values, an explanation, side-by-side comparison, Retry, and Show solution controls.
+
 ## Modules
 
 | Module | Status | Practice format |
@@ -244,7 +291,8 @@ Command feedback compares expected and submitted command tokens. File feedback u
 | Kubernetes | Complete | Kubernetes YAML manifests |
 | Helm | Complete | Charts, values, and Go templates |
 | Terraform | Complete | Terraform HCL |
-| Ansible, CI/CD, AWS, Observability | Planned | To be added |
+| Ansible | Complete | Playbooks, roles, and YAML |
+| CI/CD, AWS, Observability | Planned | To be added |
 
 ## Continuous integration
 
@@ -303,16 +351,15 @@ src/
 
 To add another tool, create a new data module under `src/data`, build its lab component, and connect it to the tool registry and app shell.
 
-## Phase 7
+## Phase 8
 
-Phase 7 should add:
+Phase 8 should enrich the Linux module with:
 
-- A complete Ansible module
-- Inventories, playbooks, roles, variables, facts, handlers, templates, and vault concepts
-- Ansible and ansible-playbook command practice
-- YAML practice for playbooks, tasks, handlers, roles, and Jinja templates
-- Lightweight validation for hosts, modules, task names, variables, handlers, and indentation-sensitive YAML
-- Larger randomized question banks
+- Expanded process, networking, storage, users, permissions, services, and troubleshooting content
+- More realistic shell pipelines and command alternatives
+- Bash scripting exercises covering functions, arguments, loops, exit codes, and signals
+- File-system debugging and log-analysis scenarios
+- Larger randomized question banks and progressive difficulty
 - Per-module completion states, streaks, and achievements
 - Accessibility and cross-browser testing
 - Deployment automation and preview environments

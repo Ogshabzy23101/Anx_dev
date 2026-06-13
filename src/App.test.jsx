@@ -79,3 +79,24 @@ describe("Terraform module", () => {
     });
   });
 });
+
+describe("Ansible module", () => {
+  it("is available and persists independent flashcard progress", async () => {
+    render(<App />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Ansible" }));
+    expect(
+      screen.getByRole("heading", { name: "Ansible automation" }),
+    ).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Flashcards" }));
+    fireEvent.click(screen.getByRole("button", { name: "Mark mastered" }));
+
+    await waitFor(() => {
+      const progress = JSON.parse(localStorage.getItem("devops-lab-progress-v1"));
+      expect(progress.ansibleMasteredFlashcards).toEqual(["ansible-fc-ansible"]);
+      expect(progress.terraformMasteredFlashcards).toEqual([]);
+      expect(progress.helmMasteredFlashcards).toEqual([]);
+    });
+  });
+});

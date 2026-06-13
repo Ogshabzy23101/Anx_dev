@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import AnsibleLab from "./components/AnsibleLab";
 import CorrectionModal from "./components/CorrectionModal";
 import DockerLab from "./components/DockerLab";
 import HelmLab from "./components/HelmLab";
@@ -6,6 +7,11 @@ import KubernetesLab from "./components/KubernetesLab";
 import LinuxLab from "./components/LinuxLab";
 import ProgressBar from "./components/ProgressBar";
 import TerraformLab from "./components/TerraformLab";
+import {
+  ansibleCommandQuiz,
+  ansibleFlashcards,
+  ansiblePractice,
+} from "./data/ansible";
 import {
   dockerCommandQuiz,
   dockerFilePractice,
@@ -56,6 +62,11 @@ const initialProgress = {
   terraformCompletedCommands: [],
   terraformCommandScore: 0,
   terraformCompletedPractices: [],
+  ansibleMasteredFlashcards: [],
+  ansibleQuizScore: 0,
+  ansibleCompletedCommands: [],
+  ansibleCommandScore: 0,
+  ansibleCompletedPractices: [],
 };
 
 export default function App() {
@@ -114,11 +125,21 @@ export default function App() {
       practiceTotal: terraformPractice.length,
     });
 
-    return { linux, docker, kubernetes, helm, terraform };
+    const ansible = calculateModuleProgress({
+      masteredCount: progress.ansibleMasteredFlashcards.length,
+      flashcardTotal: ansibleFlashcards.length,
+      quizScore: progress.ansibleQuizScore,
+      completedCommandCount: progress.ansibleCompletedCommands.length,
+      commandTotal: ansibleCommandQuiz.length,
+      completedPracticeCount: progress.ansibleCompletedPractices.length,
+      practiceTotal: ansiblePractice.length,
+    });
+
+    return { linux, docker, kubernetes, helm, terraform, ansible };
   }, [progress]);
 
   const activeToolData = tools.find((tool) => tool.id === activeTool);
-  const trackedTool = ["linux", "docker", "kubernetes", "helm", "terraform"].includes(activeTool)
+  const trackedTool = ["linux", "docker", "kubernetes", "helm", "terraform", "ansible"].includes(activeTool)
     ? activeTool
     : "linux";
   const progressSummary = {
@@ -156,6 +177,12 @@ export default function App() {
       score: progress.terraformQuizScore,
       commandScore: progress.terraformCommandScore,
     },
+    ansible: {
+      label: "Ansible",
+      cards: progress.ansibleMasteredFlashcards.length,
+      score: progress.ansibleQuizScore,
+      commandScore: progress.ansibleCommandScore,
+    },
   }[trackedTool];
 
   return (
@@ -187,7 +214,7 @@ export default function App() {
                   {activeTool === tool.id ? ">" : "$"}
                 </span>
                 {tool.label}
-                {!["linux", "docker", "kubernetes", "helm", "terraform"].includes(tool.id) && (
+                {!["linux", "docker", "kubernetes", "helm", "terraform", "ansible"].includes(tool.id) && (
                   <span className="lock-mark" aria-hidden="true">soon</span>
                 )}
               </button>
@@ -216,6 +243,8 @@ export default function App() {
             <HelmLab progress={progress} setProgress={setProgress} onWrong={setCorrection} />
           ) : activeTool === "terraform" ? (
             <TerraformLab progress={progress} setProgress={setProgress} onWrong={setCorrection} />
+          ) : activeTool === "ansible" ? (
+            <AnsibleLab progress={progress} setProgress={setProgress} onWrong={setCorrection} />
           ) : (
             <section className="empty-tool">
               <div className="terminal-card">
