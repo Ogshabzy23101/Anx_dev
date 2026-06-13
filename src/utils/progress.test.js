@@ -25,4 +25,16 @@ describe("module completion calculation", () => {
       practiceTotal: 15,
     })).toBe(100);
   });
+
+  it("calculates Helm completion from independent chart progress", () => {
+    expect(calculateModuleProgress({
+      masteredCount: 6,
+      flashcardTotal: 15,
+      quizScore: 60,
+      completedCommandCount: 20,
+      commandTotal: 25,
+      completedPracticeCount: 12,
+      practiceTotal: 15,
+    })).toBe(65);
+  });
 });

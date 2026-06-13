@@ -39,3 +39,22 @@ describe("Kubernetes module", () => {
     });
   });
 });
+
+describe("Helm module", () => {
+  it("is available and persists independent flashcard progress", async () => {
+    render(<App />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Helm" }));
+    expect(screen.getByRole("heading", { name: "Helm charts" })).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Flashcards" }));
+    fireEvent.click(screen.getByRole("button", { name: "Mark mastered" }));
+
+    await waitFor(() => {
+      const progress = JSON.parse(localStorage.getItem("devops-lab-progress-v1"));
+      expect(progress.helmMasteredFlashcards).toEqual(["helm-fc-chart"]);
+      expect(progress.kubernetesMasteredFlashcards).toEqual([]);
+      expect(progress.dockerMasteredFlashcards).toEqual([]);
+    });
+  });
+});

@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/Ogshabzy23101/Anx_dev/actions/workflows/ci.yml/badge.svg)](https://github.com/Ogshabzy23101/Anx_dev/actions/workflows/ci.yml)
 
-A dark, terminal-inspired React learning app for building hands-on DevOps skills. Phase 4 includes complete Linux, Docker, and Kubernetes modules, interactive file practice, automated tests, and continuous integration.
+A dark, terminal-inspired React learning app for building hands-on DevOps skills. Phase 5 includes complete Linux, Docker, Kubernetes, and Helm modules, interactive file practice, automated tests, and continuous integration.
 
 Live site: [https://ogshabzy23101.github.io/Anx_dev/](https://ogshabzy23101.github.io/Anx_dev/)
 
@@ -19,6 +19,8 @@ Live site: [https://ogshabzy23101.github.io/Anx_dev/](https://ogshabzy23101.gith
 - Dockerfile and `.dockerignore` practice with requirement-based validation
 - Complete Kubernetes reference, flashcards, MCQ, and kubectl command practice
 - Fifteen Kubernetes manifest exercises with YAML-aware requirement checks
+- Complete Helm reference, flashcards, MCQ, and command practice
+- Fifteen Helm chart, values, and Go-template writing exercises
 - Retry, solution reveal, and side-by-side answer comparison
 - Success and correction modals
 - Local progress persistence via `localStorage`
@@ -57,7 +59,7 @@ Run tests in watch mode while developing:
 npm run test:watch
 ```
 
-Tests use Vitest, React Testing Library, `user-event`, and the jsdom browser environment. The current suite contains **34 tests across 11 test files**.
+Tests use Vitest, React Testing Library, `user-event`, and the jsdom browser environment. The current suite contains **46 tests across 14 test files**.
 
 ## Practice validation
 
@@ -69,7 +71,7 @@ Practice tasks are defined in `src/data/linuxPractice.js`. Each task provides:
 
 The validator checks whether every required element appears in the learner's answer. It does not require an exact full-text match, so formatting differences and valid extra commands are accepted. For example, the file-existence exercise checks independently for `if`, `-f app.log`, `then`, and `fi`.
 
-The editor component receives its tasks as data. Linux shell tasks live in `src/data/linuxPractice.js`, Docker content lives in `src/data/docker.js`, and Kubernetes content lives independently in `src/data/kubernetes.js`. Future Compose, Terraform HCL, Ansible YAML, and Helm values exercises can use the same workflow with tool-specific rules.
+The editor component receives its tasks as data. Linux shell tasks live in `src/data/linuxPractice.js`, Docker content lives in `src/data/docker.js`, Kubernetes content lives in `src/data/kubernetes.js`, and Helm content lives independently in `src/data/helm.js`. Future Compose, Terraform HCL, and Ansible YAML exercises can use the same workflow with tool-specific rules.
 
 ## Docker module
 
@@ -133,6 +135,55 @@ spec:
 
 An incorrect answer opens a correction modal with missing requirements, a short explanation, the expected solution, side-by-side comparison, Retry, and Show solution actions.
 
+## Helm module
+
+The Helm module builds directly on the Kubernetes concepts already taught:
+
+- Reference material for charts, releases, repositories, values, templates, lifecycle commands, dependencies, and versioning
+- Fifteen flashcards
+- Twenty-five multiple-choice questions
+- Twenty-five Helm command-writing challenges with accepted aliases and flag alternatives
+- Fifteen exercises covering Chart.yaml, values.yaml, Kubernetes templates, helpers, conditionals, loops, notes, and dependencies
+- Independent local progress for mastered cards, best MCQ score, Helm command score, completed chart files, and module completion
+
+### Helm validation
+
+Helm exercises reuse the requirement-based practice engine and add helpers from `src/utils/helmValidation.js`. Validation can check:
+
+- Required strings and YAML keys
+- Chart.yaml and values.yaml fields
+- Helm template delimiters and expressions
+- `.Values` paths
+- Named-template definitions and `include` calls
+- `if` and `range` blocks
+- Kubernetes `apiVersion`, `kind`, and resource structure
+
+The validator does not execute Helm or fully parse Go templates. It intentionally checks required semantics while allowing whitespace differences, comments, extra fields, pipelines, and reasonable chart variations.
+
+Example Deployment template exercise:
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "webapp.fullname" . }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "webapp.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "webapp.name" . }}
+    spec:
+      containers:
+        - name: webapp
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+```
+
+Incorrect chart answers receive missing requirements, a short explanation, the expected solution, side-by-side comparison, Retry, and Show solution controls.
+
 ## Modules
 
 | Module | Status | Practice format |
@@ -140,7 +191,8 @@ An incorrect answer opens a correction modal with missing requirements, a short 
 | Linux | Complete | Bash scripts |
 | Docker | Complete | Dockerfile and `.dockerignore` |
 | Kubernetes | Complete | Kubernetes YAML manifests |
-| Terraform, Ansible, Helm, CI/CD, AWS, Observability | Planned | To be added |
+| Helm | Complete | Charts, values, and Go templates |
+| Terraform, Ansible, CI/CD, AWS, Observability | Planned | To be added |
 
 ## Continuous integration
 
@@ -199,15 +251,15 @@ src/
 
 To add another tool, create a new data module under `src/data`, build its lab component, and connect it to the tool registry and app shell.
 
-## Phase 5
+## Phase 6
 
-Phase 5 should add:
+Phase 6 should add:
 
-- A complete Helm module using Kubernetes manifests as its foundation
-- Chart structure, templates, values, release lifecycle, and repository commands
-- `values.yaml` and Go-template writing exercises
-- Rendered-manifest comparison and validation
-- Reuse of Kubernetes kinds, selectors, Services, Ingress, RBAC, and workload concepts
+- A complete Terraform module
+- Providers, resources, data sources, variables, outputs, state, modules, and lifecycle concepts
+- Terraform CLI command practice for init, plan, apply, destroy, import, fmt, validate, and state
+- HCL writing exercises for AWS-style infrastructure and reusable modules
+- Lightweight HCL validation for blocks, attributes, references, variables, and outputs
 - Larger randomized question banks
 - Per-module completion states, streaks, and achievements
 - Accessibility and cross-browser testing
