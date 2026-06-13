@@ -27,8 +27,11 @@ export default function FilePractice({
     const validation = validatePracticeAnswer(answer, task.rules);
     const nextResult = {
       type: validation.isCorrect ? "success" : "error",
+      passed: validation.passed,
       missing: validation.missing,
       explanation: task.explanation,
+      expectedValue: task.solution,
+      userValue: answer || "(empty)",
     };
 
     setResult(nextResult);

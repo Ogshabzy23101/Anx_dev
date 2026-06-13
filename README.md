@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/Ogshabzy23101/Anx_dev/actions/workflows/ci.yml/badge.svg)](https://github.com/Ogshabzy23101/Anx_dev/actions/workflows/ci.yml)
 
-A dark, terminal-inspired React learning app for building hands-on DevOps skills. Phase 5 includes complete Linux, Docker, Kubernetes, and Helm modules, interactive file practice, automated tests, and continuous integration.
+A dark, terminal-inspired React learning app for building hands-on DevOps skills. Phase 6 includes complete Linux, Docker, Kubernetes, Helm, and Terraform modules, enhanced correction feedback, automated tests, and continuous integration.
 
 Live site: [https://ogshabzy23101.github.io/Anx_dev/](https://ogshabzy23101.github.io/Anx_dev/)
 
@@ -21,6 +21,9 @@ Live site: [https://ogshabzy23101.github.io/Anx_dev/](https://ogshabzy23101.gith
 - Fifteen Kubernetes manifest exercises with YAML-aware requirement checks
 - Complete Helm reference, flashcards, MCQ, and command practice
 - Fifteen Helm chart, values, and Go-template writing exercises
+- Complete Terraform reference, flashcards, MCQ, and CLI command practice
+- Fifteen Terraform HCL exercises with block and attribute validation
+- UX-001 feedback showing correct sections, missing sections, expected values, and user values
 - Retry, solution reveal, and side-by-side answer comparison
 - Success and correction modals
 - Local progress persistence via `localStorage`
@@ -59,7 +62,7 @@ Run tests in watch mode while developing:
 npm run test:watch
 ```
 
-Tests use Vitest, React Testing Library, `user-event`, and the jsdom browser environment. The current suite contains **46 tests across 14 test files**.
+Tests use Vitest, React Testing Library, `user-event`, and the jsdom browser environment. The current suite contains **59 tests across 18 test files**.
 
 ## Practice validation
 
@@ -71,7 +74,7 @@ Practice tasks are defined in `src/data/linuxPractice.js`. Each task provides:
 
 The validator checks whether every required element appears in the learner's answer. It does not require an exact full-text match, so formatting differences and valid extra commands are accepted. For example, the file-existence exercise checks independently for `if`, `-f app.log`, `then`, and `fi`.
 
-The editor component receives its tasks as data. Linux shell tasks live in `src/data/linuxPractice.js`, Docker content lives in `src/data/docker.js`, Kubernetes content lives in `src/data/kubernetes.js`, and Helm content lives independently in `src/data/helm.js`. Future Compose, Terraform HCL, and Ansible YAML exercises can use the same workflow with tool-specific rules.
+The editor component receives its tasks as data. Linux shell tasks live in `src/data/linuxPractice.js`, Docker content lives in `src/data/docker.js`, Kubernetes content lives in `src/data/kubernetes.js`, Helm content lives in `src/data/helm.js`, and Terraform content lives independently in `src/data/terraform.js`. Future Compose and Ansible YAML exercises can use the same workflow with tool-specific rules.
 
 ## Docker module
 
@@ -184,6 +187,54 @@ spec:
 
 Incorrect chart answers receive missing requirements, a short explanation, the expected solution, side-by-side comparison, Retry, and Show solution controls.
 
+## Terraform module
+
+The Terraform module provides:
+
+- Reference material for Infrastructure as Code, providers, resources, data sources, inputs, outputs, state, backends, modules, lifecycle, and iteration
+- Twenty flashcards
+- Thirty multiple-choice questions
+- Twenty-five Terraform CLI command challenges with valid flag alternatives
+- Fifteen HCL exercises covering AWS resources, variables, outputs, data, locals, modules, remote state, locking, iteration, and lifecycle
+- Independent local progress for mastered cards, best MCQ score, Terraform command score, completed HCL files, and module completion
+
+### HCL validation
+
+Terraform exercises use helpers from `src/utils/terraformValidation.js`. The lightweight validator checks:
+
+- Provider, resource, data, variable, output, module, and backend blocks
+- Required HCL attributes and expected values
+- References such as `aws_instance.web.public_ip`
+- Nested blocks such as `lifecycle` and `ingress`
+- Collection and iteration expressions such as `count.index`, `each.value`, and `toset`
+
+Validation is requirement-based rather than exact-text matching. It accepts formatting differences and additional valid configuration while reporting precise missing blocks and attributes.
+
+Example EC2 exercise:
+
+```hcl
+provider "aws" {
+  region = "us-east-1"
+}
+
+resource "aws_instance" "web" {
+  ami           = "ami-123456"
+  instance_type = "t3.micro"
+}
+```
+
+## UX-001 feedback
+
+Correction dialogs now provide structured feedback across Linux, Docker, Kubernetes, Helm, and Terraform:
+
+- `✓ Correct sections` lists requirements already satisfied
+- `✗ Missing sections` lists exact requirements still needed
+- `Expected values` shows the accepted command or reference file
+- `User values` shows the submitted command or file
+- Side-by-side comparison, explanation, Retry, and Show solution remain available
+
+Command feedback compares expected and submitted command tokens. File feedback uses each exercise's declarative validation rules, so every module receives the same diagnostics without duplicating modal logic.
+
 ## Modules
 
 | Module | Status | Practice format |
@@ -192,7 +243,8 @@ Incorrect chart answers receive missing requirements, a short explanation, the e
 | Docker | Complete | Dockerfile and `.dockerignore` |
 | Kubernetes | Complete | Kubernetes YAML manifests |
 | Helm | Complete | Charts, values, and Go templates |
-| Terraform, Ansible, CI/CD, AWS, Observability | Planned | To be added |
+| Terraform | Complete | Terraform HCL |
+| Ansible, CI/CD, AWS, Observability | Planned | To be added |
 
 ## Continuous integration
 
@@ -251,15 +303,15 @@ src/
 
 To add another tool, create a new data module under `src/data`, build its lab component, and connect it to the tool registry and app shell.
 
-## Phase 6
+## Phase 7
 
-Phase 6 should add:
+Phase 7 should add:
 
-- A complete Terraform module
-- Providers, resources, data sources, variables, outputs, state, modules, and lifecycle concepts
-- Terraform CLI command practice for init, plan, apply, destroy, import, fmt, validate, and state
-- HCL writing exercises for AWS-style infrastructure and reusable modules
-- Lightweight HCL validation for blocks, attributes, references, variables, and outputs
+- A complete Ansible module
+- Inventories, playbooks, roles, variables, facts, handlers, templates, and vault concepts
+- Ansible and ansible-playbook command practice
+- YAML practice for playbooks, tasks, handlers, roles, and Jinja templates
+- Lightweight validation for hosts, modules, task names, variables, handlers, and indentation-sensitive YAML
 - Larger randomized question banks
 - Per-module completion states, streaks, and achievements
 - Accessibility and cross-browser testing

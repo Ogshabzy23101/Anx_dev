@@ -37,4 +37,16 @@ describe("module completion calculation", () => {
       practiceTotal: 15,
     })).toBe(65);
   });
+
+  it("calculates Terraform completion independently", () => {
+    expect(calculateModuleProgress({
+      masteredCount: 10,
+      flashcardTotal: 20,
+      quizScore: 70,
+      completedCommandCount: 15,
+      commandTotal: 25,
+      completedPracticeCount: 9,
+      practiceTotal: 15,
+    })).toBe(60);
+  });
 });

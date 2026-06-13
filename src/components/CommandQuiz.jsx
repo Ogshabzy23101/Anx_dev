@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { isCommandCorrect } from "../utils/answerValidation";
+import { getCommandFeedback, isCommandCorrect } from "../utils/answerValidation";
 
 export default function CommandQuiz({
   questions,
@@ -25,6 +25,7 @@ export default function CommandQuiz({
       onWrong({
         explanation: question.explanation,
         answer: question.answers[0],
+        feedback: getCommandFeedback(input, question.answers[0]),
       });
     }
   }

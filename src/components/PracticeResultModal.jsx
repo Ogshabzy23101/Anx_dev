@@ -34,6 +34,28 @@ export default function PracticeResultModal({
         {!isSuccess && result.explanation && (
           <p className="modal-explanation">{result.explanation}</p>
         )}
+        <div className="validation-feedback">
+          <div className="feedback-column is-correct">
+            <span>correct sections</span>
+            <ul>
+              {result.passed?.length ? result.passed.map((item) => (
+                <li key={item}>✓ {item}</li>
+              )) : <li>None yet</li>}
+            </ul>
+          </div>
+          <div className="feedback-column is-missing">
+            <span>missing sections</span>
+            <ul>
+              {result.missing.length ? result.missing.map((item) => (
+                <li key={item}>✗ {item}</li>
+              )) : <li>Nothing missing</li>}
+            </ul>
+          </div>
+          <div className="feedback-values">
+            <div><span>expected values</span><pre>{result.expectedValue}</pre></div>
+            <div><span>user values</span><pre>{result.userValue}</pre></div>
+          </div>
+        </div>
 
         <div className="answer-comparison">
           <div>

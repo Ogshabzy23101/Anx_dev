@@ -5,6 +5,7 @@ import HelmLab from "./components/HelmLab";
 import KubernetesLab from "./components/KubernetesLab";
 import LinuxLab from "./components/LinuxLab";
 import ProgressBar from "./components/ProgressBar";
+import TerraformLab from "./components/TerraformLab";
 import {
   dockerCommandQuiz,
   dockerFilePractice,
@@ -23,6 +24,11 @@ import {
   kubernetesManifestPractice,
 } from "./data/kubernetes";
 import { tools } from "./data/tools";
+import {
+  terraformCommandQuiz,
+  terraformFlashcards,
+  terraformPractice,
+} from "./data/terraform";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import { calculateModuleProgress } from "./utils/progress";
 
@@ -45,6 +51,11 @@ const initialProgress = {
   helmCompletedCommands: [],
   helmCommandScore: 0,
   helmCompletedPractices: [],
+  terraformMasteredFlashcards: [],
+  terraformQuizScore: 0,
+  terraformCompletedCommands: [],
+  terraformCommandScore: 0,
+  terraformCompletedPractices: [],
 };
 
 export default function App() {
@@ -93,11 +104,21 @@ export default function App() {
       practiceTotal: helmPractice.length,
     });
 
-    return { linux, docker, kubernetes, helm };
+    const terraform = calculateModuleProgress({
+      masteredCount: progress.terraformMasteredFlashcards.length,
+      flashcardTotal: terraformFlashcards.length,
+      quizScore: progress.terraformQuizScore,
+      completedCommandCount: progress.terraformCompletedCommands.length,
+      commandTotal: terraformCommandQuiz.length,
+      completedPracticeCount: progress.terraformCompletedPractices.length,
+      practiceTotal: terraformPractice.length,
+    });
+
+    return { linux, docker, kubernetes, helm, terraform };
   }, [progress]);
 
   const activeToolData = tools.find((tool) => tool.id === activeTool);
-  const trackedTool = ["linux", "docker", "kubernetes", "helm"].includes(activeTool)
+  const trackedTool = ["linux", "docker", "kubernetes", "helm", "terraform"].includes(activeTool)
     ? activeTool
     : "linux";
   const progressSummary = {
@@ -128,6 +149,12 @@ export default function App() {
       cards: progress.helmMasteredFlashcards.length,
       score: progress.helmQuizScore,
       commandScore: progress.helmCommandScore,
+    },
+    terraform: {
+      label: "Terraform",
+      cards: progress.terraformMasteredFlashcards.length,
+      score: progress.terraformQuizScore,
+      commandScore: progress.terraformCommandScore,
     },
   }[trackedTool];
 
@@ -160,7 +187,7 @@ export default function App() {
                   {activeTool === tool.id ? ">" : "$"}
                 </span>
                 {tool.label}
-                {!["linux", "docker", "kubernetes", "helm"].includes(tool.id) && (
+                {!["linux", "docker", "kubernetes", "helm", "terraform"].includes(tool.id) && (
                   <span className="lock-mark" aria-hidden="true">soon</span>
                 )}
               </button>
@@ -187,6 +214,8 @@ export default function App() {
             <KubernetesLab progress={progress} setProgress={setProgress} onWrong={setCorrection} />
           ) : activeTool === "helm" ? (
             <HelmLab progress={progress} setProgress={setProgress} onWrong={setCorrection} />
+          ) : activeTool === "terraform" ? (
+            <TerraformLab progress={progress} setProgress={setProgress} onWrong={setCorrection} />
           ) : (
             <section className="empty-tool">
               <div className="terminal-card">

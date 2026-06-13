@@ -58,3 +58,24 @@ describe("Helm module", () => {
     });
   });
 });
+
+describe("Terraform module", () => {
+  it("is available and persists independent flashcard progress", async () => {
+    render(<App />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Terraform" }));
+    expect(
+      screen.getByRole("heading", { name: "Terraform workflows" }),
+    ).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Flashcards" }));
+    fireEvent.click(screen.getByRole("button", { name: "Mark mastered" }));
+
+    await waitFor(() => {
+      const progress = JSON.parse(localStorage.getItem("devops-lab-progress-v1"));
+      expect(progress.terraformMasteredFlashcards).toEqual(["tf-fc-iac"]);
+      expect(progress.helmMasteredFlashcards).toEqual([]);
+      expect(progress.kubernetesMasteredFlashcards).toEqual([]);
+    });
+  });
+});
