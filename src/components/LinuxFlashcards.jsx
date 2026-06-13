@@ -1,7 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
 import { linuxCategories } from "../data/linux";
 
-export default function LinuxFlashcards({ cards, mastered, onToggleMastered }) {
+export default function LinuxFlashcards({
+  cards,
+  mastered,
+  onToggleMastered,
+  categories = linuxCategories,
+  searchPlaceholder = "pipes, permissions, services...",
+  flipLabel = "Flip Linux flashcard",
+  emptyMessage = "No flashcards match these filters.",
+}) {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("all");
   const [difficulty, setDifficulty] = useState("all");
@@ -46,14 +54,14 @@ export default function LinuxFlashcards({ cards, mastered, onToggleMastered }) {
             type="search"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="pipes, permissions, services..."
+            placeholder={searchPlaceholder}
           />
         </label>
         <label>
           <span>category</span>
           <select value={category} onChange={(event) => setCategory(event.target.value)}>
             <option value="all">All categories</option>
-            {linuxCategories.map((item) => <option key={item}>{item}</option>)}
+            {categories.map((item) => <option key={item}>{item}</option>)}
           </select>
         </label>
         <label>
@@ -68,7 +76,7 @@ export default function LinuxFlashcards({ cards, mastered, onToggleMastered }) {
       </div>
 
       {!card ? (
-        <div className="terminal-card empty-filter-result">No flashcards match these filters.</div>
+        <div className="terminal-card empty-filter-result">{emptyMessage}</div>
       ) : (
         <div className="study-layout">
           <div className="study-meta">
@@ -79,7 +87,7 @@ export default function LinuxFlashcards({ cards, mastered, onToggleMastered }) {
             className={`flashcard linux-flashcard ${flipped ? "is-flipped" : ""}`}
             type="button"
             onClick={() => setFlipped((value) => !value)}
-            aria-label="Flip Linux flashcard"
+            aria-label={flipLabel}
           >
             <span className="flashcard-header">
               <span className="card-side-label">{flipped ? "answer" : "question"}</span>

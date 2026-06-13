@@ -1,23 +1,24 @@
 import { useState } from "react";
 import {
   dockerCommandQuiz,
+  dockerCategories,
+  dockerCommandCatalog,
   dockerFilePractice,
   dockerFlashcards,
   dockerMultipleChoice,
-  dockerReference,
 } from "../data/docker";
 import CommandQuiz from "./CommandQuiz";
 import FilePractice from "./FilePractice";
-import Flashcards from "./Flashcards";
+import LinuxFlashcards from "./LinuxFlashcards";
+import LinuxReference from "./LinuxReference";
 import MultipleChoiceQuiz from "./MultipleChoiceQuiz";
-import Reference from "./Reference";
 
 const modes = [
   { id: "reference", label: "Reference", icon: "01" },
   { id: "flashcards", label: "Flashcards", icon: "02" },
   { id: "quiz", label: "Quiz", icon: "03" },
   { id: "commands", label: "Write commands", icon: "04" },
-  { id: "files", label: "Dockerfile practice", icon: "05" },
+  { id: "files", label: "File practice", icon: "05" },
 ];
 
 export default function DockerLab({ progress, setProgress, onWrong }) {
@@ -87,12 +88,25 @@ export default function DockerLab({ progress, setProgress, onWrong }) {
       </nav>
 
       <section className="mode-content">
-        {mode === "reference" && <Reference sections={dockerReference} />}
+        {mode === "reference" && (
+          <LinuxReference
+            commands={dockerCommandCatalog}
+            categories={dockerCategories}
+            searchLabel="search Docker topics and explanations"
+            searchPlaceholder="build, volumes, Compose, debugging..."
+            itemNoun="Docker topics"
+            emptyMessage="No Docker topics match these filters."
+          />
+        )}
         {mode === "flashcards" && (
-          <Flashcards
+          <LinuxFlashcards
             cards={dockerFlashcards}
             mastered={progress.dockerMasteredFlashcards}
             onToggleMastered={toggleMastered}
+            categories={dockerCategories}
+            searchPlaceholder="images, networks, multi-stage builds..."
+            flipLabel="Flip Docker flashcard"
+            emptyMessage="No Docker flashcards match these filters."
           />
         )}
         {mode === "quiz" && (
@@ -117,7 +131,7 @@ export default function DockerLab({ progress, setProgress, onWrong }) {
             tasks={dockerFilePractice}
             completedIds={progress.dockerCompletedPractices}
             onComplete={savePractice}
-            labLabel="docker build lab"
+            labLabel="Dockerfile and Compose lab"
             editorLabel="Docker file answer"
             resultNoun="File"
           />

@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/Ogshabzy23101/Anx_dev/actions/workflows/ci.yml/badge.svg)](https://github.com/Ogshabzy23101/Anx_dev/actions/workflows/ci.yml)
 
-A dark, terminal-inspired React learning app for building hands-on DevOps skills. Phase 8 includes an enriched Linux curriculum alongside complete Docker, Kubernetes, Helm, Terraform, and Ansible modules, enhanced correction feedback, automated tests, and continuous integration.
+A dark, terminal-inspired React learning app for building hands-on DevOps skills. Phase 9 includes enriched Linux and Docker curricula alongside complete Kubernetes, Helm, Terraform, and Ansible modules, enhanced correction feedback, automated tests, and continuous integration.
 
 Live site: [https://ogshabzy23101.github.io/Anx_dev/](https://ogshabzy23101.github.io/Anx_dev/)
 
@@ -14,9 +14,9 @@ Live site: [https://ogshabzy23101.github.io/Anx_dev/](https://ogshabzy23101.gith
 - 108 Linux command-writing challenges with accepted alternatives
 - Correction popups with explanations
 - 25 interactive Linux shell script exercises with requirement-based validation
-- Complete Docker reference, flashcards, quizzes, and progress tracking
-- Docker command-writing challenges with accepted alternatives
-- Dockerfile and `.dockerignore` practice with requirement-based validation
+- Searchable Docker reference with 80 entries across 20 categories
+- 80 structured Docker flashcards, MCQs, and command/configuration challenges
+- 25 Dockerfile, `.dockerignore`, and Compose exercises with requirement-based validation
 - Complete Kubernetes reference, flashcards, MCQ, and kubectl command practice
 - Fifteen Kubernetes manifest exercises with YAML-aware requirement checks
 - Complete Helm reference, flashcards, MCQ, and command practice
@@ -64,7 +64,7 @@ Run tests in watch mode while developing:
 npm run test:watch
 ```
 
-Tests use Vitest, React Testing Library, `user-event`, and the jsdom browser environment. The current suite contains **77 tests across 23 test files**.
+Tests use Vitest, React Testing Library, `user-event`, and the jsdom browser environment. The current suite contains **83 tests across 24 test files**.
 
 ## Linux enrichment
 
@@ -91,15 +91,15 @@ The editor component receives its tasks as data. Linux shell tasks live in `src/
 
 ## Docker module
 
-The Docker module mirrors the Linux learning flow:
+Phase 9 applies the enriched Linux learning pattern to Docker:
 
-- Reference material for images, containers, Dockerfiles, build context, runtime configuration, networking, registries, and multi-stage builds
-- Flashcards and a scored multiple-choice quiz
-- Command-writing exercises for common build, run, inspect, networking, tagging, and push workflows
-- Dockerfile practice for Node.js, Nginx, React/Vite multi-stage builds, core instructions, and `.dockerignore`
+- **80 reference entries** across Docker basics, images, containers, Dockerfiles, build context, registries, storage, networking, ports, environment configuration, debugging, lifecycle, Compose, multi-stage builds, optimization, security, troubleshooting, and DevOps workflows
+- **80 flashcards** with basic and professional explanations, examples, DevOps use cases, related concepts, categories, and difficulty levels
+- **80 multiple-choice questions** and **80 command/configuration writing challenges**
+- **25 file exercises** covering Node, Nginx, Python, Express, Vite multi-stage builds, optimized and non-root images, `.dockerignore`, and Docker Compose stacks
 - Independent local progress for mastered cards, best quiz score, solved commands, and completed files
 
-Dockerfile answers are checked by required instructions and patterns rather than exact text, allowing valid formatting and implementation variations.
+Docker reference and flashcard views support full-text search, category filters, difficulty filters, expandable entries, examples, common mistakes, and DevOps use cases. Dockerfile and Compose answers are checked by required instructions and patterns rather than exact text, allowing valid formatting and implementation variations.
 
 ## Kubernetes module
 
@@ -362,12 +362,12 @@ src/
 
 To add another tool, create a new data module under `src/data`, build its lab component, and connect it to the tool registry and app shell.
 
-## Phase 9
+## Phase 10
 
-Phase 9 should enrich the Docker module using the Linux depth as the model:
+Phase 10 should enrich the Kubernetes module using the Linux and Docker depth as the model:
 
-- Expand the Docker reference, flashcards, and quiz banks
-- Add image-layer, cache, registry, Compose, networking, and production troubleshooting scenarios
-- Add progressive Dockerfile and `.dockerignore` exercises
-- Add searchable categories and difficulty filters
-- Preserve independent progress and requirement-based feedback
+- Expand Kubernetes reference, flashcards, MCQs, and kubectl challenge banks
+- Add searchable workload, networking, storage, RBAC, operations, and troubleshooting categories
+- Add progressive manifest exercises and richer semantic YAML feedback
+- Add production rollout, probes, resource, scheduling, and incident scenarios
+- Preserve independent progress and GitHub Pages deployment behavior

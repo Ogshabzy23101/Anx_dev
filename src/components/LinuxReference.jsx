@@ -3,7 +3,14 @@ import { linuxCategories } from "../data/linux";
 
 const difficulties = ["all", "beginner", "intermediate", "advanced"];
 
-export default function LinuxReference({ commands }) {
+export default function LinuxReference({
+  commands,
+  categories = linuxCategories,
+  searchLabel = "search commands and explanations",
+  searchPlaceholder = "grep, networking, disk space...",
+  itemNoun = "commands",
+  emptyMessage = "No Linux commands match these filters.",
+}) {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("all");
   const [difficulty, setDifficulty] = useState("all");
@@ -29,19 +36,19 @@ export default function LinuxReference({ commands }) {
     <div className="linux-library">
       <div className="library-toolbar terminal-card">
         <label>
-          <span>search commands and explanations</span>
+          <span>{searchLabel}</span>
           <input
             type="search"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="grep, networking, disk space..."
+            placeholder={searchPlaceholder}
           />
         </label>
         <label>
           <span>category</span>
           <select value={category} onChange={(event) => setCategory(event.target.value)}>
             <option value="all">All categories</option>
-            {linuxCategories.map((item) => <option key={item}>{item}</option>)}
+            {categories.map((item) => <option key={item}>{item}</option>)}
           </select>
         </label>
         <label>
@@ -57,8 +64,8 @@ export default function LinuxReference({ commands }) {
       </div>
 
       <div className="library-summary" aria-live="polite">
-        <span>{filtered.length} of {commands.length} commands</span>
-        <span>select a command to expand</span>
+        <span>{filtered.length} of {commands.length} {itemNoun}</span>
+        <span>select an item to expand</span>
       </div>
 
       <div className="linux-command-grid">
@@ -111,7 +118,7 @@ export default function LinuxReference({ commands }) {
 
       {!filtered.length && (
         <div className="terminal-card empty-filter-result">
-          No Linux commands match these filters.
+          {emptyMessage}
         </div>
       )}
     </div>
