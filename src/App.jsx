@@ -1,7 +1,13 @@
 import { useMemo, useState } from "react";
 import CorrectionModal from "./components/CorrectionModal";
+import DockerLab from "./components/DockerLab";
 import LinuxLab from "./components/LinuxLab";
 import ProgressBar from "./components/ProgressBar";
+import {
+  dockerCommandQuiz,
+  dockerFilePractice,
+  dockerFlashcards,
+} from "./data/docker";
 import { linuxCommandQuiz, linuxFlashcards } from "./data/linux";
 import { linuxShellPractice } from "./data/linuxPractice";
 import { tools } from "./data/tools";
@@ -12,6 +18,10 @@ const initialProgress = {
   quizScore: 0,
   completedCommands: [],
   completedPractices: [],
+  dockerMasteredFlashcards: [],
+  dockerQuizScore: 0,
+  dockerCompletedCommands: [],
+  dockerCompletedPractices: [],
 };
 
 export default function App() {
@@ -19,15 +29,32 @@ export default function App() {
   const [correction, setCorrection] = useState(null);
   const [progress, setProgress] = useLocalStorage("devops-lab-progress-v1", initialProgress);
 
-  const overallProgress = useMemo(() => {
-    const flashcardPoints = progress.masteredFlashcards.length / linuxFlashcards.length;
-    const quizPoints = progress.quizScore / 100;
-    const commandPoints = progress.completedCommands.length / linuxCommandQuiz.length;
-    const practicePoints = progress.completedPractices.length / linuxShellPractice.length;
-    return ((flashcardPoints + quizPoints + commandPoints + practicePoints) / 4) * 100;
+  const moduleProgress = useMemo(() => {
+    const linux = (
+      progress.masteredFlashcards.length / linuxFlashcards.length +
+      progress.quizScore / 100 +
+      progress.completedCommands.length / linuxCommandQuiz.length +
+      progress.completedPractices.length / linuxShellPractice.length
+    ) / 4 * 100;
+
+    const docker = (
+      progress.dockerMasteredFlashcards.length / dockerFlashcards.length +
+      progress.dockerQuizScore / 100 +
+      progress.dockerCompletedCommands.length / dockerCommandQuiz.length +
+      progress.dockerCompletedPractices.length / dockerFilePractice.length
+    ) / 4 * 100;
+
+    return { linux, docker };
   }, [progress]);
 
   const activeToolData = tools.find((tool) => tool.id === activeTool);
+  const trackedTool = activeTool === "docker" ? "docker" : "linux";
+  const trackedCards = trackedTool === "docker"
+    ? progress.dockerMasteredFlashcards.length
+    : progress.masteredFlashcards.length;
+  const trackedScore = trackedTool === "docker"
+    ? progress.dockerQuizScore
+    : progress.quizScore;
 
   return (
     <div className="app-shell">
@@ -51,23 +78,33 @@ export default function App() {
                 className={activeTool === tool.id ? "active" : ""}
                 type="button"
                 key={tool.id}
+                aria-label={tool.label}
                 onClick={() => setActiveTool(tool.id)}
               >
-                <span className="tool-prompt">{activeTool === tool.id ? ">" : "$"}</span>
+                <span className="tool-prompt" aria-hidden="true">
+                  {activeTool === tool.id ? ">" : "$"}
+                </span>
                 {tool.label}
-                {tool.id !== "linux" && <span className="lock-mark">soon</span>}
+                {!["linux", "docker"].includes(tool.id) && (
+                  <span className="lock-mark" aria-hidden="true">soon</span>
+                )}
               </button>
             ))}
           </nav>
           <div className="sidebar-progress">
-            <ProgressBar value={overallProgress} label="Linux progress" />
-            <p>{progress.masteredFlashcards.length} cards · {progress.quizScore}% best quiz</p>
+            <ProgressBar
+              value={moduleProgress[trackedTool]}
+              label={`${trackedTool === "docker" ? "Docker" : "Linux"} progress`}
+            />
+            <p>{trackedCards} cards · {trackedScore}% best quiz</p>
           </div>
         </aside>
 
         <main>
           {activeTool === "linux" ? (
             <LinuxLab progress={progress} setProgress={setProgress} onWrong={setCorrection} />
+          ) : activeTool === "docker" ? (
+            <DockerLab progress={progress} setProgress={setProgress} onWrong={setCorrection} />
           ) : (
             <section className="empty-tool">
               <div className="terminal-card">

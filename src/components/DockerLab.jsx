@@ -1,11 +1,11 @@
 import { useState } from "react";
 import {
-  linuxCommandQuiz,
-  linuxFlashcards,
-  linuxMultipleChoice,
-  linuxReference,
-} from "../data/linux";
-import { linuxShellPractice } from "../data/linuxPractice";
+  dockerCommandQuiz,
+  dockerFilePractice,
+  dockerFlashcards,
+  dockerMultipleChoice,
+  dockerReference,
+} from "../data/docker";
 import CommandQuiz from "./CommandQuiz";
 import FilePractice from "./FilePractice";
 import Flashcards from "./Flashcards";
@@ -17,43 +17,43 @@ const modes = [
   { id: "flashcards", label: "Flashcards", icon: "02" },
   { id: "quiz", label: "Quiz", icon: "03" },
   { id: "commands", label: "Write commands", icon: "04" },
-  { id: "files", label: "File practice", icon: "05" },
+  { id: "files", label: "Dockerfile practice", icon: "05" },
 ];
 
-export default function LinuxLab({ progress, setProgress, onWrong }) {
+export default function DockerLab({ progress, setProgress, onWrong }) {
   const [mode, setMode] = useState("reference");
 
   function toggleMastered(id) {
     setProgress((current) => ({
       ...current,
-      masteredFlashcards: current.masteredFlashcards.includes(id)
-        ? current.masteredFlashcards.filter((cardId) => cardId !== id)
-        : [...current.masteredFlashcards, id],
+      dockerMasteredFlashcards: current.dockerMasteredFlashcards.includes(id)
+        ? current.dockerMasteredFlashcards.filter((cardId) => cardId !== id)
+        : [...current.dockerMasteredFlashcards, id],
     }));
   }
 
   function saveQuizScore(score) {
     setProgress((current) => ({
       ...current,
-      quizScore: Math.max(current.quizScore, score),
+      dockerQuizScore: Math.max(current.dockerQuizScore, score),
     }));
   }
 
   function saveCommand(id) {
     setProgress((current) => ({
       ...current,
-      completedCommands: current.completedCommands.includes(id)
-        ? current.completedCommands
-        : [...current.completedCommands, id],
+      dockerCompletedCommands: current.dockerCompletedCommands.includes(id)
+        ? current.dockerCompletedCommands
+        : [...current.dockerCompletedCommands, id],
     }));
   }
 
   function savePractice(id) {
     setProgress((current) => ({
       ...current,
-      completedPractices: current.completedPractices.includes(id)
-        ? current.completedPractices
-        : [...current.completedPractices, id],
+      dockerCompletedPractices: current.dockerCompletedPractices.includes(id)
+        ? current.dockerCompletedPractices
+        : [...current.dockerCompletedPractices, id],
     }));
   }
 
@@ -61,17 +61,17 @@ export default function LinuxLab({ progress, setProgress, onWrong }) {
     <>
       <section className="linux-heading">
         <div>
-          <span className="eyebrow">module 01 / foundation</span>
-          <h1>Linux operations</h1>
-          <p>Build fluency at the command line, one deliberate repetition at a time.</p>
+          <span className="eyebrow">module 02 / containers</span>
+          <h1>Docker workflows</h1>
+          <p>Build, run, inspect, and ship containers with repeatable commands and lean images.</p>
         </div>
         <div className="module-badge">
-          <span>current shell</span>
-          <code>bash</code>
+          <span>runtime</span>
+          <code>docker</code>
         </div>
       </section>
 
-      <nav className="mode-tabs" aria-label="Linux learning modes">
+      <nav className="mode-tabs" aria-label="Docker learning modes">
         {modes.map((item) => (
           <button
             className={mode === item.id ? "active" : ""}
@@ -87,38 +87,39 @@ export default function LinuxLab({ progress, setProgress, onWrong }) {
       </nav>
 
       <section className="mode-content">
-        {mode === "reference" && <Reference sections={linuxReference} />}
+        {mode === "reference" && <Reference sections={dockerReference} />}
         {mode === "flashcards" && (
           <Flashcards
-            cards={linuxFlashcards}
-            mastered={progress.masteredFlashcards}
+            cards={dockerFlashcards}
+            mastered={progress.dockerMasteredFlashcards}
             onToggleMastered={toggleMastered}
           />
         )}
         {mode === "quiz" && (
           <MultipleChoiceQuiz
-            questions={linuxMultipleChoice}
-            savedScore={progress.quizScore}
+            questions={dockerMultipleChoice}
+            savedScore={progress.dockerQuizScore}
             onComplete={saveQuizScore}
             onWrong={onWrong}
           />
         )}
         {mode === "commands" && (
           <CommandQuiz
-            questions={linuxCommandQuiz}
-            completedIds={progress.completedCommands}
+            questions={dockerCommandQuiz}
+            completedIds={progress.dockerCompletedCommands}
             onCorrect={saveCommand}
             onWrong={onWrong}
+            shellPrompt="lab@docker:~$"
           />
         )}
         {mode === "files" && (
           <FilePractice
-            tasks={linuxShellPractice}
-            completedIds={progress.completedPractices}
+            tasks={dockerFilePractice}
+            completedIds={progress.dockerCompletedPractices}
             onComplete={savePractice}
-            labLabel="shell script lab"
-            editorLabel="Shell script answer"
-            resultNoun="Script"
+            labLabel="docker build lab"
+            editorLabel="Docker file answer"
+            resultNoun="File"
           />
         )}
       </section>

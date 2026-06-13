@@ -1,7 +1,13 @@
 import { useState } from "react";
 import { isCommandCorrect } from "../utils/answerValidation";
 
-export default function CommandQuiz({ questions, completedIds, onCorrect, onWrong }) {
+export default function CommandQuiz({
+  questions,
+  completedIds,
+  onCorrect,
+  onWrong,
+  shellPrompt = "lab@linux:~$",
+}) {
   const [index, setIndex] = useState(0);
   const [input, setInput] = useState("");
   const [status, setStatus] = useState("");
@@ -38,7 +44,7 @@ export default function CommandQuiz({ questions, completedIds, onCorrect, onWron
       <h2>{question.prompt}</h2>
       <form onSubmit={submit}>
         <label className="command-input">
-          <span>lab@linux:~$</span>
+          <span>{shellPrompt}</span>
           <input
             value={input}
             onChange={(event) => {

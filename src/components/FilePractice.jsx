@@ -2,7 +2,14 @@ import { useEffect, useState } from "react";
 import { validatePracticeAnswer } from "../utils/answerValidation";
 import PracticeResultModal from "./PracticeResultModal";
 
-export default function FilePractice({ tasks, completedIds, onComplete }) {
+export default function FilePractice({
+  tasks,
+  completedIds,
+  onComplete,
+  labLabel = "shell script lab",
+  editorLabel = "Shell script answer",
+  resultNoun = "Script",
+}) {
   const [index, setIndex] = useState(0);
   const [answer, setAnswer] = useState(tasks[0].starter);
   const [result, setResult] = useState(null);
@@ -40,7 +47,7 @@ export default function FilePractice({ tasks, completedIds, onComplete }) {
     <div className="practice-workspace">
       <section className="practice-instructions terminal-card">
         <div className="study-meta">
-          <span>shell script lab</span>
+          <span>{labLabel}</span>
           <span>{completedIds.length}/{tasks.length} solved</span>
         </div>
         <label className="task-selector">
@@ -70,7 +77,7 @@ export default function FilePractice({ tasks, completedIds, onComplete }) {
           <span />
           <code>{task.filename}</code>
         </div>
-        <label className="sr-only" htmlFor="practice-answer">Shell script answer</label>
+        <label className="sr-only" htmlFor="practice-answer">{editorLabel}</label>
         <textarea
           id="practice-answer"
           value={answer}
@@ -79,7 +86,7 @@ export default function FilePractice({ tasks, completedIds, onComplete }) {
             setResult(null);
           }}
           spellCheck="false"
-          aria-label="Shell script answer"
+          aria-label={editorLabel}
         />
         <div className="editor-actions">
           <button className="primary-button" type="button" onClick={submit} disabled={!answer.trim()}>
@@ -105,6 +112,12 @@ export default function FilePractice({ tasks, completedIds, onComplete }) {
         userAnswer={answer}
         expectedAnswer={task.solution}
         onClose={() => setResult(null)}
+        onRetry={retry}
+        onShowSolution={() => {
+          setShowSolution(true);
+          setResult(null);
+        }}
+        resultNoun={resultNoun}
       />
     </div>
   );

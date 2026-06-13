@@ -3,6 +3,9 @@ export default function PracticeResultModal({
   userAnswer,
   expectedAnswer,
   onClose,
+  onRetry,
+  onShowSolution,
+  resultNoun = "Script",
 }) {
   if (!result) return null;
 
@@ -21,7 +24,7 @@ export default function PracticeResultModal({
           {isSuccess ? "validation_passed" : "validation_failed"}
         </div>
         <h2 id="practice-result-title">
-          {isSuccess ? "Script accepted." : "The script needs another pass."}
+          {isSuccess ? `${resultNoun} accepted.` : `The ${resultNoun.toLowerCase()} needs another pass.`}
         </h2>
         <p>
           {isSuccess
@@ -40,9 +43,21 @@ export default function PracticeResultModal({
           </div>
         </div>
 
-        <button className="primary-button" type="button" onClick={onClose} autoFocus>
-          {isSuccess ? "Continue" : "Return to editor"}
-        </button>
+        <div className="modal-actions">
+          <button className="primary-button" type="button" onClick={onClose} autoFocus>
+            {isSuccess ? "Continue" : "Return to editor"}
+          </button>
+          {!isSuccess && (
+            <>
+              <button className="ghost-button" type="button" onClick={onRetry}>
+                Retry
+              </button>
+              <button className="ghost-button" type="button" onClick={onShowSolution}>
+                Show solution in editor
+              </button>
+            </>
+          )}
+        </div>
       </section>
     </div>
   );
