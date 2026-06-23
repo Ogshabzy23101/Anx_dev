@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/Ogshabzy23101/Anx_dev/actions/workflows/ci.yml/badge.svg)](https://github.com/Ogshabzy23101/Anx_dev/actions/workflows/ci.yml)
 
-A dark, terminal-inspired React learning app for building hands-on DevOps skills. Phase 10 includes enriched Linux, Docker, and Kubernetes curricula alongside complete Helm, Terraform, and Ansible modules, enhanced correction feedback, automated tests, and continuous integration.
+A dark, terminal-inspired React learning app for building hands-on DevOps skills. Phase 11 includes enriched Linux, Docker, Kubernetes, and Helm curricula alongside complete Terraform and Ansible modules, enhanced correction feedback, automated tests, and continuous integration.
 
 Live site: [https://ogshabzy23101.github.io/Anx_dev/](https://ogshabzy23101.github.io/Anx_dev/)
 
@@ -20,8 +20,9 @@ Live site: [https://ogshabzy23101.github.io/Anx_dev/](https://ogshabzy23101.gith
 - Searchable Kubernetes reference with 126 entries across 42 categories
 - 126 structured Kubernetes flashcards, MCQs, and kubectl challenges
 - 35 Kubernetes manifest exercises with YAML-aware requirement checks
-- Complete Helm reference, flashcards, MCQ, and command practice
-- Fifteen Helm chart, values, and Go-template writing exercises
+- Searchable Helm reference with 104 entries across 26 categories
+- 104 structured Helm flashcards, MCQs, and command-writing challenges
+- 30 Helm chart, values, and Go-template writing exercises
 - Complete Terraform reference, flashcards, MCQ, and CLI command practice
 - Fifteen Terraform HCL exercises with block and attribute validation
 - Complete Ansible reference, flashcards, MCQ, and command practice
@@ -65,7 +66,7 @@ Run tests in watch mode while developing:
 npm run test:watch
 ```
 
-Tests use Vitest, React Testing Library, `user-event`, and the jsdom browser environment. The current suite contains **89 tests across 25 test files**.
+Tests use Vitest, React Testing Library, `user-event`, and the jsdom browser environment. The current suite contains **95 tests across 26 test files**.
 
 ## Linux enrichment
 
@@ -155,14 +156,15 @@ An incorrect answer opens a correction modal with missing requirements, a short 
 
 ## Helm module
 
-The Helm module builds directly on the Kubernetes concepts already taught:
+Phase 11 applies the enriched Linux, Docker, and Kubernetes learning pattern to Helm:
 
-- Reference material for charts, releases, repositories, values, templates, lifecycle commands, dependencies, and versioning
-- Fifteen flashcards
-- Twenty-five multiple-choice questions
-- Twenty-five Helm command-writing challenges with accepted aliases and flag alternatives
-- Fifteen exercises covering Chart.yaml, values.yaml, Kubernetes templates, helpers, conditionals, loops, notes, and dependencies
+- **104 reference entries** across Helm basics, charts, releases, repositories, metadata, values, templates, helpers, functions, control flow, dependencies, versioning, lifecycle commands, linting, rendering, debugging, and DevOps workflows
+- **104 flashcards** with basic and professional explanations, examples, DevOps use cases, related concepts, categories, and difficulty levels
+- **104 multiple-choice questions** and **104 Helm command-writing challenges**
+- **30 chart/YAML exercises** covering Chart.yaml, values.yaml, Deployment, Service, Ingress, ConfigMap, Secret, helpers, include, if, range, default, quote, toYaml, nindent, resources, probes, env, imagePullSecrets, ServiceAccount, NOTES, dependencies, frontend/backend/postgres chart values, parent values, environment overrides, and full app chart structure
 - Independent local progress for mastered cards, best MCQ score, Helm command score, completed chart files, and module completion
+
+Helm reference and flashcard views support full-text search, category and difficulty filters, expandable chart cards, chart or command examples, common mistakes, and DevOps use cases.
 
 ### Helm validation
 
@@ -364,12 +366,12 @@ src/
 
 To add another tool, create a new data module under `src/data`, build its lab component, and connect it to the tool registry and app shell.
 
-## Phase 11
+## Phase 12
 
-Phase 11 should enrich the Helm module using the Linux, Docker, and Kubernetes depth as the model:
+Phase 12 should enrich the Terraform module using the Linux, Docker, Kubernetes, and Helm depth as the model:
 
-- Expand Helm reference, flashcards, MCQs, and command-writing banks
-- Add searchable chart, values, templates, release, repository, and troubleshooting categories
-- Add progressive chart exercises using the enriched Kubernetes manifests as a base
-- Add deeper helpers, functions, dependencies, hooks, tests, and packaging workflows
+- Expand Terraform reference, flashcards, MCQs, and command-writing banks
+- Add searchable provider, state, module, backend, expression, workflow, and troubleshooting categories
+- Add progressive HCL exercises for AWS infrastructure, modules, remote state, iteration, and lifecycle
+- Add deeper validation for variables, outputs, resources, data sources, and module composition
 - Preserve independent progress and GitHub Pages deployment behavior

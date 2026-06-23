@@ -1,11 +1,21 @@
-import { helmRules as h } from "../utils/helmValidation";
+import { helmRules as h } from "../utils/helmValidation.js";
 import {
   expectedYamlValue,
   kubernetesRules as k,
   requiredString,
-} from "../utils/kubernetesValidation";
+} from "../utils/kubernetesValidation.js";
+import { helmExtraPractice } from "./helmExtraPractice.js";
 
-export const helmReference = [
+export {
+  helmCategories,
+  helmCommandCatalog,
+  helmCommandQuiz,
+  helmFlashcards,
+  helmMultipleChoice,
+  helmReference,
+} from "./helmCatalog.js";
+
+const legacyHelmReference = [
   {
     category: "Core concepts",
     commands: [
@@ -67,7 +77,7 @@ export const helmReference = [
   },
 ];
 
-export const helmFlashcards = [
+const legacyHelmFlashcards = [
   ["chart", "What is a Helm chart?", "A versioned package of Kubernetes templates, default values, metadata, and optional dependencies."],
   ["release", "What is a Helm release?", "A named chart installation with its own configuration and revision history."],
   ["values", "What is `values.yaml`?", "The chart's default configuration, exposed to templates through `.Values`."],
@@ -85,7 +95,7 @@ export const helmFlashcards = [
   ["values-file", "What does `-f values-prod.yaml` do?", "It merges values from an additional file over chart defaults."],
 ].map(([id, front, back]) => ({ id: `helm-fc-${id}`, front, back }));
 
-export const helmMultipleChoice = [
+const legacyHelmMultipleChoice = [
   ["metadata", "Which file contains chart name and version?", ["values.yaml", "Chart.yaml", "templates.yaml", "index.yaml"], 1, "Chart.yaml stores chart metadata."],
   ["defaults", "Where are default chart settings normally defined?", ["values.yaml", "NOTES.txt", "_helpers.tpl", "Chart.lock"], 0, "values.yaml contains defaults."],
   ["release", "What is a Helm release?", ["A repository", "A named chart installation", "A template function", "A packaged cluster"], 1, "A release is a named installed chart."],
@@ -115,7 +125,7 @@ export const helmMultipleChoice = [
   id: `helm-mc-${id}`, question, options, answer, explanation,
 }));
 
-export const helmCommandQuiz = [
+const legacyHelmCommandQuiz = [
   ["create", "Create a new chart named `webapp`.", ["helm create webapp"]],
   ["install", "Install chart `./webapp` as release `web`.", ["helm install web ./webapp"]],
   ["custom-release", "Install repository chart `bitnami/nginx` as release `frontend`.", ["helm install frontend bitnami/nginx"]],
@@ -154,7 +164,7 @@ const chartBase = [
   h.chartField("version", "0.1.0"),
 ];
 
-export const helmPractice = [
+const baseHelmPractice = [
   {
     id: "helm-chart-basic", title: "Basic Chart.yaml", filename: "Chart.yaml",
     instruction: "Write Chart.yaml for an application chart named `webapp`, version `0.1.0`, and appVersion `1.0.0`.",
@@ -260,4 +270,9 @@ export const helmPractice = [
     explanation: "Chart dependencies declare a chart name, version constraint, and repository URL.",
     rules: [...chartBase, h.yamlKey("dependencies"), expectedYamlValue("name", "postgresql"), expectedYamlValue("version", "15.5.0"), expectedYamlValue("repository", "https://charts.bitnami.com/bitnami")],
   },
+];
+
+export const helmPractice = [
+  ...baseHelmPractice,
+  ...helmExtraPractice,
 ];

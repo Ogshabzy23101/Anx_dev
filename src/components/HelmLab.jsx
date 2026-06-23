@@ -1,16 +1,17 @@
 import { useState } from "react";
 import {
   helmCommandQuiz,
+  helmCategories,
+  helmCommandCatalog,
   helmFlashcards,
   helmMultipleChoice,
   helmPractice,
-  helmReference,
 } from "../data/helm";
 import CommandQuiz from "./CommandQuiz";
 import FilePractice from "./FilePractice";
-import Flashcards from "./Flashcards";
+import LinuxFlashcards from "./LinuxFlashcards";
+import LinuxReference from "./LinuxReference";
 import MultipleChoiceQuiz from "./MultipleChoiceQuiz";
-import Reference from "./Reference";
 
 const modes = [
   { id: "reference", label: "Reference", icon: "01" },
@@ -92,12 +93,29 @@ export default function HelmLab({ progress, setProgress, onWrong }) {
       </nav>
 
       <section className="mode-content">
-        {mode === "reference" && <Reference sections={helmReference} />}
+        {mode === "reference" && (
+          <LinuxReference
+            commands={helmCommandCatalog}
+            categories={helmCategories}
+            searchLabel="search Helm topics and explanations"
+            searchPlaceholder="templates, values, rollback, lint..."
+            itemNoun="Helm topics"
+            emptyMessage="No Helm topics match these filters."
+            syntaxLabel="Syntax or chart example"
+            flagsLabel="Common fields or flags"
+            examplesLabel="Chart or command examples"
+            relatedLabel="Related concepts"
+          />
+        )}
         {mode === "flashcards" && (
-          <Flashcards
+          <LinuxFlashcards
             cards={helmFlashcards}
             mastered={progress.helmMasteredFlashcards}
             onToggleMastered={toggleMastered}
+            categories={helmCategories}
+            searchPlaceholder="install, values, helpers, pipelines..."
+            flipLabel="Flip Helm flashcard"
+            emptyMessage="No Helm flashcards match these filters."
           />
         )}
         {mode === "quiz" && (

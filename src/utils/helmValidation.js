@@ -2,7 +2,7 @@ import {
   expectedYamlValue,
   requiredString,
   requiredYamlKey,
-} from "./kubernetesValidation";
+} from "./kubernetesValidation.js";
 
 function escapeRegExp(value) {
   return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");

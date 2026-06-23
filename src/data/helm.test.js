@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   helmCommandQuiz,
+  helmCommandCatalog,
   helmFlashcards,
   helmMultipleChoice,
   helmPractice,
@@ -13,10 +14,27 @@ import {
 
 describe("Helm learning data", () => {
   it("contains the required content volume", () => {
-    expect(helmFlashcards.length).toBeGreaterThanOrEqual(15);
-    expect(helmMultipleChoice.length).toBeGreaterThanOrEqual(25);
-    expect(helmCommandQuiz.length).toBeGreaterThanOrEqual(25);
-    expect(helmPractice).toHaveLength(15);
+    expect(helmCommandCatalog).toHaveLength(104);
+    expect(helmFlashcards).toHaveLength(104);
+    expect(helmMultipleChoice).toHaveLength(104);
+    expect(helmCommandQuiz).toHaveLength(104);
+    expect(helmPractice).toHaveLength(30);
+
+    helmCommandCatalog.forEach((item) => {
+      expect(item).toEqual(expect.objectContaining({
+        command: expect.any(String),
+        fullMeaning: expect.any(String),
+        basicExplanation: expect.any(String),
+        professionalExplanation: expect.any(String),
+        commonSyntax: expect.any(String),
+        commonFlags: expect.any(Array),
+        examples: expect.any(Array),
+        devOpsUseCase: expect.any(String),
+        commonMistake: expect.any(String),
+        relatedCommands: expect.any(Array),
+        difficulty: expect.stringMatching(/beginner|intermediate|advanced/),
+      }));
+    });
   });
 
   it("covers the requested reference topics", () => {
@@ -70,6 +88,31 @@ describe("Helm learning data", () => {
       "containers:",
       ".Values.image.repository",
       ".Values.image.tag",
+    ]));
+  });
+
+  it("validates .Values, include, if, and range chart exercises", () => {
+    [
+      "helm-existing-deployment",
+      "helm-include",
+      "helm-if",
+      "helm-range",
+    ].forEach((id) => {
+      const task = helmPractice.find((item) => item.id === id);
+      expect(validatePracticeAnswer(task.solution, task.rules).isCorrect).toBe(true);
+    });
+  });
+
+  it("detects missing template function requirements", () => {
+    const task = helmPractice.find((item) => item.id === "helm-default-function");
+    const validation = validatePracticeAnswer(
+      'image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"',
+      task.rules,
+    );
+
+    expect(validation.missing).toEqual(expect.arrayContaining([
+      "default function",
+      ".Chart.AppVersion",
     ]));
   });
 });
