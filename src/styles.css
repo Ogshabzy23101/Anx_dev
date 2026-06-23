@@ -633,6 +633,127 @@ main {
   font: 700 clamp(42px, 8vw, 76px) "IBM Plex Mono", monospace;
 }
 
+.recommended-panel,
+.practice-repo-panel {
+  margin-top: 18px;
+  padding: 18px;
+}
+
+.recommended-panel p,
+.practice-repo-panel p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.practice-lab-layout {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.8fr) minmax(0, 1.4fr);
+  gap: 18px;
+  margin-top: 18px;
+  align-items: start;
+}
+
+.practice-lab-list {
+  display: grid;
+  gap: 8px;
+  max-height: 780px;
+  overflow: auto;
+  padding: 14px;
+}
+
+.practice-lab-list .linux-command-card {
+  border: 1px solid var(--line);
+  background: #0a0f0c;
+}
+
+.practice-lab-list .linux-command-card summary {
+  padding: 13px;
+}
+
+.practice-lab-detail {
+  display: grid;
+  gap: 18px;
+  padding: clamp(22px, 4vw, 34px);
+}
+
+.practice-lab-detail h2,
+.practice-repo-panel h2 {
+  margin: 0;
+  color: #e5eee8;
+  font-size: clamp(24px, 3vw, 34px);
+}
+
+.practice-lab-detail h3 {
+  margin: 0 0 8px;
+  color: #718078;
+  font: 9px "IBM Plex Mono", monospace;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.practice-lab-detail p,
+.practice-lab-detail li {
+  color: #a2afa7;
+  line-height: 1.55;
+}
+
+.practice-lab-detail code {
+  display: block;
+  margin: 6px 0;
+  padding: 8px 10px;
+  color: var(--green);
+  background: #07100b;
+  font: 11px "IBM Plex Mono", monospace;
+  overflow-x: auto;
+}
+
+.hint-box,
+.solution-box {
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: #0a100d;
+}
+
+.solution-box {
+  border-color: #365742;
+  background: #0b1710;
+}
+
+.solution-box pre {
+  overflow-x: auto;
+  margin: 0;
+  color: #d8e2dc;
+  font: 12px/1.6 "IBM Plex Mono", monospace;
+}
+
+.reset-progress-button {
+  justify-self: center;
+}
+
+.practice-repo-panel {
+  display: grid;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.practice-repo-panel code {
+  display: inline-block;
+  width: max-content;
+  padding: 8px 10px;
+  color: var(--green);
+  background: #07100b;
+  font: 12px "IBM Plex Mono", monospace;
+}
+
+.practice-repo-panel ul {
+  columns: 2;
+  margin: 0;
+  color: #a2afa7;
+  line-height: 1.7;
+}
+
 .study-layout,
 .quiz-panel,
 .result-panel {

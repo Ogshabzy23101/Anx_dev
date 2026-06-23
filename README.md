@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/Ogshabzy23101/Anx_dev/actions/workflows/ci.yml/badge.svg)](https://github.com/Ogshabzy23101/Anx_dev/actions/workflows/ci.yml)
 
-A dark, terminal-inspired React learning app for building hands-on DevOps skills. Phase 14 includes enriched Linux, Docker, Kubernetes, Helm, Terraform, and Ansible curricula plus Interview Mode for structured DevOps interview preparation.
+A dark, terminal-inspired React learning app for building hands-on DevOps skills. Phase 15 includes enriched Linux, Docker, Kubernetes, Helm, Terraform, and Ansible curricula, Interview Mode, and a new Practice Labs section for guided hands-on Linux work.
 
 Live site: [https://ogshabzy23101.github.io/Anx_dev/](https://ogshabzy23101.github.io/Anx_dev/)
 
@@ -31,11 +31,14 @@ Live site: [https://ogshabzy23101.github.io/Anx_dev/](https://ogshabzy23101.gith
 - 31 Ansible playbook, inventory, role, Vault, and YAML exercises
 - Interview Mode with Q&A bank, flashcards, MCQs, written-answer practice, and mock interviews
 - 101 interview questions across 11 categories and four difficulty levels
+- Practice Labs with 75 guided Linux labs across beginner, intermediate, and advanced difficulty levels
+- Linux lab search, category filters, difficulty filters, hints, solution reveal, and completion tracking
+- Practice Repository placeholder metadata for future downloadable lab files
 - UX-001 feedback showing correct sections, missing sections, expected values, and user values
 - Retry, solution reveal, and side-by-side answer comparison
 - Success and correction modals
 - Local progress persistence via `localStorage`
-- Responsive navigation for Linux, Docker, Kubernetes, Terraform, Ansible, Helm, Interview, CI/CD, AWS, and Observability
+- Responsive navigation for Linux, Docker, Kubernetes, Terraform, Ansible, Helm, Interview, Practice Labs, CI/CD, AWS, and Observability
 - Vitest and React Testing Library coverage for answer checking, persistence, and feedback
 
 ## Setup
@@ -70,7 +73,7 @@ Run tests in watch mode while developing:
 npm run test:watch
 ```
 
-Tests use Vitest, React Testing Library, `user-event`, and the jsdom browser environment. The current suite contains **119 tests across 30 test files**.
+Tests use Vitest, React Testing Library, `user-event`, and the jsdom browser environment. The current suite contains **132 tests across 33 test files**.
 
 ## Linux enrichment
 
@@ -339,6 +342,68 @@ Current categories are Linux, Docker, Kubernetes, Helm, Terraform, Ansible, CI/C
 
 Interview progress is stored independently in `localStorage` and tracks reviewed questions, mastered flashcards, best quiz score, completed written answers, completed mock interviews, and weak categories from mock interview results.
 
+## Practice Labs
+
+Phase 15 adds a dedicated Practice Labs section without mixing lab content into Linux, Docker, Kubernetes, Helm, Terraform, Ansible, or Interview Mode.
+
+The MVP focuses on Linux labs only:
+
+- **75 Linux labs** total
+- **25 Beginner**, **25 Intermediate**, and **25 Advanced** labs
+- Coverage across Navigation, Files, Directories, Permissions, Ownership, Searching, Find, Grep, Awk, Sed, Logs, Processes, Services, Networking, SSH, Cron, Disk Usage, Memory Usage, Compression, Archives, Environment Variables, Users, Groups, Monitoring, Bash Scripting, and Troubleshooting
+- Search, category filtering, difficulty filtering, expandable lab cards, previous/next navigation, hints, solution reveal, completion tracking, and progress reset
+
+Each lab is defined in `src/data/practiceLabs.js` with:
+
+```js
+{
+  id,
+  title,
+  difficulty,
+  category,
+  scenario,
+  objectives,
+  expectedCommands,
+  hints,
+  solution,
+  realWorldExplanation,
+  relatedLinuxTopics,
+}
+```
+
+### Practice Lab progress
+
+Practice Lab progress is stored independently in `localStorage` and tracks:
+
+- Labs started
+- Labs completed
+- Completion percentage
+- Difficulty completion
+- Category completion
+- Logged blockers by category
+
+Recommended Practice Areas are calculated from low category completion and repeated blockers. For example, if a learner repeatedly logs blockers in Permissions or Bash Scripting, those categories are surfaced as recommended review areas.
+
+### Practice Repository
+
+The Practice Repository panel introduces placeholder metadata for future downloadable lab files. Zip generation is not implemented yet, but the structure is ready for future phases:
+
+```text
+linux-practice-lab/
+README.md
+navigation/
+files/
+permissions/
+logs/
+networking/
+processes/
+services/
+bash/
+troubleshooting/
+```
+
+Future Practice Labs phases should add Docker, Kubernetes, Terraform, Helm, and Ansible labs, then generate downloadable practice repositories from the same metadata.
+
 ## Modules
 
 | Module | Status | Practice format |
@@ -350,6 +415,7 @@ Interview progress is stored independently in `localStorage` and tracks reviewed
 | Terraform | Complete | Terraform HCL |
 | Ansible | Complete | Playbooks, roles, and YAML |
 | Interview | MVP | Q&A, flashcards, quizzes, written answers, and mocks |
+| Practice Labs | MVP | Guided Linux labs |
 | CI/CD, AWS, Observability | Planned | To be added |
 
 ## Continuous integration
@@ -409,6 +475,6 @@ src/
 
 To add another tool, create a new data module under `src/data`, build its lab component, and connect it to the tool registry and app shell.
 
-## Phase 15
+## Future roadmap
 
-Phase 15 should import user-provided interview Q&A banks and expand Interview Mode content. A useful next step is a JSON or Markdown import workflow that validates question shape, merges categories safely, and lets users grow their own targeted interview prep set.
+Next Practice Labs phases should add Docker, Kubernetes, Terraform, Helm, and Ansible labs using the same lab engine. A useful follow-up is downloadable zip generation from the Practice Repository metadata so learners can run realistic file-based exercises locally.
