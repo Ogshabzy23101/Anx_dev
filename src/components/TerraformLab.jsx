@@ -1,16 +1,17 @@
 import { useState } from "react";
 import {
   terraformCommandQuiz,
+  terraformCategories,
+  terraformCommandCatalog,
   terraformFlashcards,
   terraformMultipleChoice,
   terraformPractice,
-  terraformReference,
 } from "../data/terraform";
 import CommandQuiz from "./CommandQuiz";
 import FilePractice from "./FilePractice";
-import Flashcards from "./Flashcards";
+import LinuxFlashcards from "./LinuxFlashcards";
+import LinuxReference from "./LinuxReference";
 import MultipleChoiceQuiz from "./MultipleChoiceQuiz";
-import Reference from "./Reference";
 
 const modes = [
   { id: "reference", label: "Reference", icon: "01" },
@@ -94,12 +95,29 @@ export default function TerraformLab({ progress, setProgress, onWrong }) {
       </nav>
 
       <section className="mode-content">
-        {mode === "reference" && <Reference sections={terraformReference} />}
+        {mode === "reference" && (
+          <LinuxReference
+            commands={terraformCommandCatalog}
+            categories={terraformCategories}
+            searchLabel="search Terraform topics and explanations"
+            searchPlaceholder="state, modules, backend, EC2..."
+            itemNoun="Terraform topics"
+            emptyMessage="No Terraform topics match these filters."
+            syntaxLabel="Syntax or HCL example"
+            flagsLabel="Common fields or flags"
+            examplesLabel="HCL or CLI examples"
+            relatedLabel="Related concepts"
+          />
+        )}
         {mode === "flashcards" && (
-          <Flashcards
+          <LinuxFlashcards
             cards={terraformFlashcards}
             mastered={progress.terraformMasteredFlashcards}
             onToggleMastered={toggleMastered}
+            categories={terraformCategories}
+            searchPlaceholder="providers, state, modules, workspaces..."
+            flipLabel="Flip Terraform flashcard"
+            emptyMessage="No Terraform flashcards match these filters."
           />
         )}
         {mode === "quiz" && (

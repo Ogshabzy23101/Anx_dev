@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   terraformCommandQuiz,
+  terraformCommandCatalog,
   terraformFlashcards,
   terraformMultipleChoice,
   terraformPractice,
@@ -13,10 +14,27 @@ import {
 
 describe("Terraform learning data", () => {
   it("contains the required content volume", () => {
-    expect(terraformFlashcards.length).toBeGreaterThanOrEqual(20);
-    expect(terraformMultipleChoice.length).toBeGreaterThanOrEqual(30);
-    expect(terraformCommandQuiz.length).toBeGreaterThanOrEqual(25);
-    expect(terraformPractice).toHaveLength(15);
+    expect(terraformCommandCatalog).toHaveLength(124);
+    expect(terraformFlashcards).toHaveLength(124);
+    expect(terraformMultipleChoice).toHaveLength(124);
+    expect(terraformCommandQuiz).toHaveLength(124);
+    expect(terraformPractice).toHaveLength(31);
+
+    terraformCommandCatalog.forEach((item) => {
+      expect(item).toEqual(expect.objectContaining({
+        command: expect.any(String),
+        fullMeaning: expect.any(String),
+        basicExplanation: expect.any(String),
+        professionalExplanation: expect.any(String),
+        commonSyntax: expect.any(String),
+        commonFlags: expect.any(Array),
+        examples: expect.any(Array),
+        devOpsUseCase: expect.any(String),
+        commonMistake: expect.any(String),
+        relatedCommands: expect.any(Array),
+        difficulty: expect.stringMatching(/beginner|intermediate|advanced/),
+      }));
+    });
   });
 
   it("covers the requested reference topics", () => {
@@ -70,5 +88,33 @@ describe("Terraform learning data", () => {
       "ami = ami-123456",
       "instance_type = t3.micro",
     ]);
+  });
+
+  it("validates provider, resource, data, module, and backend exercises", () => {
+    [
+      "tf-hcl-provider",
+      "tf-hcl-ec2",
+      "tf-hcl-data",
+      "tf-hcl-module",
+      "tf-hcl-backend-complete",
+    ].forEach((id) => {
+      const task = terraformPractice.find((item) => item.id === id);
+      expect(validatePracticeAnswer(task.solution, task.rules).isCorrect).toBe(true);
+    });
+  });
+
+  it("detects missing backend and state locking fields", () => {
+    const task = terraformPractice.find((item) => item.id === "tf-hcl-backend-complete");
+    const validation = validatePracticeAnswer(
+      'terraform {\n  backend "s3" {\n    bucket = "company-tf-state"\n  }\n}',
+      task.rules,
+    );
+
+    expect(validation.missing).toEqual(expect.arrayContaining([
+      "key = prod/app/terraform.tfstate",
+      "region = us-east-1",
+      "encrypt = true",
+      "dynamodb_table = terraform-locks",
+    ]));
   });
 });

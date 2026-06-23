@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/Ogshabzy23101/Anx_dev/actions/workflows/ci.yml/badge.svg)](https://github.com/Ogshabzy23101/Anx_dev/actions/workflows/ci.yml)
 
-A dark, terminal-inspired React learning app for building hands-on DevOps skills. Phase 11 includes enriched Linux, Docker, Kubernetes, and Helm curricula alongside complete Terraform and Ansible modules, enhanced correction feedback, automated tests, and continuous integration.
+A dark, terminal-inspired React learning app for building hands-on DevOps skills. Phase 12 includes enriched Linux, Docker, Kubernetes, Helm, and Terraform curricula alongside the complete Ansible module, enhanced correction feedback, automated tests, and continuous integration.
 
 Live site: [https://ogshabzy23101.github.io/Anx_dev/](https://ogshabzy23101.github.io/Anx_dev/)
 
@@ -23,8 +23,9 @@ Live site: [https://ogshabzy23101.github.io/Anx_dev/](https://ogshabzy23101.gith
 - Searchable Helm reference with 104 entries across 26 categories
 - 104 structured Helm flashcards, MCQs, and command-writing challenges
 - 30 Helm chart, values, and Go-template writing exercises
-- Complete Terraform reference, flashcards, MCQ, and CLI command practice
-- Fifteen Terraform HCL exercises with block and attribute validation
+- Searchable Terraform reference with 124 entries across 31 categories
+- 124 structured Terraform flashcards, MCQs, and CLI command challenges
+- 31 Terraform HCL exercises with block, attribute, state, backend, module, and AWS validation
 - Complete Ansible reference, flashcards, MCQ, and command practice
 - Fifteen Ansible playbook and YAML exercises
 - UX-001 feedback showing correct sections, missing sections, expected values, and user values
@@ -66,7 +67,7 @@ Run tests in watch mode while developing:
 npm run test:watch
 ```
 
-Tests use Vitest, React Testing Library, `user-event`, and the jsdom browser environment. The current suite contains **95 tests across 26 test files**.
+Tests use Vitest, React Testing Library, `user-event`, and the jsdom browser environment. The current suite contains **101 tests across 27 test files**.
 
 ## Linux enrichment
 
@@ -206,14 +207,15 @@ Incorrect chart answers receive missing requirements, a short explanation, the e
 
 ## Terraform module
 
-The Terraform module provides:
+Phase 12 applies the enriched Linux, Docker, Kubernetes, and Helm learning pattern to Terraform:
 
-- Reference material for Infrastructure as Code, providers, resources, data sources, inputs, outputs, state, backends, modules, lifecycle, and iteration
-- Twenty flashcards
-- Thirty multiple-choice questions
-- Twenty-five Terraform CLI command challenges with valid flag alternatives
-- Fifteen HCL exercises covering AWS resources, variables, outputs, data, locals, modules, remote state, locking, iteration, and lifecycle
+- **124 reference entries** across Terraform basics, providers, resources, data sources, variables, outputs, locals, state, remote state, backends, workspaces, modules, count, `for_each`, dynamic blocks, lifecycle, dependencies, provisioners, import, plan/apply, destroy, validation, security, secrets, AWS, VPC, EC2, S3 backend, DynamoDB locking, troubleshooting, and DevOps workflows
+- **124 flashcards** with basic and professional explanations, examples, DevOps use cases, related concepts, categories, and difficulty levels
+- **124 multiple-choice questions** and **124 Terraform CLI challenges**
+- **31 HCL exercises** covering AWS providers, EC2, security groups, variables, outputs, locals, data sources, modules, S3 backend, DynamoDB locking, count, `for_each`, lifecycle, `depends_on`, VPC, subnets, internet gateways, route tables, security group rules, IAM, EKS module usage, remote state, tfvars, sensitive variables, complete EC2 projects, complete backend configuration, workspace naming, and reusable module interfaces
 - Independent local progress for mastered cards, best MCQ score, Terraform command score, completed HCL files, and module completion
+
+Terraform reference and flashcard views support full-text search, category and difficulty filters, expandable HCL/CLI cards, examples, common mistakes, and DevOps use cases.
 
 ### HCL validation
 
@@ -222,8 +224,10 @@ Terraform exercises use helpers from `src/utils/terraformValidation.js`. The lig
 - Provider, resource, data, variable, output, module, and backend blocks
 - Required HCL attributes and expected values
 - References such as `aws_instance.web.public_ip`
-- Nested blocks such as `lifecycle` and `ingress`
+- Nested blocks such as `lifecycle`, `route`, and backend `config`
 - Collection and iteration expressions such as `count.index`, `each.value`, and `toset`
+- State and backend requirements such as S3 bucket/key/region, encryption, and DynamoDB locking
+- AWS infrastructure composition such as VPCs, subnets, gateways, IAM roles, policy attachments, and module outputs
 
 Validation is requirement-based rather than exact-text matching. It accepts formatting differences and additional valid configuration while reporting precise missing blocks and attributes.
 
@@ -366,12 +370,12 @@ src/
 
 To add another tool, create a new data module under `src/data`, build its lab component, and connect it to the tool registry and app shell.
 
-## Phase 12
+## Phase 13
 
-Phase 12 should enrich the Terraform module using the Linux, Docker, Kubernetes, and Helm depth as the model:
+Phase 13 should enrich the Ansible module using the same depth as Linux, Docker, Kubernetes, Helm, and Terraform:
 
-- Expand Terraform reference, flashcards, MCQs, and command-writing banks
-- Add searchable provider, state, module, backend, expression, workflow, and troubleshooting categories
-- Add progressive HCL exercises for AWS infrastructure, modules, remote state, iteration, and lifecycle
-- Add deeper validation for variables, outputs, resources, data sources, and module composition
+- Expand Ansible reference, flashcards, MCQs, and command-writing banks
+- Add searchable inventory, playbook, task, role, variable, handler, Vault, Galaxy, and troubleshooting categories
+- Add progressive YAML exercises for playbooks, roles, templates, handlers, loops, conditions, registered output, and secure automation
+- Add deeper validation for inventory structure, module usage, idempotency, variables, roles, and handlers
 - Preserve independent progress and GitHub Pages deployment behavior

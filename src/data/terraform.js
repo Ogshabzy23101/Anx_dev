@@ -1,6 +1,16 @@
-import { terraformRules as t } from "../utils/terraformValidation";
+import { terraformRules as t } from "../utils/terraformValidation.js";
+import { terraformExtraPractice } from "./terraformExtraPractice.js";
 
-export const terraformReference = [
+export {
+  terraformCategories,
+  terraformCommandCatalog,
+  terraformCommandQuiz,
+  terraformFlashcards,
+  terraformMultipleChoice,
+  terraformReference,
+} from "./terraformCatalog.js";
+
+const legacyTerraformReference = [
   {
     category: "Core model",
     commands: [
@@ -55,7 +65,7 @@ export const terraformReference = [
   },
 ];
 
-export const terraformFlashcards = [
+const legacyTerraformFlashcards = [
   ["iac", "What is Infrastructure as Code?", "Managing infrastructure through versioned, machine-readable configuration."],
   ["provider", "What is a Terraform provider?", "A plugin that connects Terraform to an API and supplies resources and data sources."],
   ["resource", "What is a resource block?", "A declaration that Terraform should manage an infrastructure object."],
@@ -78,7 +88,7 @@ export const terraformFlashcards = [
   ["sensitive", "What does `sensitive = true` do?", "Redacts a variable or output from normal CLI display, without encrypting storage."],
 ].map(([id, front, back]) => ({ id: `tf-fc-${id}`, front, back }));
 
-export const terraformMultipleChoice = [
+const legacyTerraformMultipleChoice = [
   ["state-purpose", "What is Terraform state primarily used for?", ["Store provider binaries", "Map resource addresses to real objects", "Encrypt variables", "Render documentation"], 1, "State records Terraform's mapping to managed objects."],
   ["state-secret", "Should state be treated as sensitive?", ["No", "Only local state", "Yes, it can contain sensitive values", "Only after apply"], 2, "State can contain credentials and other sensitive data."],
   ["backend", "What configures state storage?", ["Provider", "Backend", "Output", "Local"], 1, "The backend determines state storage."],
@@ -113,7 +123,7 @@ export const terraformMultipleChoice = [
   id: `tf-mc-${id}`, question, options, answer, explanation,
 }));
 
-export const terraformCommandQuiz = [
+const legacyTerraformCommandQuiz = [
   ["init", "Initialize the current Terraform directory.", ["terraform init"]],
   ["init-upgrade", "Initialize and upgrade provider selections.", ["terraform init -upgrade", "terraform init --upgrade"]],
   ["validate", "Validate the current configuration.", ["terraform validate"]],
@@ -146,7 +156,7 @@ export const terraformCommandQuiz = [
   explanation: `A valid answer is \`${answers[0]}\`. Equivalent long flags are accepted where Terraform supports them.`,
 }));
 
-export const terraformPractice = [
+const baseTerraformPractice = [
   {
     id: "tf-hcl-provider", title: "AWS provider", filename: "providers.tf",
     instruction: "Write an AWS provider block using region us-east-1.",
@@ -252,4 +262,9 @@ export const terraformPractice = [
     explanation: "Registry modules use a source, pinned version, and documented input arguments.",
     rules: [t.module("vpc"), t.attribute("source", "terraform-aws-modules/vpc/aws"), t.attribute("version", "5.0.0"), t.attribute("name", "main"), t.attribute("cidr", "10.0.0.0/16"), t.requiredString("availability zone us-east-1a", "us-east-1a"), t.requiredString("availability zone us-east-1b", "us-east-1b")],
   },
+];
+
+export const terraformPractice = [
+  ...baseTerraformPractice,
+  ...terraformExtraPractice,
 ];
