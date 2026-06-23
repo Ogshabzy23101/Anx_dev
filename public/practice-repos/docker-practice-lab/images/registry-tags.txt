@@ -1,0 +1,6 @@
+practice/simple-app:dev
+practice/simple-app:1.0.0
+registry.example.com/platform/simple-app:2026.06.23
+registry.example.com/platform/simple-app:rc
+registry.example.com/platform/simple-app:rollback
+username/simple-app:1.0.0

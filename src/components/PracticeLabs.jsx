@@ -1,5 +1,10 @@
 import { useMemo, useState } from "react";
 import {
+  dockerLabCategories,
+  dockerPracticeLabs,
+  dockerPracticeRepository,
+} from "../data/dockerPracticeLabs";
+import {
   linuxLabCategories,
   linuxPracticeLabs,
   practiceLabDifficulties,
@@ -8,6 +13,7 @@ import {
 import { calculatePracticeLabStats } from "../utils/practiceLabProgress";
 
 export default function PracticeLabs({ progress, setProgress }) {
+  const [activeLabSet, setActiveLabSet] = useState("linux");
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("all");
   const [difficulty, setDifficulty] = useState("all");
@@ -15,14 +21,54 @@ export default function PracticeLabs({ progress, setProgress }) {
   const [hintLevel, setHintLevel] = useState(0);
   const [showSolution, setShowSolution] = useState(false);
 
+  const labSets = {
+    linux: {
+      label: "Linux",
+      eyebrow: "phase 15 / hands-on labs",
+      intro: "Work through realistic Linux DevOps tasks with guided objectives, hints, solutions, and production context.",
+      badge: "linux labs",
+      placeholder: "grep, logs, permissions, services...",
+      topicHeading: "Related Linux topics",
+      categories: linuxLabCategories,
+      labs: linuxPracticeLabs,
+      repository: practiceRepository,
+      startedKey: "practiceLabStartedIds",
+      completedKey: "practiceLabCompletedIds",
+      failuresKey: "practiceLabFailures",
+    },
+    docker: {
+      label: "Docker",
+      eyebrow: "phase 15.3 / docker labs",
+      intro: "Practice realistic Docker operations with guided scenarios for images, containers, Dockerfiles, Compose, networking, security, and troubleshooting.",
+      badge: "docker labs",
+      placeholder: "compose, Dockerfile, networks, logs...",
+      topicHeading: "Related Docker topics",
+      categories: dockerLabCategories,
+      labs: dockerPracticeLabs,
+      repository: dockerPracticeRepository,
+      startedKey: "dockerPracticeLabStartedIds",
+      completedKey: "dockerPracticeLabCompletedIds",
+      failuresKey: "dockerPracticeLabFailures",
+    },
+  };
+
+  const labConfig = labSets[activeLabSet];
+  const startedIds = progress[labConfig.startedKey] || [];
+  const completedIds = progress[labConfig.completedKey] || [];
+  const failures = progress[labConfig.failuresKey] || {};
+
   const stats = useMemo(
-    () => calculatePracticeLabStats(progress, linuxPracticeLabs),
-    [progress],
+    () => calculatePracticeLabStats({
+      practiceLabStartedIds: startedIds,
+      practiceLabCompletedIds: completedIds,
+      practiceLabFailures: failures,
+    }, labConfig.labs),
+    [failures, labConfig.labs, startedIds, completedIds],
   );
 
   const filteredLabs = useMemo(() => {
     const search = query.trim().toLowerCase();
-    return linuxPracticeLabs.filter((lab) => {
+    return labConfig.labs.filter((lab) => {
       const text = [
         lab.title,
         lab.category,
@@ -30,13 +76,13 @@ export default function PracticeLabs({ progress, setProgress }) {
         lab.objectives.join(" "),
         lab.expectedCommands.join(" "),
         lab.realWorldExplanation,
-        lab.relatedLinuxTopics.join(" "),
+        (lab.relatedLinuxTopics || lab.relatedDockerTopics || []).join(" "),
       ].join(" ").toLowerCase();
       return (!search || text.includes(search))
         && (category === "all" || lab.category === category)
         && (difficulty === "all" || lab.difficulty === difficulty);
     });
-  }, [category, difficulty, query]);
+  }, [category, difficulty, labConfig.labs, query]);
 
   const activeIndex = Math.min(selectedIndex, Math.max(filteredLabs.length - 1, 0));
   const activeLab = filteredLabs[activeIndex];
@@ -50,33 +96,33 @@ export default function PracticeLabs({ progress, setProgress }) {
   function saveStarted(lab) {
     setProgress((current) => ({
       ...current,
-      practiceLabStartedIds: current.practiceLabStartedIds.includes(lab.id)
-        ? current.practiceLabStartedIds
-        : [...current.practiceLabStartedIds, lab.id],
+      [labConfig.startedKey]: (current[labConfig.startedKey] || []).includes(lab.id)
+        ? current[labConfig.startedKey]
+        : [...(current[labConfig.startedKey] || []), lab.id],
     }));
   }
 
   function markComplete(lab) {
     setProgress((current) => ({
       ...current,
-      practiceLabStartedIds: current.practiceLabStartedIds.includes(lab.id)
-        ? current.practiceLabStartedIds
-        : [...current.practiceLabStartedIds, lab.id],
-      practiceLabCompletedIds: current.practiceLabCompletedIds.includes(lab.id)
-        ? current.practiceLabCompletedIds
-        : [...current.practiceLabCompletedIds, lab.id],
+      [labConfig.startedKey]: (current[labConfig.startedKey] || []).includes(lab.id)
+        ? current[labConfig.startedKey]
+        : [...(current[labConfig.startedKey] || []), lab.id],
+      [labConfig.completedKey]: (current[labConfig.completedKey] || []).includes(lab.id)
+        ? current[labConfig.completedKey]
+        : [...(current[labConfig.completedKey] || []), lab.id],
     }));
   }
 
   function logFailure(lab) {
     setProgress((current) => ({
       ...current,
-      practiceLabStartedIds: current.practiceLabStartedIds.includes(lab.id)
-        ? current.practiceLabStartedIds
-        : [...current.practiceLabStartedIds, lab.id],
-      practiceLabFailures: {
-        ...current.practiceLabFailures,
-        [lab.category]: (current.practiceLabFailures[lab.category] || 0) + 1,
+      [labConfig.startedKey]: (current[labConfig.startedKey] || []).includes(lab.id)
+        ? current[labConfig.startedKey]
+        : [...(current[labConfig.startedKey] || []), lab.id],
+      [labConfig.failuresKey]: {
+        ...(current[labConfig.failuresKey] || {}),
+        [lab.category]: ((current[labConfig.failuresKey] || {})[lab.category] || 0) + 1,
       },
     }));
   }
@@ -84,9 +130,9 @@ export default function PracticeLabs({ progress, setProgress }) {
   function resetProgress() {
     setProgress((current) => ({
       ...current,
-      practiceLabStartedIds: [],
-      practiceLabCompletedIds: [],
-      practiceLabFailures: {},
+      [labConfig.startedKey]: [],
+      [labConfig.completedKey]: [],
+      [labConfig.failuresKey]: {},
     }));
   }
 
@@ -94,15 +140,36 @@ export default function PracticeLabs({ progress, setProgress }) {
     <>
       <section className="linux-heading">
         <div>
-          <span className="eyebrow">phase 15 / hands-on labs</span>
+          <span className="eyebrow">{labConfig.eyebrow}</span>
           <h1>Practice Labs</h1>
-          <p>Work through realistic Linux DevOps tasks with guided objectives, hints, solutions, and production context.</p>
+          <p>{labConfig.intro}</p>
         </div>
         <div className="module-badge">
-          <span>linux labs</span>
-          <code>{linuxPracticeLabs.length} tasks</code>
+          <span>{labConfig.badge}</span>
+          <code>{labConfig.labs.length} tasks</code>
         </div>
       </section>
+
+      <nav className="mode-tabs" aria-label="Practice lab sets">
+        {Object.entries(labSets).map(([id, item]) => (
+          <button
+            className={activeLabSet === id ? "active" : ""}
+            type="button"
+            key={id}
+            aria-label={`${item.label} Practice Labs`}
+            onClick={() => {
+              setActiveLabSet(id);
+              setQuery("");
+              setCategory("all");
+              setDifficulty("all");
+              resetLabView(0);
+            }}
+          >
+            <span>{id === "linux" ? "01" : "02"}</span>
+            {item.label}
+          </button>
+        ))}
+      </nav>
 
       <section className="interview-progress terminal-card">
         <span>{stats.startedCount} started</span>
@@ -122,7 +189,7 @@ export default function PracticeLabs({ progress, setProgress }) {
               setQuery(event.target.value);
               resetLabView(0);
             }}
-            placeholder="grep, logs, permissions, services..."
+            placeholder={labConfig.placeholder}
           />
         </label>
         <label>
@@ -132,7 +199,7 @@ export default function PracticeLabs({ progress, setProgress }) {
             resetLabView(0);
           }}>
             <option value="all">All categories</option>
-            {linuxLabCategories.map((item) => <option key={item}>{item}</option>)}
+            {labConfig.categories.map((item) => <option key={item}>{item}</option>)}
           </select>
         </label>
         <label>
@@ -236,8 +303,8 @@ export default function PracticeLabs({ progress, setProgress }) {
               <p>{activeLab.realWorldExplanation}</p>
             </section>
             <section>
-              <h3>Related Linux topics</h3>
-              <p>{activeLab.relatedLinuxTopics.join(", ")}</p>
+              <h3>{labConfig.topicHeading}</h3>
+              <p>{(activeLab.relatedLinuxTopics || activeLab.relatedDockerTopics || []).join(", ")}</p>
             </section>
 
             <div className="button-row">
@@ -282,13 +349,13 @@ export default function PracticeLabs({ progress, setProgress }) {
       <section className="terminal-card practice-repo-panel">
         <div>
           <span className="eyebrow">practice repository</span>
-          <h2>Download Linux Practice Repo</h2>
-          <p>Zip generation is planned for a future phase. This static scaffold defines the folder structure the downloadable repo will use.</p>
+          <h2>Download {labConfig.label} Practice Repo</h2>
+          <p>Zip generation is planned for a future phase. This static practice repository defines the folder structure and files the downloadable repo will use.</p>
         </div>
-        <code>{practiceRepository.root}</code>
-        <code>{practiceRepository.publicPath}</code>
+        <code>{labConfig.repository.root}</code>
+        <code>{labConfig.repository.publicPath}</code>
         <ul>
-          {practiceRepository.files.map((item) => <li key={item}>{item}</li>)}
+          {labConfig.repository.files.map((item) => <li key={item}>{item}</li>)}
         </ul>
       </section>
     </>

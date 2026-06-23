@@ -1,0 +1,4 @@
+#7 [3/5] COPY . .
+#8 [4/5] RUN npm ci
+#8 0.422 npm ERR! The `npm ci` command can only install with an existing package-lock.json
+#8 ERROR: process "/bin/sh -c npm ci" did not complete successfully: exit code: 1

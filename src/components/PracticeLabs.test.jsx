@@ -7,6 +7,9 @@ const progress = {
   practiceLabStartedIds: [],
   practiceLabCompletedIds: [],
   practiceLabFailures: {},
+  dockerPracticeLabStartedIds: [],
+  dockerPracticeLabCompletedIds: [],
+  dockerPracticeLabFailures: {},
 };
 
 function renderPracticeLabs(overrides = {}) {
@@ -29,6 +32,18 @@ describe("Practice Labs", () => {
     expect(screen.getByText("practice-repos/linux-practice-lab/")).toBeInTheDocument();
   });
 
+  it("renders Docker Practice Labs and repository metadata", () => {
+    renderPracticeLabs();
+
+    fireEvent.click(screen.getByRole("button", { name: "Docker Practice Labs" }));
+
+    expect(screen.getByText("docker labs")).toBeInTheDocument();
+    expect(screen.getByText("75 tasks")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Download Docker Practice Repo" })).toBeInTheDocument();
+    expect(screen.getByText("docker-practice-lab/")).toBeInTheDocument();
+    expect(screen.getByText("practice-repos/docker-practice-lab/")).toBeInTheDocument();
+  });
+
   it("filters labs by search, category, and difficulty", () => {
     const { container } = renderPracticeLabs();
 
@@ -39,6 +54,22 @@ describe("Practice Labs", () => {
 
     fireEvent.change(screen.getByLabelText("category"), { target: { value: "Grep" } });
     expect(container.querySelectorAll("details")).toHaveLength(2);
+
+    fireEvent.change(screen.getByLabelText("difficulty"), { target: { value: "Beginner" } });
+    expect(container.querySelectorAll("details")).toHaveLength(1);
+  });
+
+  it("filters Docker labs by search, category, and difficulty", () => {
+    const { container } = renderPracticeLabs();
+
+    fireEvent.click(screen.getByRole("button", { name: "Docker Practice Labs" }));
+    fireEvent.change(screen.getByRole("searchbox", { name: "search labs" }), {
+      target: { value: "Compose" },
+    });
+    expect(screen.getAllByText(/Compose/).length).toBeGreaterThan(0);
+
+    fireEvent.change(screen.getByLabelText("category"), { target: { value: "Compose" } });
+    expect(container.querySelectorAll("details").length).toBeGreaterThan(0);
 
     fireEvent.change(screen.getByLabelText("difficulty"), { target: { value: "Beginner" } });
     expect(container.querySelectorAll("details")).toHaveLength(1);
@@ -79,6 +110,21 @@ describe("Practice Labs", () => {
     });
   });
 
+  it("persists Docker Lab completion independently through App localStorage", async () => {
+    render(<App />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Practice Labs" }));
+    fireEvent.click(screen.getByRole("button", { name: "Docker Practice Labs" }));
+    fireEvent.click(screen.getByRole("button", { name: "Mark Complete" }));
+
+    await waitFor(() => {
+      const stored = JSON.parse(localStorage.getItem("devops-lab-progress-v1"));
+      expect(stored.dockerPracticeLabStartedIds).toEqual(["docker-lab-beginner-1"]);
+      expect(stored.dockerPracticeLabCompletedIds).toEqual(["docker-lab-beginner-1"]);
+      expect(stored.practiceLabCompletedIds).toEqual([]);
+    });
+  });
+
   it("logs blockers and surfaces recommended practice areas", async () => {
     render(<App />);
 
@@ -91,6 +137,21 @@ describe("Practice Labs", () => {
       expect(stored.practiceLabFailures.Navigation).toBe(2);
     });
     expect(screen.getAllByText(/Navigation/).length).toBeGreaterThan(0);
+  });
+
+  it("logs Docker blockers and surfaces Docker recommended practice areas", async () => {
+    render(<App />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Practice Labs" }));
+    fireEvent.click(screen.getByRole("button", { name: "Docker Practice Labs" }));
+    fireEvent.click(screen.getByRole("button", { name: "Log blocker" }));
+    fireEvent.click(screen.getByRole("button", { name: "Log blocker" }));
+
+    await waitFor(() => {
+      const stored = JSON.parse(localStorage.getItem("devops-lab-progress-v1"));
+      expect(stored.dockerPracticeLabFailures["Docker Basics"]).toBe(2);
+    });
+    expect(screen.getAllByText(/Docker Basics/).length).toBeGreaterThan(0);
   });
 
   it("resets Practice Lab progress", async () => {

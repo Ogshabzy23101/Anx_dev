@@ -1,0 +1,4 @@
+backend  | INFO booting practice backend
+backend  | WARN APP_ENV not set, defaulting to development
+backend  | ERROR missing required env var DATABASE_URL
+backend  | ERROR startup aborted

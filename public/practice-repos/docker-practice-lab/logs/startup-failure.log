@@ -1,0 +1,4 @@
+2026-06-23T09:00:01Z INFO starting backend service
+2026-06-23T09:00:02Z DEBUG loading environment variables
+2026-06-23T09:00:02Z ERROR DATABASE_URL is required
+2026-06-23T09:00:02Z INFO shutting down

@@ -1,0 +1,23 @@
+{
+  "Name": "/app",
+  "Config": {
+    "Image": "practice/backend:1.0.0",
+    "Env": ["APP_ENV=production", "APP_PORT=8080"]
+  },
+  "State": {
+    "Status": "exited",
+    "ExitCode": 1,
+    "Health": {
+      "Status": "unhealthy"
+    }
+  },
+  "NetworkSettings": {
+    "IPAddress": "172.19.0.8",
+    "Ports": {
+      "8080/tcp": [{"HostIp": "0.0.0.0", "HostPort": "8080"}]
+    }
+  },
+  "Mounts": [
+    {"Type": "volume", "Name": "app-data", "Destination": "/var/lib/app"}
+  ]
+}

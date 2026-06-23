@@ -1,0 +1,7 @@
+services:
+  backend:
+    image: practice/backend:1.0.0
+    volumes:
+      - ./missing-config:/app/config:ro
+    environment:
+      APP_ENV: production

@@ -36,6 +36,7 @@ import {
   kubernetesManifestPractice,
 } from "./data/kubernetes";
 import { tools } from "./data/tools";
+import { dockerPracticeLabs } from "./data/dockerPracticeLabs";
 import { linuxPracticeLabs } from "./data/practiceLabs";
 import {
   terraformCommandQuiz,
@@ -84,6 +85,9 @@ const initialProgress = {
   practiceLabStartedIds: [],
   practiceLabCompletedIds: [],
   practiceLabFailures: {},
+  dockerPracticeLabStartedIds: [],
+  dockerPracticeLabCompletedIds: [],
+  dockerPracticeLabFailures: {},
 };
 
 export default function App() {
@@ -162,8 +166,16 @@ export default function App() {
       practiceTotal: interviewQuestions.length,
     });
 
-    const practiceLabStats = calculatePracticeLabStats(progress, linuxPracticeLabs);
-    const practiceLabs = practiceLabStats.completionPercentage;
+    const linuxPracticeLabStats = calculatePracticeLabStats(progress, linuxPracticeLabs);
+    const dockerPracticeLabStats = calculatePracticeLabStats({
+      practiceLabStartedIds: progress.dockerPracticeLabStartedIds,
+      practiceLabCompletedIds: progress.dockerPracticeLabCompletedIds,
+      practiceLabFailures: progress.dockerPracticeLabFailures,
+    }, dockerPracticeLabs);
+    const practiceLabs = Math.round(
+      (linuxPracticeLabStats.completedCount + dockerPracticeLabStats.completedCount)
+        / (linuxPracticeLabStats.totalCount + dockerPracticeLabStats.totalCount) * 100,
+    );
 
     return { linux, docker, kubernetes, helm, terraform, ansible, interview, "practice-labs": practiceLabs };
   }, [progress]);
@@ -223,9 +235,15 @@ export default function App() {
     },
     "practice-labs": {
       label: "Practice Labs",
-      cards: progress.practiceLabStartedIds.length,
-      score: Math.round(progress.practiceLabCompletedIds.length / linuxPracticeLabs.length * 100),
-      commandScore: Math.round(progress.practiceLabCompletedIds.length / linuxPracticeLabs.length * 100),
+      cards: (progress.practiceLabStartedIds || []).length + (progress.dockerPracticeLabStartedIds || []).length,
+      score: Math.round(
+        ((progress.practiceLabCompletedIds || []).length + (progress.dockerPracticeLabCompletedIds || []).length)
+          / (linuxPracticeLabs.length + dockerPracticeLabs.length) * 100,
+      ),
+      commandScore: Math.round(
+        ((progress.practiceLabCompletedIds || []).length + (progress.dockerPracticeLabCompletedIds || []).length)
+          / (linuxPracticeLabs.length + dockerPracticeLabs.length) * 100,
+      ),
     },
   }[trackedTool];
 

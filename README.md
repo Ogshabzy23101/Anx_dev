@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/Ogshabzy23101/Anx_dev/actions/workflows/ci.yml/badge.svg)](https://github.com/Ogshabzy23101/Anx_dev/actions/workflows/ci.yml)
 
-A dark, terminal-inspired React learning app for building hands-on DevOps skills. Phase 15.2 includes enriched Linux, Docker, Kubernetes, Helm, Terraform, and Ansible curricula, Interview Mode, Practice Labs, and a populated static Linux practice repository.
+A dark, terminal-inspired React learning app for building hands-on DevOps skills. Phase 15.3 includes enriched Linux, Docker, Kubernetes, Helm, Terraform, and Ansible curricula, Interview Mode, Practice Labs, and populated static Linux and Docker practice repositories.
 
 Live site: [https://ogshabzy23101.github.io/Anx_dev/](https://ogshabzy23101.github.io/Anx_dev/)
 
@@ -31,9 +31,10 @@ Live site: [https://ogshabzy23101.github.io/Anx_dev/](https://ogshabzy23101.gith
 - 31 Ansible playbook, inventory, role, Vault, and YAML exercises
 - Interview Mode with Q&A bank, flashcards, MCQs, written-answer practice, and mock interviews
 - 101 interview questions across 11 categories and four difficulty levels
-- Practice Labs with 75 guided Linux labs across beginner, intermediate, and advanced difficulty levels
-- Linux lab search, category filters, difficulty filters, hints, solution reveal, and completion tracking
+- Practice Labs with 75 guided Linux labs and 75 guided Docker labs across beginner, intermediate, and advanced difficulty levels
+- Linux and Docker lab search, category filters, difficulty filters, hints, solution reveal, and completion tracking
 - Practice Repository populated at `public/practice-repos/linux-practice-lab/` with realistic logs, configs, scripts, data, keys, archives, and troubleshooting scenarios
+- Docker Practice Repository populated at `public/practice-repos/docker-practice-lab/` with Dockerfiles, Compose stacks, logs, networking examples, security examples, and troubleshooting scenarios
 - UX-001 feedback showing correct sections, missing sections, expected values, and user values
 - Retry, solution reveal, and side-by-side answer comparison
 - Success and correction modals
@@ -73,7 +74,7 @@ Run tests in watch mode while developing:
 npm run test:watch
 ```
 
-Tests use Vitest, React Testing Library, `user-event`, and the jsdom browser environment. The current suite contains **135 tests across 33 test files**.
+Tests use Vitest, React Testing Library, `user-event`, and the jsdom browser environment. The current suite contains **145 tests across 34 test files**.
 
 ## Linux enrichment
 
@@ -346,11 +347,12 @@ Interview progress is stored independently in `localStorage` and tracks reviewed
 
 Phase 15 adds a dedicated Practice Labs section without mixing lab content into Linux, Docker, Kubernetes, Helm, Terraform, Ansible, or Interview Mode. Phase 15.2 populates the Linux practice repository so the labs have realistic local files to practice against.
 
-The MVP focuses on Linux labs only:
+The current Practice Labs scope includes Linux and Docker labs only:
 
-- **75 Linux labs** total
-- **25 Beginner**, **25 Intermediate**, and **25 Advanced** labs
-- Coverage across Navigation, Files, Directories, Permissions, Ownership, Searching, Find, Grep, Awk, Sed, Logs, Processes, Services, Networking, SSH, Cron, Disk Usage, Memory Usage, Compression, Archives, Environment Variables, Users, Groups, Monitoring, Bash Scripting, and Troubleshooting
+- **75 Linux labs** total, with **25 Beginner**, **25 Intermediate**, and **25 Advanced** labs
+- **75 Docker labs** total, with **25 Beginner**, **25 Intermediate**, and **25 Advanced** labs
+- Linux coverage across Navigation, Files, Directories, Permissions, Ownership, Searching, Find, Grep, Awk, Sed, Logs, Processes, Services, Networking, SSH, Cron, Disk Usage, Memory Usage, Compression, Archives, Environment Variables, Users, Groups, Monitoring, Bash Scripting, and Troubleshooting
+- Docker coverage across Docker Basics, Images, Containers, Dockerfile, Build Context, Layers, Volumes, Bind Mounts, Networking, Bridge Networks, Environment Variables, Logs, Exec, Inspect, Compose, Multi-stage Builds, Container Security, Image Optimization, Registries, Docker Hub, Health Checks, Troubleshooting, Debugging, Production Operations, and CI/CD Integration
 - Search, category filtering, difficulty filtering, expandable lab cards, previous/next navigation, hints, solution reveal, completion tracking, and progress reset
 
 Each lab is defined in `src/data/practiceLabs.js` with:
@@ -382,7 +384,7 @@ Practice Lab progress is stored independently in `localStorage` and tracks:
 - Category completion
 - Logged blockers by category
 
-Recommended Practice Areas are calculated from low category completion and repeated blockers. For example, if a learner repeatedly logs blockers in Permissions or Bash Scripting, those categories are surfaced as recommended review areas.
+Linux and Docker lab progress are tracked separately. Recommended Practice Areas are calculated from low category completion and repeated blockers. For example, if a learner repeatedly logs blockers in Permissions, Bash Scripting, Docker Networking, Compose, or Image Optimization, those categories are surfaced as recommended review areas for that lab set.
 
 ### Practice Repository
 
@@ -418,9 +420,37 @@ The repository includes:
 
 Each major folder has its own README with purpose, sample tasks, suggested commands, and expected learning outcomes. Repository metadata in `src/data/practiceLabs.js` maps Linux lab categories to relevant practice files, such as Grep labs to `logs/*.log`, Permissions labs to `permissions/`, Bash labs to `scripts/`, and Troubleshooting labs to `configs/` and `troubleshooting/`.
 
+### Docker Practice Repository
+
+Phase 15.3 adds a populated Docker practice repository at `public/practice-repos/docker-practice-lab/`.
+
+```text
+docker-practice-lab/
+README.md
+images/
+containers/
+dockerfiles/
+compose/
+volumes/
+networking/
+logs/
+security/
+troubleshooting/
+```
+
+The Docker repository includes:
+
+- Dockerfiles: simple, broken, multi-stage, insecure, and optimized examples
+- Compose: frontend/backend/database stack, broken compose file, networking issue, environment issue, and volume issue
+- Logs: startup failure, missing env var, connection refused, database failure, health check failure, and build failure
+- Networking: bridge network and DNS resolution examples
+- Security: root container, exposed secret, missing ignore rules, and oversized image notes
+- Troubleshooting: exited container, image build failure, compose startup failure, volume mount issue, port conflict, and health check failure scenarios
+
+Each major Docker folder has its own README with purpose, realistic tasks, suggested commands, and expected outcomes. Repository metadata in `src/data/dockerPracticeLabs.js` maps Docker lab categories to relevant practice files, such as Dockerfile labs to `dockerfiles/`, Compose labs to `compose/`, Logs labs to `logs/`, Networking labs to `networking/`, Security labs to `security/`, and Troubleshooting labs to `troubleshooting/`.
+
 Roadmap reminder:
 
-- Phase 15.3 - Docker Practice Labs
 - Phase 15.4 - Kubernetes Practice Labs
 - Phase 15.5 - Terraform Practice Labs
 - Phase 15.6 - Helm Practice Labs
@@ -437,7 +467,7 @@ Roadmap reminder:
 | Terraform | Complete | Terraform HCL |
 | Ansible | Complete | Playbooks, roles, and YAML |
 | Interview | MVP | Q&A, flashcards, quizzes, written answers, and mocks |
-| Practice Labs | MVP | Guided Linux labs |
+| Practice Labs | MVP | Guided Linux and Docker labs |
 | CI/CD, AWS, Observability | Planned | To be added |
 
 ## Continuous integration

@@ -1,0 +1,14 @@
+services:
+  frontend:
+    image: nginx:1.27-alpine
+    networks:
+      - frontend-net
+
+  backend:
+    image: practice/backend:1.0.0
+    networks:
+      - backend-net
+
+networks:
+  frontend-net:
+  backend-net:

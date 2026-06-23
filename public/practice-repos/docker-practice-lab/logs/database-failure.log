@@ -1,0 +1,3 @@
+backend  | INFO connecting to postgres://app:***@database:5432/app
+backend  | ERROR database connection failed: password authentication failed for user "app"
+database | FATAL: password authentication failed for user "app"
