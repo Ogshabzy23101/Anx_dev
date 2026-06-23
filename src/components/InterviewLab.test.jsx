@@ -27,7 +27,7 @@ describe("Interview Mode", () => {
     renderInterview();
 
     expect(screen.getByRole("heading", { name: "Interview Mode" })).toBeInTheDocument();
-    expect(screen.getByText("55 prompts")).toBeInTheDocument();
+    expect(screen.getByText("101 prompts")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Q&A Bank" })).toHaveClass("active");
   });
 
@@ -35,7 +35,7 @@ describe("Interview Mode", () => {
     const { container } = renderInterview();
 
     fireEvent.change(screen.getByLabelText("category"), { target: { value: "Docker" } });
-    expect(container.querySelectorAll("details")).toHaveLength(5);
+    expect(container.querySelectorAll("details")).toHaveLength(7);
 
     fireEvent.change(screen.getByLabelText("difficulty"), { target: { value: "Beginner" } });
     expect(container.querySelectorAll("details")).toHaveLength(2);
@@ -68,7 +68,7 @@ describe("Interview Mode", () => {
     renderInterview({ onWrong });
 
     fireEvent.click(screen.getByRole("button", { name: "Interview Quiz" }));
-    fireEvent.click(screen.getAllByRole("button", { name: /A strong answer should mention/i })[1]);
+    fireEvent.click(screen.getAllByRole("button", { name: /^B/i })[0]);
     fireEvent.click(screen.getByRole("button", { name: "Submit interview answer" }));
 
     expect(onWrong).toHaveBeenCalledWith(expect.objectContaining({
@@ -103,8 +103,8 @@ describe("Interview Mode", () => {
 
     await waitFor(() => {
       const stored = JSON.parse(localStorage.getItem("devops-lab-progress-v1"));
-      expect(stored.interviewReviewedQuestions).toEqual(["interview-linux-1"]);
-      expect(stored.interviewMasteredFlashcards).toEqual(["flashcard-interview-linux-1"]);
+      expect(stored.interviewReviewedQuestions).toEqual(["pdf-behavioural-intro"]);
+      expect(stored.interviewMasteredFlashcards).toEqual(["flashcard-pdf-behavioural-intro"]);
       expect(stored.ansibleMasteredFlashcards).toEqual([]);
     });
   });

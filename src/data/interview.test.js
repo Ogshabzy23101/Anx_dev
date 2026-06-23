@@ -11,12 +11,12 @@ import { scoreMockInterview, validateWrittenAnswer } from "../utils/interviewVal
 describe("Interview data", () => {
   it("contains the MVP category coverage and structured answers", () => {
     expect(interviewCategories).toHaveLength(11);
-    expect(interviewQuestions).toHaveLength(55);
-    expect(interviewFlashcards).toHaveLength(55);
-    expect(interviewMultipleChoice).toHaveLength(55);
+    expect(interviewQuestions).toHaveLength(101);
+    expect(interviewFlashcards).toHaveLength(101);
+    expect(interviewMultipleChoice).toHaveLength(101);
 
     interviewCategories.forEach((category) => {
-      expect(interviewQuestions.filter((item) => item.category === category)).toHaveLength(5);
+      expect(interviewQuestions.filter((item) => item.category === category).length).toBeGreaterThanOrEqual(5);
     });
 
     interviewQuestions.forEach((item) => {
@@ -42,7 +42,7 @@ describe("Interview data", () => {
   });
 
   it("validates written answer keywords and missing concepts", () => {
-    const question = interviewQuestions.find((item) => item.category === "Docker");
+    const question = interviewQuestions.find((item) => item.id === "interview-docker-1");
     const validation = validateWrittenAnswer("An image becomes a running container at runtime.", question.requiredKeywords);
 
     expect(validation.passed).toEqual(expect.arrayContaining(["image", "container", "runtime"]));

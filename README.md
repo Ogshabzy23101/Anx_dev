@@ -30,7 +30,7 @@ Live site: [https://ogshabzy23101.github.io/Anx_dev/](https://ogshabzy23101.gith
 - 124 structured Ansible flashcards, MCQs, and command-writing challenges
 - 31 Ansible playbook, inventory, role, Vault, and YAML exercises
 - Interview Mode with Q&A bank, flashcards, MCQs, written-answer practice, and mock interviews
-- 55 interview questions across 11 categories and four difficulty levels
+- 101 interview questions across 11 categories and four difficulty levels
 - UX-001 feedback showing correct sections, missing sections, expected values, and user values
 - Retry, solution reveal, and side-by-side answer comparison
 - Success and correction modals
@@ -317,7 +317,7 @@ Interview Mode includes:
 - **Written Answer Practice** with requirement-based keyword validation, covered points, missing points, expected answer, and improvement suggestion
 - **Mock Interview Mode** that selects mixed questions, scores answers, and reports strong areas, weak areas, and suggested modules to review
 
-The MVP question bank lives in `src/data/interview.js`. Each item includes:
+The question bank lives in `src/data/interview.js`. It includes the original MVP prompts plus deduplicated questions imported from the interview PDF material. Advanced PDF questions remain under the Advanced difficulty level. Each item includes:
 
 ```js
 {
