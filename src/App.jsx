@@ -3,6 +3,7 @@ import AnsibleLab from "./components/AnsibleLab";
 import CorrectionModal from "./components/CorrectionModal";
 import DockerLab from "./components/DockerLab";
 import HelmLab from "./components/HelmLab";
+import InterviewLab from "./components/InterviewLab";
 import KubernetesLab from "./components/KubernetesLab";
 import LinuxLab from "./components/LinuxLab";
 import ProgressBar from "./components/ProgressBar";
@@ -19,6 +20,10 @@ import {
 } from "./data/docker";
 import { linuxCommandQuiz, linuxFlashcards } from "./data/linux";
 import { linuxShellPractice } from "./data/linuxPractice";
+import {
+  interviewFlashcards,
+  interviewQuestions,
+} from "./data/interview";
 import {
   helmCommandQuiz,
   helmFlashcards,
@@ -67,6 +72,12 @@ const initialProgress = {
   ansibleCompletedCommands: [],
   ansibleCommandScore: 0,
   ansibleCompletedPractices: [],
+  interviewReviewedQuestions: [],
+  interviewMasteredFlashcards: [],
+  interviewQuizScore: 0,
+  interviewCompletedWritten: [],
+  interviewCompletedMocks: 0,
+  interviewWeakCategories: [],
 };
 
 export default function App() {
@@ -135,11 +146,21 @@ export default function App() {
       practiceTotal: ansiblePractice.length,
     });
 
-    return { linux, docker, kubernetes, helm, terraform, ansible };
+    const interview = calculateModuleProgress({
+      masteredCount: progress.interviewMasteredFlashcards.length,
+      flashcardTotal: interviewFlashcards.length,
+      quizScore: progress.interviewQuizScore,
+      completedCommandCount: progress.interviewReviewedQuestions.length,
+      commandTotal: interviewQuestions.length,
+      completedPracticeCount: progress.interviewCompletedWritten.length,
+      practiceTotal: interviewQuestions.length,
+    });
+
+    return { linux, docker, kubernetes, helm, terraform, ansible, interview };
   }, [progress]);
 
   const activeToolData = tools.find((tool) => tool.id === activeTool);
-  const trackedTool = ["linux", "docker", "kubernetes", "helm", "terraform", "ansible"].includes(activeTool)
+  const trackedTool = ["linux", "docker", "kubernetes", "helm", "terraform", "ansible", "interview"].includes(activeTool)
     ? activeTool
     : "linux";
   const progressSummary = {
@@ -183,6 +204,14 @@ export default function App() {
       score: progress.ansibleQuizScore,
       commandScore: progress.ansibleCommandScore,
     },
+    interview: {
+      label: "Interview",
+      cards: progress.interviewMasteredFlashcards.length,
+      score: progress.interviewQuizScore,
+      commandScore: Math.round(
+        progress.interviewReviewedQuestions.length / interviewQuestions.length * 100,
+      ),
+    },
   }[trackedTool];
 
   return (
@@ -214,7 +243,7 @@ export default function App() {
                   {activeTool === tool.id ? ">" : "$"}
                 </span>
                 {tool.label}
-                {!["linux", "docker", "kubernetes", "helm", "terraform", "ansible"].includes(tool.id) && (
+                {!["linux", "docker", "kubernetes", "helm", "terraform", "ansible", "interview"].includes(tool.id) && (
                   <span className="lock-mark" aria-hidden="true">soon</span>
                 )}
               </button>
@@ -245,6 +274,8 @@ export default function App() {
             <TerraformLab progress={progress} setProgress={setProgress} onWrong={setCorrection} />
           ) : activeTool === "ansible" ? (
             <AnsibleLab progress={progress} setProgress={setProgress} onWrong={setCorrection} />
+          ) : activeTool === "interview" ? (
+            <InterviewLab progress={progress} setProgress={setProgress} onWrong={setCorrection} />
           ) : (
             <section className="empty-tool">
               <div className="terminal-card">

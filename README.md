@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/Ogshabzy23101/Anx_dev/actions/workflows/ci.yml/badge.svg)](https://github.com/Ogshabzy23101/Anx_dev/actions/workflows/ci.yml)
 
-A dark, terminal-inspired React learning app for building hands-on DevOps skills. Phase 13 includes enriched Linux, Docker, Kubernetes, Helm, Terraform, and Ansible curricula, enhanced correction feedback, automated tests, and continuous integration.
+A dark, terminal-inspired React learning app for building hands-on DevOps skills. Phase 14 includes enriched Linux, Docker, Kubernetes, Helm, Terraform, and Ansible curricula plus Interview Mode for structured DevOps interview preparation.
 
 Live site: [https://ogshabzy23101.github.io/Anx_dev/](https://ogshabzy23101.github.io/Anx_dev/)
 
@@ -29,11 +29,13 @@ Live site: [https://ogshabzy23101.github.io/Anx_dev/](https://ogshabzy23101.gith
 - Searchable Ansible reference with 124 entries across 31 categories
 - 124 structured Ansible flashcards, MCQs, and command-writing challenges
 - 31 Ansible playbook, inventory, role, Vault, and YAML exercises
+- Interview Mode with Q&A bank, flashcards, MCQs, written-answer practice, and mock interviews
+- 55 interview questions across 11 categories and four difficulty levels
 - UX-001 feedback showing correct sections, missing sections, expected values, and user values
 - Retry, solution reveal, and side-by-side answer comparison
 - Success and correction modals
 - Local progress persistence via `localStorage`
-- Responsive navigation for Linux, Docker, Kubernetes, Terraform, Ansible, Helm, CI/CD, AWS, and Observability
+- Responsive navigation for Linux, Docker, Kubernetes, Terraform, Ansible, Helm, Interview, CI/CD, AWS, and Observability
 - Vitest and React Testing Library coverage for answer checking, persistence, and feedback
 
 ## Setup
@@ -68,7 +70,7 @@ Run tests in watch mode while developing:
 npm run test:watch
 ```
 
-Tests use Vitest, React Testing Library, `user-event`, and the jsdom browser environment. The current suite contains **108 tests across 28 test files**.
+Tests use Vitest, React Testing Library, `user-event`, and the jsdom browser environment. The current suite contains **119 tests across 30 test files**.
 
 ## Linux enrichment
 
@@ -247,7 +249,7 @@ resource "aws_instance" "web" {
 
 ## UX-001 feedback
 
-Correction dialogs now provide structured feedback across Linux, Docker, Kubernetes, Helm, Terraform, and Ansible:
+Correction dialogs now provide structured feedback across Linux, Docker, Kubernetes, Helm, Terraform, Ansible, and Interview Mode:
 
 - `✓ Correct sections` lists requirements already satisfied
 - `✗ Missing sections` lists exact requirements still needed
@@ -303,6 +305,40 @@ Example nginx playbook:
 
 Invalid playbooks receive UX-001 requirement diagnostics, expected and submitted values, an explanation, side-by-side comparison, Retry, and Show solution controls.
 
+## Interview Mode
+
+Phase 14 adds a dedicated Interview section without mixing interview content into the individual tool modules.
+
+Interview Mode includes:
+
+- **Q&A Bank** with structured answers containing a short answer, detailed answer, example, common mistake, and interview tip
+- **Interview Flashcards** with a question front and structured answer reveal
+- **Multiple-choice Interview Quiz** with correction modal feedback when answers are wrong
+- **Written Answer Practice** with requirement-based keyword validation, covered points, missing points, expected answer, and improvement suggestion
+- **Mock Interview Mode** that selects mixed questions, scores answers, and reports strong areas, weak areas, and suggested modules to review
+
+The MVP question bank lives in `src/data/interview.js`. Each item includes:
+
+```js
+{
+  id,
+  category,
+  difficulty,
+  question,
+  shortAnswer,
+  detailedAnswer,
+  example,
+  commonMistake,
+  interviewTip,
+  requiredKeywords,
+  relatedModule,
+}
+```
+
+Current categories are Linux, Docker, Kubernetes, Helm, Terraform, Ansible, CI/CD, DevOps fundamentals, Troubleshooting, Scenario-based questions, and Behavioural questions. Difficulty levels are Beginner, Junior DevOps, Mid-level DevOps, and Advanced.
+
+Interview progress is stored independently in `localStorage` and tracks reviewed questions, mastered flashcards, best quiz score, completed written answers, completed mock interviews, and weak categories from mock interview results.
+
 ## Modules
 
 | Module | Status | Practice format |
@@ -313,6 +349,7 @@ Invalid playbooks receive UX-001 requirement diagnostics, expected and submitted
 | Helm | Complete | Charts, values, and Go templates |
 | Terraform | Complete | Terraform HCL |
 | Ansible | Complete | Playbooks, roles, and YAML |
+| Interview | MVP | Q&A, flashcards, quizzes, written answers, and mocks |
 | CI/CD, AWS, Observability | Planned | To be added |
 
 ## Continuous integration
@@ -372,6 +409,6 @@ src/
 
 To add another tool, create a new data module under `src/data`, build its lab component, and connect it to the tool registry and app shell.
 
-## Next direction
+## Phase 15
 
-All current active learning modules are enriched. A sensible next phase is to plan CI/CD, AWS, or Observability as the next complete module while preserving the same data-driven content, validation, and progress patterns.
+Phase 15 should import user-provided interview Q&A banks and expand Interview Mode content. A useful next step is a JSON or Markdown import workflow that validates question shape, merges categories safely, and lets users grow their own targeted interview prep set.
