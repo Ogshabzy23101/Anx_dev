@@ -1,6 +1,16 @@
 import { ansibleRules as a } from "../utils/ansibleValidation";
+import { ansibleExtraPractice } from "./ansibleExtraPractice";
 
-export const ansibleReference = [
+export {
+  ansibleCategories,
+  ansibleCommandCatalog,
+  ansibleCommandQuiz,
+  ansibleFlashcards,
+  ansibleMultipleChoice,
+  ansibleReference,
+} from "./ansibleCatalog";
+
+const baseAnsibleReference = [
   {
     category: "Architecture",
     commands: [
@@ -57,7 +67,7 @@ export const ansibleReference = [
   },
 ];
 
-export const ansibleFlashcards = [
+const baseAnsibleFlashcards = [
   ["ansible", "What is Ansible?", "An agentless automation tool that applies desired configuration over connections such as SSH."],
   ["control", "What is the control node?", "The machine that runs Ansible commands and playbooks."],
   ["managed", "What is a managed node?", "A target system controlled by Ansible."],
@@ -80,7 +90,7 @@ export const ansibleFlashcards = [
   ["idempotency", "What is idempotency?", "Repeated automation runs produce the same desired state without needless changes."],
 ].map(([id, front, back]) => ({ id: `ansible-fc-${id}`, front, back }));
 
-export const ansibleMultipleChoice = [
+const baseAnsibleMultipleChoice = [
   ["agentless", "What normally connects Ansible to Linux managed nodes?", ["A permanent agent", "SSH", "SNMP only", "A browser"], 1, "Ansible commonly uses SSH without a permanent agent."],
   ["inventory", "What defines target hosts and groups?", ["Vault", "Inventory", "Handler", "Template"], 1, "Inventory defines managed hosts."],
   ["config", "Which file configures Ansible defaults?", ["ansible.cfg", "playbook.cfg", "inventory.yml only", "galaxy.ini"], 0, "ansible.cfg controls defaults."],
@@ -115,7 +125,7 @@ export const ansibleMultipleChoice = [
   id: `ansible-mc-${id}`, question, options, answer, explanation,
 }));
 
-export const ansibleCommandQuiz = [
+const baseAnsibleCommandQuiz = [
   ["ping", "Ping all inventory hosts with the Ansible ping module.", ["ansible all -m ping", "ansible all --module-name ping"]],
   ["uptime", "Run `uptime` with the shell module on group `web`.", ['ansible web -m shell -a "uptime"', "ansible web -m shell -a uptime", 'ansible web --module-name shell --args "uptime"']],
   ["playbook", "Run playbook `site.yml`.", ["ansible-playbook site.yml"]],
@@ -148,7 +158,7 @@ export const ansibleCommandQuiz = [
   explanation: `A valid answer is \`${answers[0]}\`. Equivalent long flags and supported command placement are accepted where appropriate.`,
 }));
 
-export const ansiblePractice = [
+const baseAnsiblePractice = [
   {
     id: "ansible-yaml-basic", title: "Basic web play", filename: "site.yml",
     instruction: "Write a play named Configure web servers targeting web hosts with a tasks list.",
@@ -254,4 +264,9 @@ export const ansiblePractice = [
     explanation: "Fully qualified collection names make module resolution explicit.",
     rules: [a.requiredString("ansible.builtin.file", "ansible.builtin.file"), a.requiredString("ansible.builtin.copy", "ansible.builtin.copy"), a.value("path", "/opt/app"), a.value("state", "directory"), a.value("dest", "/opt/app/app.conf")],
   },
+];
+
+export const ansiblePractice = [
+  ...baseAnsiblePractice,
+  ...ansibleExtraPractice,
 ];

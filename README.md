@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/Ogshabzy23101/Anx_dev/actions/workflows/ci.yml/badge.svg)](https://github.com/Ogshabzy23101/Anx_dev/actions/workflows/ci.yml)
 
-A dark, terminal-inspired React learning app for building hands-on DevOps skills. Phase 12 includes enriched Linux, Docker, Kubernetes, Helm, and Terraform curricula alongside the complete Ansible module, enhanced correction feedback, automated tests, and continuous integration.
+A dark, terminal-inspired React learning app for building hands-on DevOps skills. Phase 13 includes enriched Linux, Docker, Kubernetes, Helm, Terraform, and Ansible curricula, enhanced correction feedback, automated tests, and continuous integration.
 
 Live site: [https://ogshabzy23101.github.io/Anx_dev/](https://ogshabzy23101.github.io/Anx_dev/)
 
@@ -26,8 +26,9 @@ Live site: [https://ogshabzy23101.github.io/Anx_dev/](https://ogshabzy23101.gith
 - Searchable Terraform reference with 124 entries across 31 categories
 - 124 structured Terraform flashcards, MCQs, and CLI command challenges
 - 31 Terraform HCL exercises with block, attribute, state, backend, module, and AWS validation
-- Complete Ansible reference, flashcards, MCQ, and command practice
-- Fifteen Ansible playbook and YAML exercises
+- Searchable Ansible reference with 124 entries across 31 categories
+- 124 structured Ansible flashcards, MCQs, and command-writing challenges
+- 31 Ansible playbook, inventory, role, Vault, and YAML exercises
 - UX-001 feedback showing correct sections, missing sections, expected values, and user values
 - Retry, solution reveal, and side-by-side answer comparison
 - Success and correction modals
@@ -67,7 +68,7 @@ Run tests in watch mode while developing:
 npm run test:watch
 ```
 
-Tests use Vitest, React Testing Library, `user-event`, and the jsdom browser environment. The current suite contains **101 tests across 27 test files**.
+Tests use Vitest, React Testing Library, `user-event`, and the jsdom browser environment. The current suite contains **108 tests across 28 test files**.
 
 ## Linux enrichment
 
@@ -246,7 +247,7 @@ resource "aws_instance" "web" {
 
 ## UX-001 feedback
 
-Correction dialogs now provide structured feedback across Linux, Docker, Kubernetes, Helm, and Terraform:
+Correction dialogs now provide structured feedback across Linux, Docker, Kubernetes, Helm, Terraform, and Ansible:
 
 - `✓ Correct sections` lists requirements already satisfied
 - `✗ Missing sections` lists exact requirements still needed
@@ -258,14 +259,15 @@ Command feedback compares expected and submitted command tokens. File feedback u
 
 ## Ansible module
 
-The Ansible module provides:
+Phase 13 applies the enriched Linux, Docker, Kubernetes, Helm, and Terraform learning pattern to Ansible:
 
-- Reference material for control and managed nodes, inventories, playbooks, tasks, modules, variables, facts, handlers, roles, Vault, Galaxy, and idempotency
-- Twenty flashcards
-- Thirty multiple-choice questions
-- Twenty-five Ansible command challenges with accepted long flags and aliases
-- Fifteen YAML exercises covering plays, packages, services, files, variables, handlers, loops, conditions, registered output, roles, group variables, templates, and fully qualified module names
+- **124 reference entries** across Ansible basics, inventory, hosts, groups, variables, facts, tasks, plays, playbooks, modules, package management, services, files, templates, Jinja2, loops, conditions, handlers, notify, register, debug, tags, roles, collections, Galaxy, Vault, become, SSH, configuration, troubleshooting, and DevOps workflows
+- **124 flashcards** with basic and professional explanations, examples, DevOps use cases, related concepts, categories, and difficulty levels
+- **124 multiple-choice questions** and **124 Ansible command-writing challenges**
+- **31 playbook/YAML exercises** covering package and service management, copying files, templates, variables, handlers, notify, loops, conditions, register, debug, become, inventory groups, `group_vars`, `host_vars`, roles, Galaxy, Vault, tags, collections, dynamic inventory, secure secrets, and complete production playbooks
 - Independent local progress for mastered cards, best MCQ score, command score, completed playbooks, and module completion
+
+Ansible reference and flashcard views support full-text search, category and difficulty filters, expandable YAML/command cards, examples, common mistakes, and DevOps use cases.
 
 ### Ansible validation
 
@@ -277,7 +279,7 @@ Ansible exercises use helpers from `src/utils/ansibleValidation.js`. Validation 
 - Short and `ansible.builtin` module names
 - Package names and service states
 - `notify`, variables, loops, conditions, registration, and debug output
-- Role structure and group variable files
+- Role structure, inventory groups, `group_vars`, `host_vars`, Galaxy role requirements, Vault files, collections, dynamic inventory, and production playbook patterns
 
 Example nginx playbook:
 
@@ -370,12 +372,6 @@ src/
 
 To add another tool, create a new data module under `src/data`, build its lab component, and connect it to the tool registry and app shell.
 
-## Phase 13
+## Next direction
 
-Phase 13 should enrich the Ansible module using the same depth as Linux, Docker, Kubernetes, Helm, and Terraform:
-
-- Expand Ansible reference, flashcards, MCQs, and command-writing banks
-- Add searchable inventory, playbook, task, role, variable, handler, Vault, Galaxy, and troubleshooting categories
-- Add progressive YAML exercises for playbooks, roles, templates, handlers, loops, conditions, registered output, and secure automation
-- Add deeper validation for inventory structure, module usage, idempotency, variables, roles, and handlers
-- Preserve independent progress and GitHub Pages deployment behavior
+All current active learning modules are enriched. A sensible next phase is to plan CI/CD, AWS, or Observability as the next complete module while preserving the same data-driven content, validation, and progress patterns.

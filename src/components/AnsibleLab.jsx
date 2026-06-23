@@ -1,16 +1,17 @@
 import { useState } from "react";
 import {
+  ansibleCategories,
+  ansibleCommandCatalog,
   ansibleCommandQuiz,
   ansibleFlashcards,
   ansibleMultipleChoice,
   ansiblePractice,
-  ansibleReference,
 } from "../data/ansible";
 import CommandQuiz from "./CommandQuiz";
 import FilePractice from "./FilePractice";
-import Flashcards from "./Flashcards";
+import LinuxFlashcards from "./LinuxFlashcards";
+import LinuxReference from "./LinuxReference";
 import MultipleChoiceQuiz from "./MultipleChoiceQuiz";
-import Reference from "./Reference";
 
 const modes = [
   { id: "reference", label: "Reference", icon: "01" },
@@ -94,12 +95,29 @@ export default function AnsibleLab({ progress, setProgress, onWrong }) {
       </nav>
 
       <section className="mode-content">
-        {mode === "reference" && <Reference sections={ansibleReference} />}
+        {mode === "reference" && (
+          <LinuxReference
+            commands={ansibleCommandCatalog}
+            categories={ansibleCategories}
+            searchLabel="search Ansible topics and explanations"
+            searchPlaceholder="inventory, handlers, vault, roles..."
+            itemNoun="Ansible topics"
+            emptyMessage="No Ansible topics match these filters."
+            syntaxLabel="YAML or command example"
+            flagsLabel="Common options"
+            examplesLabel="YAML or command examples"
+            relatedLabel="Related concepts"
+          />
+        )}
         {mode === "flashcards" && (
-          <Flashcards
+          <LinuxFlashcards
             cards={ansibleFlashcards}
             mastered={progress.ansibleMasteredFlashcards}
             onToggleMastered={toggleMastered}
+            categories={ansibleCategories}
+            searchPlaceholder="inventory, roles, handlers, vault..."
+            flipLabel="Flip Ansible flashcard"
+            emptyMessage="No Ansible flashcards match these filters."
           />
         )}
         {mode === "quiz" && (
