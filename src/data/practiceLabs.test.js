@@ -46,6 +46,7 @@ describe("Practice Lab data", () => {
 
   it("defines the placeholder downloadable repository metadata", () => {
     expect(practiceRepository.root).toBe("linux-practice-lab/");
+    expect(practiceRepository.publicPath).toBe("practice-repos/linux-practice-lab/");
     [
       "README.md",
       "navigation/",

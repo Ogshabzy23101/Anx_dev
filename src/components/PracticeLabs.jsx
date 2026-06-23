@@ -283,9 +283,10 @@ export default function PracticeLabs({ progress, setProgress }) {
         <div>
           <span className="eyebrow">practice repository</span>
           <h2>Download Linux Practice Repo</h2>
-          <p>Zip generation is planned for a future phase. This metadata defines the folder structure the downloadable repo will use.</p>
+          <p>Zip generation is planned for a future phase. This static scaffold defines the folder structure the downloadable repo will use.</p>
         </div>
         <code>{practiceRepository.root}</code>
+        <code>{practiceRepository.publicPath}</code>
         <ul>
           {practiceRepository.files.map((item) => <li key={item}>{item}</li>)}
         </ul>

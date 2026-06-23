@@ -33,7 +33,7 @@ Live site: [https://ogshabzy23101.github.io/Anx_dev/](https://ogshabzy23101.gith
 - 101 interview questions across 11 categories and four difficulty levels
 - Practice Labs with 75 guided Linux labs across beginner, intermediate, and advanced difficulty levels
 - Linux lab search, category filters, difficulty filters, hints, solution reveal, and completion tracking
-- Practice Repository placeholder metadata for future downloadable lab files
+- Practice Repository static scaffold at `public/practice-repos/linux-practice-lab/` for future downloadable lab files
 - UX-001 feedback showing correct sections, missing sections, expected values, and user values
 - Retry, solution reveal, and side-by-side answer comparison
 - Success and correction modals
@@ -386,7 +386,7 @@ Recommended Practice Areas are calculated from low category completion and repea
 
 ### Practice Repository
 
-The Practice Repository panel introduces placeholder metadata for future downloadable lab files. Zip generation is not implemented yet, but the structure is ready for future phases:
+The Practice Repository panel introduces a static scaffold for future downloadable lab files. Zip generation is not implemented yet, but the structure now exists at `public/practice-repos/linux-practice-lab/` and is ready for future phases:
 
 ```text
 linux-practice-lab/

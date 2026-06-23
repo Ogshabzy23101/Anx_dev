@@ -33,8 +33,9 @@ export const practiceRepository = {
   id: "linux-practice-lab",
   title: "Linux Practice Repo",
   description: "Placeholder repository layout for future downloadable hands-on Linux exercises.",
-  status: "metadata only",
+  status: "static scaffold",
   root: "linux-practice-lab/",
+  publicPath: "practice-repos/linux-practice-lab/",
   files: [
     "README.md",
     "navigation/",

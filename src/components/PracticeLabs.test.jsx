@@ -26,6 +26,7 @@ describe("Practice Labs", () => {
     expect(screen.getByText("75 tasks")).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Download Linux Practice Repo" })).toBeInTheDocument();
     expect(screen.getByText("linux-practice-lab/")).toBeInTheDocument();
+    expect(screen.getByText("practice-repos/linux-practice-lab/")).toBeInTheDocument();
   });
 
   it("filters labs by search, category, and difficulty", () => {
