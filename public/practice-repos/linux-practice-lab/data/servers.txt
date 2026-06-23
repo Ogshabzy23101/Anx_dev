@@ -1,0 +1,6 @@
+web-01 prod 10.0.2.44 nginx active
+web-02 prod 10.0.2.45 nginx degraded
+api-01 prod 10.0.2.50 node active
+api-02 staging 10.0.3.50 node active
+db-01 prod 10.0.2.60 postgres active
+worker-01 prod 10.0.2.70 worker warning

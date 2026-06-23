@@ -1,0 +1,6 @@
+USER         PID %CPU %MEM COMMAND
+root           1  0.0  0.1 /sbin/init
+deploy      2144 12.5  4.2 node server.js
+www-data    2190  1.2  1.1 nginx: worker process
+postgres    2301  8.8 12.3 postgres: writer process
+deploy      2400 65.0  3.9 worker --queue payments

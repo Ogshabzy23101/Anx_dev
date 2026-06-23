@@ -1,0 +1,3 @@
+2026-06-22 release 1.4.1 fixed login redirect.
+2026-06-23 release 1.4.2 changed backend API timeout.
+TODO verify payment retry settings.

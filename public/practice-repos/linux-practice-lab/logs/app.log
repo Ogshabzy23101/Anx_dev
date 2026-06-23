@@ -1,0 +1,15 @@
+2026-06-23T08:00:01Z INFO request_id=req-1037 service=checkout message="application boot complete" version=1.4.2
+2026-06-23T08:01:14Z DEBUG request_id=req-1038 user=1001 message="loading feature flags"
+2026-06-23T08:02:44Z INFO request_id=req-1039 endpoint=/health status=200 latency_ms=18
+2026-06-23T08:05:02Z WARN request_id=req-1040 service=checkout message="slow database query" latency_ms=1420
+2026-06-23T08:07:31Z ERROR request_id=req-1041 service=payments message="payment provider timeout" code=PAYMENT_TIMEOUT
+2026-06-23T08:09:05Z INFO request_id=req-1042 endpoint=/api/orders status=201 latency_ms=122
+2026-06-23T08:09:07Z ERROR request_id=req-1042 service=orders message="failed to enqueue order confirmation" code=QUEUE_RETRY
+2026-06-23T08:10:49Z WARN request_id=req-1043 service=auth message="token refresh took longer than expected"
+2026-06-23T08:12:18Z DEBUG request_id=req-1044 user=deploy message="reading APP_ENV from configs/app.env"
+2026-06-23T08:15:59Z ERROR request_id=req-1045 service=api message="upstream returned 502" upstream=backend-api
+2026-06-23T08:18:21Z INFO request_id=req-1046 service=worker message="processed scheduled task" duration_ms=341
+2026-06-23T08:21:33Z WARN request_id=req-1047 service=worker message="disk usage above warning threshold" usage=82%
+2026-06-23T08:23:42Z ERROR request_id=req-1048 service=database message="connection refused" host=db.internal port=5432
+2026-06-23T08:25:10Z INFO request_id=req-1049 service=checkout message="cart updated" user=1007
+2026-06-23T08:28:45Z DEBUG request_id=req-1050 service=cleanup message="dry run enabled"

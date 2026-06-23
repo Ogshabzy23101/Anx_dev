@@ -1,0 +1,12 @@
+[Unit]
+Description=Practice nginx service
+After=network.target
+
+[Service]
+Type=forking
+ExecStart=/usr/sbin/nginx
+ExecReload=/usr/sbin/nginx -s reload
+ExecStop=/usr/sbin/nginx -s quit
+
+[Install]
+WantedBy=multi-user.target

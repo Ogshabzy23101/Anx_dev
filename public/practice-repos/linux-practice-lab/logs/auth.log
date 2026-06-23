@@ -1,0 +1,10 @@
+Jun 23 08:00:12 lab-server sshd[1842]: Accepted publickey for deploy from 10.0.2.15 port 52214 ssh2
+Jun 23 08:01:03 lab-server sshd[1850]: Failed password for invalid user admin from 198.51.100.22 port 44012 ssh2
+Jun 23 08:01:08 lab-server sshd[1850]: Failed password for invalid user admin from 198.51.100.22 port 44012 ssh2
+Jun 23 08:02:44 lab-server sudo: deploy : TTY=pts/0 ; PWD=/opt/app ; USER=root ; COMMAND=/bin/systemctl restart nginx
+Jun 23 08:04:19 lab-server sshd[1888]: Failed password for root from 203.0.113.77 port 49812 ssh2
+Jun 23 08:04:22 lab-server sshd[1888]: Connection closed by authenticating user root 203.0.113.77 port 49812 [preauth]
+Jun 23 08:05:40 lab-server sshd[1901]: Accepted publickey for ansible from 10.0.2.20 port 51111 ssh2
+Jun 23 08:07:50 lab-server sshd[1925]: Failed password for deploy from 192.0.2.45 port 35001 ssh2
+Jun 23 08:09:10 lab-server sudo: ansible : TTY=unknown ; PWD=/home/ansible ; USER=root ; COMMAND=/usr/bin/apt-get update
+Jun 23 08:11:52 lab-server sshd[1950]: Failed password for invalid user test from 203.0.113.88 port 56011 ssh2

@@ -1,0 +1,5 @@
+PAYMENT_TIMEOUT payment provider timeout
+QUEUE_RETRY failed to enqueue order confirmation
+UPSTREAM_502 upstream returned 502
+DB_CONN_REFUSED database connection refused
+AUTH_FAILED repeated failed login attempt

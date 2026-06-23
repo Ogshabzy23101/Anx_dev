@@ -1,0 +1,9 @@
+Port 22
+PermitRootLogin yes
+PasswordAuthentication yes
+PubkeyAuthentication yes
+AuthorizedKeysFile .ssh/authorized_keys
+AllowUsers deploy ansible
+ClientAliveInterval 300
+X11Forwarding no
+# TODO: disable password auth after key rollout.

@@ -1,0 +1,5 @@
+http://localhost:8080/health
+http://localhost:8080/api/orders
+https://practice.local/health
+db.internal:5432
+backend.internal:8080

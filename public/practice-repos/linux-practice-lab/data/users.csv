@@ -1,0 +1,7 @@
+id,username,team,status,shell
+1001,deploy,platform,active,/bin/bash
+1002,ansible,automation,active,/bin/bash
+1003,reader,audit,disabled,/usr/sbin/nologin
+1004,nginx,web,active,/usr/sbin/nologin
+1005,backup,platform,active,/bin/bash
+1006,temp-user,support,disabled,/bin/bash

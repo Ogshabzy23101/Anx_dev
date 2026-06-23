@@ -1,0 +1,9 @@
+Jun 23 08:00:01 lab-server systemd[1]: Started DevOps practice application.
+Jun 23 08:05:04 lab-server kernel: [12345.100] EXT4-fs warning: mounting filesystem with errors, running e2fsck is recommended
+Jun 23 08:06:20 lab-server systemd[1]: nginx.service: Deactivated successfully.
+Jun 23 08:06:21 lab-server systemd[1]: Started A high performance web server and reverse proxy server.
+Jun 23 08:12:42 lab-server app[2144]: WARN cache miss rate above baseline
+Jun 23 08:16:03 lab-server app[2144]: ERROR upstream backend-api returned status=502
+Jun 23 08:21:33 lab-server node-exporter[1002]: WARN disk usage /var is 82%
+Jun 23 08:24:51 lab-server systemd[1]: backup.service: Failed with result 'exit-code'.
+Jun 23 08:24:51 lab-server systemd[1]: backup.service: Main process exited, code=exited, status=2/INVALIDARGUMENT

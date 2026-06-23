@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/Ogshabzy23101/Anx_dev/actions/workflows/ci.yml/badge.svg)](https://github.com/Ogshabzy23101/Anx_dev/actions/workflows/ci.yml)
 
-A dark, terminal-inspired React learning app for building hands-on DevOps skills. Phase 15 includes enriched Linux, Docker, Kubernetes, Helm, Terraform, and Ansible curricula, Interview Mode, and a new Practice Labs section for guided hands-on Linux work.
+A dark, terminal-inspired React learning app for building hands-on DevOps skills. Phase 15.2 includes enriched Linux, Docker, Kubernetes, Helm, Terraform, and Ansible curricula, Interview Mode, Practice Labs, and a populated static Linux practice repository.
 
 Live site: [https://ogshabzy23101.github.io/Anx_dev/](https://ogshabzy23101.github.io/Anx_dev/)
 
@@ -33,7 +33,7 @@ Live site: [https://ogshabzy23101.github.io/Anx_dev/](https://ogshabzy23101.gith
 - 101 interview questions across 11 categories and four difficulty levels
 - Practice Labs with 75 guided Linux labs across beginner, intermediate, and advanced difficulty levels
 - Linux lab search, category filters, difficulty filters, hints, solution reveal, and completion tracking
-- Practice Repository static scaffold at `public/practice-repos/linux-practice-lab/` for future downloadable lab files
+- Practice Repository populated at `public/practice-repos/linux-practice-lab/` with realistic logs, configs, scripts, data, keys, archives, and troubleshooting scenarios
 - UX-001 feedback showing correct sections, missing sections, expected values, and user values
 - Retry, solution reveal, and side-by-side answer comparison
 - Success and correction modals
@@ -73,7 +73,7 @@ Run tests in watch mode while developing:
 npm run test:watch
 ```
 
-Tests use Vitest, React Testing Library, `user-event`, and the jsdom browser environment. The current suite contains **132 tests across 33 test files**.
+Tests use Vitest, React Testing Library, `user-event`, and the jsdom browser environment. The current suite contains **135 tests across 33 test files**.
 
 ## Linux enrichment
 
@@ -344,7 +344,7 @@ Interview progress is stored independently in `localStorage` and tracks reviewed
 
 ## Practice Labs
 
-Phase 15 adds a dedicated Practice Labs section without mixing lab content into Linux, Docker, Kubernetes, Helm, Terraform, Ansible, or Interview Mode.
+Phase 15 adds a dedicated Practice Labs section without mixing lab content into Linux, Docker, Kubernetes, Helm, Terraform, Ansible, or Interview Mode. Phase 15.2 populates the Linux practice repository so the labs have realistic local files to practice against.
 
 The MVP focuses on Linux labs only:
 
@@ -386,7 +386,7 @@ Recommended Practice Areas are calculated from low category completion and repea
 
 ### Practice Repository
 
-The Practice Repository panel introduces a static scaffold for future downloadable lab files. Zip generation is not implemented yet, but the structure now exists at `public/practice-repos/linux-practice-lab/` and is ready for future phases:
+The Practice Repository panel points to a populated static Linux environment at `public/practice-repos/linux-practice-lab/`. Zip generation is not implemented yet, but the folder can already be copied into WSL, a Linux VM, macOS Terminal, a Legion Go development environment, or an SSH sandbox.
 
 ```text
 linux-practice-lab/
@@ -400,9 +400,31 @@ processes/
 services/
 bash/
 troubleshooting/
+archives/
+configs/
+data/
+scripts/
 ```
 
-Future Practice Labs phases should add Docker, Kubernetes, Terraform, Helm, and Ansible labs, then generate downloadable practice repositories from the same metadata.
+The repository includes:
+
+- Logs: `app.log`, `auth.log`, `nginx.log`, and `system.log`
+- Configs: `nginx.conf`, `app.env`, `database.conf`, and `sshd_config`
+- Scripts: `deploy.sh`, `backup.sh`, `cleanup.sh`, and `healthcheck.sh`
+- Data: `users.csv`, `orders.csv`, `errors.txt`, and `servers.txt`
+- Permissions practice files: `private.key` and `public.key`
+- Archives: `backup.tar.gz` and `logs.tar.gz`
+- Troubleshooting scenario: `troubleshooting/incident-502.md`
+
+Each major folder has its own README with purpose, sample tasks, suggested commands, and expected learning outcomes. Repository metadata in `src/data/practiceLabs.js` maps Linux lab categories to relevant practice files, such as Grep labs to `logs/*.log`, Permissions labs to `permissions/`, Bash labs to `scripts/`, and Troubleshooting labs to `configs/` and `troubleshooting/`.
+
+Roadmap reminder:
+
+- Phase 15.3 - Docker Practice Labs
+- Phase 15.4 - Kubernetes Practice Labs
+- Phase 15.5 - Terraform Practice Labs
+- Phase 15.6 - Helm Practice Labs
+- Phase 15.7 - Ansible Practice Labs
 
 ## Modules
 

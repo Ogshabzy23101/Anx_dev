@@ -1,0 +1,8 @@
+order_id,user_id,status,amount,region
+ord-1001,1001,complete,42.50,eu-west
+ord-1002,1007,failed,13.99,us-east
+ord-1003,1004,pending,91.20,eu-west
+ord-1004,1008,failed,120.00,us-east
+ord-1005,1002,complete,18.75,ap-south
+ord-1006,1009,refunded,44.10,eu-west
+ord-1007,1010,failed,77.70,eu-central
