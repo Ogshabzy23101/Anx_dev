@@ -378,37 +378,58 @@ The question bank lives in `src/data/interview.js`. It includes the original MVP
   question,
   shortAnswer,
   detailedAnswer,
-  example,
-  commonMistake,
+  beginnerExplanation,
+  professionalExplanation,
+  realWorldExample,
+  commands,
+  followUpQuestions,
+  commonMistakes,
   interviewTip,
   requiredKeywords,
   relatedModule,
+  reviewStatus,
 }
 ```
 
 Current categories are Linux, Docker, Kubernetes, Helm, Terraform, Ansible, CI/CD, DevOps fundamentals, Troubleshooting, Scenario-based questions, and Behavioural questions. Difficulty levels are Beginner, Junior DevOps, Mid-level DevOps, and Advanced.
 
+`reviewStatus` supports `generated`, `needs-review`, `reviewed`, and `approved`. Existing generated and imported PDF questions default to `needs-review` until a human review pass promotes them.
+
 Interview progress is stored independently in `localStorage` and tracks reviewed questions, mastered flashcards, best quiz score, completed written answers, completed mock interviews, and weak categories from mock interview results.
 
 ### Interview question review workflow
 
-All current Interview Mode questions can be exported for human review:
+All current Interview Mode questions can be exported for human review as Markdown:
 
 ```bash
 npm run export:interview-review
 ```
 
-The export writes `docs/interview-question-review.md`. Each question includes its id, category, difficulty, question text, current short answer, current detailed answer, example, common mistake, interview tip, required keywords, and related module.
+The export writes `docs/interview-question-review.md`. To export JSON instead, pass an output path:
+
+```bash
+npm run export:interview-review -- docs/interview-question-review.json
+```
+
+Each reviewed answer supports `id`, `category`, `difficulty`, `question`, `shortAnswer`, `detailedAnswer`, `beginnerExplanation`, `professionalExplanation`, `realWorldExample`, `commands`, `followUpQuestions`, `commonMistakes`, `interviewTip`, `requiredKeywords`, `relatedModule`, and `reviewStatus`.
 
 Recommended review process:
 
 1. Run `npm run export:interview-review`.
-2. Edit `docs/interview-question-review.md` during human review.
-3. Copy approved answer improvements back into `src/data/interview.js`.
-4. Keep the same question `id` values so progress and tests remain stable.
-5. Run `npm test` before committing updated interview answers.
+2. Edit `docs/interview-question-review.md` during human review, or export and edit JSON.
+3. Keep the same question `id` values so progress and tests remain stable.
+4. Set `reviewStatus` to `reviewed` or `approved` only after a human pass.
+5. Import the reviewed answers:
 
-The Markdown export is a review aid only. The app continues to read live Interview Mode data from `src/data/interview.js`.
+```bash
+npm run import:interview-review -- docs/interview-question-review.md
+```
+
+The importer validates required fields, duplicate IDs, unknown IDs, incomplete answers, and answer quality warnings. Approved content is written to `src/data/interviewReviewedOverrides.js`, which is consumed by `src/data/interview.js` without deleting the generated question bank.
+
+Quality checks flag answers that are too short, repeat generic generated phrases, omit real-world examples, omit common mistakes, omit interview tips, omit required keywords, or contain placeholder wording such as `Explain the concept clearly`.
+
+The Interview UI includes a review-status filter for All, Needs Review, Reviewed, and Approved so polished content can be separated from content still awaiting human review.
 
 ## Practice Labs
 

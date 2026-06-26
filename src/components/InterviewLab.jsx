@@ -22,6 +22,7 @@ export default function InterviewLab({ progress, setProgress, onWrong }) {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("all");
   const [difficulty, setDifficulty] = useState("all");
+  const [reviewStatus, setReviewStatus] = useState("all");
   const [flashcardIndex, setFlashcardIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [quizIndex, setQuizIndex] = useState(0);
@@ -49,9 +50,10 @@ export default function InterviewLab({ progress, setProgress, onWrong }) {
       ].join(" ").toLowerCase();
       return (!search || text.includes(search))
         && (category === "all" || item.category === category)
-        && (difficulty === "all" || item.difficulty === difficulty);
+        && (difficulty === "all" || item.difficulty === difficulty)
+        && (reviewStatus === "all" || item.reviewStatus === reviewStatus);
     });
-  }, [category, difficulty, query]);
+  }, [category, difficulty, query, reviewStatus]);
 
   const filteredFlashcards = useMemo(() => (
     interviewFlashcards.filter((card) => filteredQuestions.some((item) => `flashcard-${item.id}` === card.id))
@@ -216,6 +218,8 @@ export default function InterviewLab({ progress, setProgress, onWrong }) {
             setCategory={setCategory}
             difficulty={difficulty}
             setDifficulty={setDifficulty}
+            reviewStatus={reviewStatus}
+            setReviewStatus={setReviewStatus}
           />
         )}
 
@@ -237,6 +241,7 @@ export default function InterviewLab({ progress, setProgress, onWrong }) {
                   <span className="difficulty-badge intermediate">{item.difficulty}</span>
                 </summary>
                 <div className="command-detail">
+                  <section><h3>Review status</h3><p>{item.reviewStatus}</p></section>
                   <section><h3>Short answer</h3><p>{item.shortAnswer}</p></section>
                   <section><h3>Detailed answer</h3><p>{item.detailedAnswer}</p></section>
                   <section><h3>Example</h3><p>{item.example}</p></section>

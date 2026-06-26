@@ -42,6 +42,16 @@ describe("Interview Mode", () => {
     expect(screen.getByText("What is the difference between an image and a container?")).toBeInTheDocument();
   });
 
+  it("filters questions by review status", () => {
+    const { container } = renderInterview();
+
+    fireEvent.change(screen.getByLabelText("review status"), { target: { value: "approved" } });
+    expect(container.querySelectorAll("details")).toHaveLength(0);
+
+    fireEvent.change(screen.getByLabelText("review status"), { target: { value: "needs-review" } });
+    expect(container.querySelectorAll("details")).toHaveLength(101);
+  });
+
   it("reveals structured Q&A details", () => {
     renderInterview();
 

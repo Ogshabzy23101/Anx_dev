@@ -8,6 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "export:interview-review": "node scripts/exportInterviewReview.mjs",
+    "import:interview-review": "node scripts/importInterviewReview.mjs",
     "test": "vitest run",
     "test:watch": "vitest"
   },

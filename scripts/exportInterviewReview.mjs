@@ -1,39 +1,14 @@
 import { mkdirSync, writeFileSync } from "node:fs";
-import { dirname, resolve } from "node:path";
+import { dirname, extname, resolve } from "node:path";
 import { interviewQuestions } from "../src/data/interview.js";
+import { serializeInterviewReviewMarkdown } from "../src/utils/interviewReviewWorkflow.js";
 
-const outputPath = resolve("docs/interview-question-review.md");
+const outputPath = resolve(process.argv[2] || "docs/interview-question-review.md");
+const extension = extname(outputPath).toLowerCase();
 
-function list(values) {
-  return values?.length ? values.join(", ") : "None";
-}
-
-function section(question) {
-  return `## ${question.id}
-
-- **Category:** ${question.category}
-- **Difficulty:** ${question.difficulty}
-- **Question:** ${question.question}
-- **Current short answer:** ${question.shortAnswer}
-- **Current detailed answer:** ${question.detailedAnswer}
-- **Example:** ${question.example}
-- **Common mistake:** ${question.commonMistake}
-- **Interview tip:** ${question.interviewTip}
-- **Required keywords:** ${list(question.requiredKeywords)}
-- **Related module:** ${question.relatedModule}
-`;
-}
-
-const content = `# Interview Question Review
-
-This file is generated from \`src/data/interview.js\`.
-
-Use it for human review of Interview Mode answers. Edit this Markdown file freely during review, then copy approved improvements back into \`src/data/interview.js\` and rerun tests.
-
-Total questions: ${interviewQuestions.length}
-
-${interviewQuestions.map(section).join("\n")}
-`;
+const content = extension === ".json"
+  ? `${JSON.stringify(interviewQuestions, null, 2)}\n`
+  : serializeInterviewReviewMarkdown(interviewQuestions);
 
 mkdirSync(dirname(outputPath), { recursive: true });
 writeFileSync(outputPath, content);

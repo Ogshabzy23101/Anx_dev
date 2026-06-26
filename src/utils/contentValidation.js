@@ -26,6 +26,7 @@ const requiredFields = {
     "interviewTip",
     "requiredKeywords",
     "relatedModule",
+    "reviewStatus",
   ],
 };
 

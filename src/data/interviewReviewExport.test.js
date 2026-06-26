@@ -20,8 +20,12 @@ describe("interview question review export", () => {
 
     expect(content).toContain(`## ${sample.id}`);
     expect(content).toContain(`- **Question:** ${sample.question}`);
-    expect(content).toContain(`- **Current short answer:** ${sample.shortAnswer}`);
-    expect(content).toContain(`- **Current detailed answer:** ${sample.detailedAnswer}`);
+    expect(content).toContain(`- **Review status:** ${sample.reviewStatus}`);
+    expect(content).toContain(`- **Short answer:** ${sample.shortAnswer}`);
+    expect(content).toContain(`- **Detailed answer:** ${sample.detailedAnswer}`);
+    expect(content).toContain(`- **Beginner explanation:** ${sample.beginnerExplanation}`);
+    expect(content).toContain(`- **Professional explanation:** ${sample.professionalExplanation}`);
+    expect(content).toContain(`- **Real world example:** ${sample.realWorldExample}`);
     expect(content).toContain(`- **Required keywords:** ${sample.requiredKeywords.join(", ")}`);
   });
 });

@@ -1,3 +1,6 @@
+import { interviewReviewedOverrides } from "./interviewReviewedOverrides.js";
+import { normalizeReviewedQuestion } from "../utils/interviewReviewWorkflow.js";
+
 export const interviewCategories = [
   "Linux",
   "Docker",
@@ -17,6 +20,13 @@ export const interviewDifficulties = [
   "Junior DevOps",
   "Mid-level DevOps",
   "Advanced",
+];
+
+export const interviewReviewStatuses = [
+  "generated",
+  "needs-review",
+  "reviewed",
+  "approved",
 ];
 
 const categoryTopics = {
@@ -194,15 +204,25 @@ function dedupeQuestions(questions) {
 
 const importedInterviewQuestions = importedQuestionSpecs.map(makeImportedQuestion);
 
+function applyReviewedOverride(question) {
+  return normalizeReviewedQuestion({
+    ...question,
+    reviewStatus: question.reviewStatus || "needs-review",
+    ...(interviewReviewedOverrides[question.id] || {}),
+    id: question.id,
+  });
+}
+
 export const interviewQuestions = dedupeQuestions([
   ...importedInterviewQuestions,
   ...baseInterviewQuestions,
-]);
+]).map(applyReviewedOverride);
 
 export const interviewFlashcards = interviewQuestions.map((item) => ({
   id: `flashcard-${item.id}`,
   category: item.category,
   difficulty: item.difficulty,
+  reviewStatus: item.reviewStatus,
   front: item.question,
   shortAnswer: item.shortAnswer,
   deeperExplanation: item.detailedAnswer,

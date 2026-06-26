@@ -1,5 +1,12 @@
 import { interviewCategories, interviewDifficulties } from "../../data/interview";
 
+const reviewStatusOptions = [
+  { value: "all", label: "All" },
+  { value: "needs-review", label: "Needs Review" },
+  { value: "reviewed", label: "Reviewed" },
+  { value: "approved", label: "Approved" },
+];
+
 export default function InterviewFilters({
   query,
   setQuery,
@@ -7,6 +14,8 @@ export default function InterviewFilters({
   setCategory,
   difficulty,
   setDifficulty,
+  reviewStatus,
+  setReviewStatus,
 }) {
   return (
     <div className="library-toolbar terminal-card">
@@ -31,6 +40,14 @@ export default function InterviewFilters({
         <select value={difficulty} onChange={(event) => setDifficulty(event.target.value)}>
           <option value="all">All levels</option>
           {interviewDifficulties.map((item) => <option key={item}>{item}</option>)}
+        </select>
+      </label>
+      <label>
+        <span>review status</span>
+        <select value={reviewStatus} onChange={(event) => setReviewStatus(event.target.value)}>
+          {reviewStatusOptions.map((item) => (
+            <option key={item.value} value={item.value}>{item.label}</option>
+          ))}
         </select>
       </label>
     </div>
