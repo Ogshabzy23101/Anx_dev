@@ -9,20 +9,25 @@ import {
 } from "../data/helm";
 import CommandQuiz from "./CommandQuiz";
 import FilePractice from "./FilePractice";
+import LectureNotes from "./LectureNotes";
 import LinuxFlashcards from "./LinuxFlashcards";
 import LinuxReference from "./LinuxReference";
 import MultipleChoiceQuiz from "./MultipleChoiceQuiz";
+import { splitReferenceContent } from "../utils/referenceContent";
 
 const modes = [
-  { id: "reference", label: "Reference", icon: "01" },
-  { id: "flashcards", label: "Flashcards", icon: "02" },
-  { id: "quiz", label: "Quiz", icon: "03" },
-  { id: "commands", label: "Write Helm commands", icon: "04" },
-  { id: "charts", label: "Chart practice", icon: "05" },
+  { id: "notes", label: "Notes", icon: "01" },
+  { id: "command-reference", label: "Commands", icon: "02" },
+  { id: "flashcards", label: "Flashcards", icon: "03" },
+  { id: "quiz", label: "Quiz", icon: "04" },
+  { id: "commands", label: "Write Helm commands", icon: "05" },
+  { id: "charts", label: "Chart practice", icon: "06" },
 ];
 
+const helmReferenceContent = splitReferenceContent(helmCommandCatalog, "Helm");
+
 export default function HelmLab({ progress, setProgress, onWrong }) {
-  const [mode, setMode] = useState("reference");
+  const [mode, setMode] = useState("notes");
 
   function toggleMastered(id) {
     setProgress((current) => ({
@@ -93,18 +98,27 @@ export default function HelmLab({ progress, setProgress, onWrong }) {
       </nav>
 
       <section className="mode-content">
-        {mode === "reference" && (
-          <LinuxReference
-            commands={helmCommandCatalog}
+        {mode === "notes" && (
+          <LectureNotes
+            notes={helmReferenceContent.notes}
             categories={helmCategories}
-            searchLabel="search Helm topics and explanations"
+            searchLabel="search Helm notes"
+            searchPlaceholder="charts, values, templates, releases..."
+            emptyMessage="No Helm notes match these filters."
+          />
+        )}
+        {mode === "command-reference" && (
+          <LinuxReference
+            commands={helmReferenceContent.commands}
+            categories={helmCategories}
+            searchLabel="search Helm commands and explanations"
             searchPlaceholder="templates, values, rollback, lint..."
-            itemNoun="Helm topics"
-            emptyMessage="No Helm topics match these filters."
+            itemNoun="Helm commands"
+            emptyMessage="No Helm commands match these filters."
             syntaxLabel="Syntax or chart example"
             flagsLabel="Common fields or flags"
-            examplesLabel="Chart or command examples"
-            relatedLabel="Related concepts"
+            examplesLabel="Helm command examples"
+            relatedLabel="Related commands"
           />
         )}
         {mode === "flashcards" && (

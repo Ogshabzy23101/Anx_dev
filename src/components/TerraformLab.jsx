@@ -9,20 +9,25 @@ import {
 } from "../data/terraform";
 import CommandQuiz from "./CommandQuiz";
 import FilePractice from "./FilePractice";
+import LectureNotes from "./LectureNotes";
 import LinuxFlashcards from "./LinuxFlashcards";
 import LinuxReference from "./LinuxReference";
 import MultipleChoiceQuiz from "./MultipleChoiceQuiz";
+import { splitReferenceContent } from "../utils/referenceContent";
 
 const modes = [
-  { id: "reference", label: "Reference", icon: "01" },
-  { id: "flashcards", label: "Flashcards", icon: "02" },
-  { id: "quiz", label: "Quiz", icon: "03" },
-  { id: "commands", label: "Write Terraform commands", icon: "04" },
-  { id: "hcl", label: "HCL practice", icon: "05" },
+  { id: "notes", label: "Notes", icon: "01" },
+  { id: "command-reference", label: "Commands", icon: "02" },
+  { id: "flashcards", label: "Flashcards", icon: "03" },
+  { id: "quiz", label: "Quiz", icon: "04" },
+  { id: "commands", label: "Write Terraform commands", icon: "05" },
+  { id: "hcl", label: "HCL practice", icon: "06" },
 ];
 
+const terraformReferenceContent = splitReferenceContent(terraformCommandCatalog, "Terraform");
+
 export default function TerraformLab({ progress, setProgress, onWrong }) {
-  const [mode, setMode] = useState("reference");
+  const [mode, setMode] = useState("notes");
 
   function toggleMastered(id) {
     setProgress((current) => ({
@@ -95,18 +100,27 @@ export default function TerraformLab({ progress, setProgress, onWrong }) {
       </nav>
 
       <section className="mode-content">
-        {mode === "reference" && (
-          <LinuxReference
-            commands={terraformCommandCatalog}
+        {mode === "notes" && (
+          <LectureNotes
+            notes={terraformReferenceContent.notes}
             categories={terraformCategories}
-            searchLabel="search Terraform topics and explanations"
+            searchLabel="search Terraform notes"
+            searchPlaceholder="state, modules, backend, lifecycle..."
+            emptyMessage="No Terraform notes match these filters."
+          />
+        )}
+        {mode === "command-reference" && (
+          <LinuxReference
+            commands={terraformReferenceContent.commands}
+            categories={terraformCategories}
+            searchLabel="search Terraform commands and explanations"
             searchPlaceholder="state, modules, backend, EC2..."
-            itemNoun="Terraform topics"
-            emptyMessage="No Terraform topics match these filters."
+            itemNoun="Terraform commands"
+            emptyMessage="No Terraform commands match these filters."
             syntaxLabel="Syntax or HCL example"
             flagsLabel="Common fields or flags"
-            examplesLabel="HCL or CLI examples"
-            relatedLabel="Related concepts"
+            examplesLabel="Terraform command examples"
+            relatedLabel="Related commands"
           />
         )}
         {mode === "flashcards" && (

@@ -74,7 +74,54 @@ Run tests in watch mode while developing:
 npm run test:watch
 ```
 
-Tests use Vitest, React Testing Library, `user-event`, and the jsdom browser environment. The current suite contains **145 tests across 34 test files**.
+Tests use Vitest, React Testing Library, `user-event`, and the jsdom browser environment. The current suite contains **150 tests across 36 test files**.
+
+## Notes vs Commands
+
+Each core module now separates conceptual learning from command lookup:
+
+- **Notes** contain lecture-style explanations for concepts, architecture, workflow ideas, and resource behavior.
+- **Commands** contain executable CLI references only.
+
+This keeps items such as Kubernetes architecture, API server, etcd, scheduler, RBAC, CRDs, operators, ServiceMonitor, Docker images, Terraform state, Helm releases, and Ansible inventory in Notes, while commands such as `kubectl get pods`, `docker build`, `helm install`, `terraform plan`, and `ansible-playbook` live in Commands.
+
+The derived note structure supports future imported lecture notes:
+
+```js
+{
+  id,
+  module,
+  title,
+  category,
+  difficulty,
+  summary,
+  beginnerExplanation,
+  professionalExplanation,
+  example,
+  useCase,
+  commonMistakes,
+  relatedTopics,
+}
+```
+
+The command structure supports command-only imports:
+
+```js
+{
+  id,
+  module,
+  command,
+  category,
+  difficulty,
+  syntax,
+  explanation,
+  commonFlags,
+  examples,
+  useCase,
+  commonMistakes,
+  relatedCommands,
+}
+```
 
 ## Linux enrichment
 
@@ -342,6 +389,26 @@ The question bank lives in `src/data/interview.js`. It includes the original MVP
 Current categories are Linux, Docker, Kubernetes, Helm, Terraform, Ansible, CI/CD, DevOps fundamentals, Troubleshooting, Scenario-based questions, and Behavioural questions. Difficulty levels are Beginner, Junior DevOps, Mid-level DevOps, and Advanced.
 
 Interview progress is stored independently in `localStorage` and tracks reviewed questions, mastered flashcards, best quiz score, completed written answers, completed mock interviews, and weak categories from mock interview results.
+
+### Interview question review workflow
+
+All current Interview Mode questions can be exported for human review:
+
+```bash
+npm run export:interview-review
+```
+
+The export writes `docs/interview-question-review.md`. Each question includes its id, category, difficulty, question text, current short answer, current detailed answer, example, common mistake, interview tip, required keywords, and related module.
+
+Recommended review process:
+
+1. Run `npm run export:interview-review`.
+2. Edit `docs/interview-question-review.md` during human review.
+3. Copy approved answer improvements back into `src/data/interview.js`.
+4. Keep the same question `id` values so progress and tests remain stable.
+5. Run `npm test` before committing updated interview answers.
+
+The Markdown export is a review aid only. The app continues to read live Interview Mode data from `src/data/interview.js`.
 
 ## Practice Labs
 

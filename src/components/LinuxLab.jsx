@@ -1,6 +1,7 @@
 import { useState } from "react";
 import {
   linuxCommandQuiz,
+  linuxCategories,
   linuxCommandCatalog,
   linuxFlashcards,
   linuxMultipleChoice,
@@ -8,20 +9,25 @@ import {
 import { linuxShellPractice } from "../data/linuxPractice";
 import CommandQuiz from "./CommandQuiz";
 import FilePractice from "./FilePractice";
+import LectureNotes from "./LectureNotes";
 import LinuxFlashcards from "./LinuxFlashcards";
 import LinuxReference from "./LinuxReference";
 import MultipleChoiceQuiz from "./MultipleChoiceQuiz";
+import { splitReferenceContent } from "../utils/referenceContent";
 
 const modes = [
-  { id: "reference", label: "Reference", icon: "01" },
-  { id: "flashcards", label: "Flashcards", icon: "02" },
-  { id: "quiz", label: "Quiz", icon: "03" },
-  { id: "commands", label: "Write commands", icon: "04" },
-  { id: "files", label: "File practice", icon: "05" },
+  { id: "notes", label: "Notes", icon: "01" },
+  { id: "command-reference", label: "Commands", icon: "02" },
+  { id: "flashcards", label: "Flashcards", icon: "03" },
+  { id: "quiz", label: "Quiz", icon: "04" },
+  { id: "commands", label: "Write commands", icon: "05" },
+  { id: "files", label: "File practice", icon: "06" },
 ];
 
+const linuxReferenceContent = splitReferenceContent(linuxCommandCatalog, "Linux");
+
 export default function LinuxLab({ progress, setProgress, onWrong }) {
-  const [mode, setMode] = useState("reference");
+  const [mode, setMode] = useState("notes");
 
   function toggleMastered(id) {
     setProgress((current) => ({
@@ -87,7 +93,15 @@ export default function LinuxLab({ progress, setProgress, onWrong }) {
       </nav>
 
       <section className="mode-content">
-        {mode === "reference" && <LinuxReference commands={linuxCommandCatalog} />}
+        {mode === "notes" && (
+          <LectureNotes
+            notes={linuxReferenceContent.notes}
+            categories={linuxCategories}
+            searchPlaceholder="permissions, processes, shell, networking..."
+            emptyMessage="No Linux notes match these filters."
+          />
+        )}
+        {mode === "command-reference" && <LinuxReference commands={linuxReferenceContent.commands} />}
         {mode === "flashcards" && (
           <LinuxFlashcards
             cards={linuxFlashcards}

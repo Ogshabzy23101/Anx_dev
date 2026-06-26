@@ -9,20 +9,25 @@ import {
 } from "../data/docker";
 import CommandQuiz from "./CommandQuiz";
 import FilePractice from "./FilePractice";
+import LectureNotes from "./LectureNotes";
 import LinuxFlashcards from "./LinuxFlashcards";
 import LinuxReference from "./LinuxReference";
 import MultipleChoiceQuiz from "./MultipleChoiceQuiz";
+import { splitReferenceContent } from "../utils/referenceContent";
 
 const modes = [
-  { id: "reference", label: "Reference", icon: "01" },
-  { id: "flashcards", label: "Flashcards", icon: "02" },
-  { id: "quiz", label: "Quiz", icon: "03" },
-  { id: "commands", label: "Write commands", icon: "04" },
-  { id: "files", label: "File practice", icon: "05" },
+  { id: "notes", label: "Notes", icon: "01" },
+  { id: "command-reference", label: "Commands", icon: "02" },
+  { id: "flashcards", label: "Flashcards", icon: "03" },
+  { id: "quiz", label: "Quiz", icon: "04" },
+  { id: "commands", label: "Write commands", icon: "05" },
+  { id: "files", label: "File practice", icon: "06" },
 ];
 
+const dockerReferenceContent = splitReferenceContent(dockerCommandCatalog, "Docker");
+
 export default function DockerLab({ progress, setProgress, onWrong }) {
-  const [mode, setMode] = useState("reference");
+  const [mode, setMode] = useState("notes");
 
   function toggleMastered(id) {
     setProgress((current) => ({
@@ -88,14 +93,23 @@ export default function DockerLab({ progress, setProgress, onWrong }) {
       </nav>
 
       <section className="mode-content">
-        {mode === "reference" && (
-          <LinuxReference
-            commands={dockerCommandCatalog}
+        {mode === "notes" && (
+          <LectureNotes
+            notes={dockerReferenceContent.notes}
             categories={dockerCategories}
-            searchLabel="search Docker topics and explanations"
+            searchLabel="search Docker notes"
+            searchPlaceholder="engine, images, Compose, security..."
+            emptyMessage="No Docker notes match these filters."
+          />
+        )}
+        {mode === "command-reference" && (
+          <LinuxReference
+            commands={dockerReferenceContent.commands}
+            categories={dockerCategories}
+            searchLabel="search Docker commands and explanations"
             searchPlaceholder="build, volumes, Compose, debugging..."
-            itemNoun="Docker topics"
-            emptyMessage="No Docker topics match these filters."
+            itemNoun="Docker commands"
+            emptyMessage="No Docker commands match these filters."
           />
         )}
         {mode === "flashcards" && (

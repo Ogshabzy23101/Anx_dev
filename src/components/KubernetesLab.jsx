@@ -9,20 +9,25 @@ import {
 } from "../data/kubernetes";
 import CommandQuiz from "./CommandQuiz";
 import FilePractice from "./FilePractice";
+import LectureNotes from "./LectureNotes";
 import LinuxFlashcards from "./LinuxFlashcards";
 import LinuxReference from "./LinuxReference";
 import MultipleChoiceQuiz from "./MultipleChoiceQuiz";
+import { splitReferenceContent } from "../utils/referenceContent";
 
 const modes = [
-  { id: "reference", label: "Reference", icon: "01" },
-  { id: "flashcards", label: "Flashcards", icon: "02" },
-  { id: "quiz", label: "Quiz", icon: "03" },
-  { id: "commands", label: "Write kubectl", icon: "04" },
-  { id: "manifests", label: "Manifest practice", icon: "05" },
+  { id: "notes", label: "Notes", icon: "01" },
+  { id: "command-reference", label: "Commands", icon: "02" },
+  { id: "flashcards", label: "Flashcards", icon: "03" },
+  { id: "quiz", label: "Quiz", icon: "04" },
+  { id: "commands", label: "Write kubectl", icon: "05" },
+  { id: "manifests", label: "Manifest practice", icon: "06" },
 ];
 
+const kubernetesReferenceContent = splitReferenceContent(kubernetesCommandCatalog, "Kubernetes");
+
 export default function KubernetesLab({ progress, setProgress, onWrong }) {
-  const [mode, setMode] = useState("reference");
+  const [mode, setMode] = useState("notes");
 
   function toggleMastered(id) {
     setProgress((current) => ({
@@ -95,18 +100,27 @@ export default function KubernetesLab({ progress, setProgress, onWrong }) {
       </nav>
 
       <section className="mode-content">
-        {mode === "reference" && (
-          <LinuxReference
-            commands={kubernetesCommandCatalog}
+        {mode === "notes" && (
+          <LectureNotes
+            notes={kubernetesReferenceContent.notes}
             categories={kubernetesCategories}
-            searchLabel="search Kubernetes resources and explanations"
+            searchLabel="search Kubernetes lecture notes"
+            searchPlaceholder="architecture, RBAC, services, networking..."
+            emptyMessage="No Kubernetes notes match these filters."
+          />
+        )}
+        {mode === "command-reference" && (
+          <LinuxReference
+            commands={kubernetesReferenceContent.commands}
+            categories={kubernetesCategories}
+            searchLabel="search kubectl commands and explanations"
             searchPlaceholder="deployments, RBAC, probes, troubleshooting..."
-            itemNoun="Kubernetes topics"
-            emptyMessage="No Kubernetes topics match these filters."
+            itemNoun="kubectl commands"
+            emptyMessage="No kubectl commands match these filters."
             syntaxLabel="Syntax or manifest example"
             flagsLabel="Common fields or flags"
-            examplesLabel="Manifest or kubectl examples"
-            relatedLabel="Related concepts"
+            examplesLabel="kubectl examples"
+            relatedLabel="Related commands"
           />
         )}
         {mode === "flashcards" && (

@@ -9,20 +9,25 @@ import {
 } from "../data/ansible";
 import CommandQuiz from "./CommandQuiz";
 import FilePractice from "./FilePractice";
+import LectureNotes from "./LectureNotes";
 import LinuxFlashcards from "./LinuxFlashcards";
 import LinuxReference from "./LinuxReference";
 import MultipleChoiceQuiz from "./MultipleChoiceQuiz";
+import { splitReferenceContent } from "../utils/referenceContent";
 
 const modes = [
-  { id: "reference", label: "Reference", icon: "01" },
-  { id: "flashcards", label: "Flashcards", icon: "02" },
-  { id: "quiz", label: "Quiz", icon: "03" },
-  { id: "commands", label: "Write Ansible commands", icon: "04" },
-  { id: "playbooks", label: "Playbook practice", icon: "05" },
+  { id: "notes", label: "Notes", icon: "01" },
+  { id: "command-reference", label: "Commands", icon: "02" },
+  { id: "flashcards", label: "Flashcards", icon: "03" },
+  { id: "quiz", label: "Quiz", icon: "04" },
+  { id: "commands", label: "Write Ansible commands", icon: "05" },
+  { id: "playbooks", label: "Playbook practice", icon: "06" },
 ];
 
+const ansibleReferenceContent = splitReferenceContent(ansibleCommandCatalog, "Ansible");
+
 export default function AnsibleLab({ progress, setProgress, onWrong }) {
-  const [mode, setMode] = useState("reference");
+  const [mode, setMode] = useState("notes");
 
   function toggleMastered(id) {
     setProgress((current) => ({
@@ -95,18 +100,27 @@ export default function AnsibleLab({ progress, setProgress, onWrong }) {
       </nav>
 
       <section className="mode-content">
-        {mode === "reference" && (
-          <LinuxReference
-            commands={ansibleCommandCatalog}
+        {mode === "notes" && (
+          <LectureNotes
+            notes={ansibleReferenceContent.notes}
             categories={ansibleCategories}
-            searchLabel="search Ansible topics and explanations"
+            searchLabel="search Ansible notes"
+            searchPlaceholder="inventory, roles, handlers, vault..."
+            emptyMessage="No Ansible notes match these filters."
+          />
+        )}
+        {mode === "command-reference" && (
+          <LinuxReference
+            commands={ansibleReferenceContent.commands}
+            categories={ansibleCategories}
+            searchLabel="search Ansible commands and explanations"
             searchPlaceholder="inventory, handlers, vault, roles..."
-            itemNoun="Ansible topics"
-            emptyMessage="No Ansible topics match these filters."
+            itemNoun="Ansible commands"
+            emptyMessage="No Ansible commands match these filters."
             syntaxLabel="YAML or command example"
             flagsLabel="Common options"
-            examplesLabel="YAML or command examples"
-            relatedLabel="Related concepts"
+            examplesLabel="Ansible command examples"
+            relatedLabel="Related commands"
           />
         )}
         {mode === "flashcards" && (

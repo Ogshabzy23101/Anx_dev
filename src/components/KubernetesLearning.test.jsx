@@ -10,6 +10,20 @@ import LinuxFlashcards from "./LinuxFlashcards";
 import LinuxReference from "./LinuxReference";
 
 describe("Kubernetes reference library", () => {
+  it("renders Kubernetes Notes and Commands as separate module tabs", () => {
+    render(<App />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Kubernetes" }));
+    expect(screen.getByRole("button", { name: "Notes" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Commands" })).toBeInTheDocument();
+    expect(screen.getAllByText("Kubernetes API").length).toBeGreaterThan(0);
+
+    fireEvent.click(screen.getByRole("button", { name: "Commands" }));
+    expect(screen.getByRole("searchbox", { name: "search kubectl commands and explanations" })).toBeInTheDocument();
+    expect(screen.getAllByText("kubectl get pods").length).toBeGreaterThan(0);
+    expect(screen.queryByText("Kubernetes API")).not.toBeInTheDocument();
+  });
+
   it("renders expandable entries and searches explanation text", () => {
     const { container } = render(
       <LinuxReference
