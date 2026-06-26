@@ -11,6 +11,10 @@ import {
   practiceRepository,
 } from "../data/practiceLabs";
 import { calculatePracticeLabStats } from "../utils/practiceLabProgress";
+import PracticeFilters from "./practice/PracticeFilters";
+import PracticeProgress from "./practice/PracticeProgress";
+import PracticeRepository from "./practice/PracticeRepository";
+import WeakAreaPanel from "./practice/WeakAreaPanel";
 
 export default function PracticeLabs({ progress, setProgress }) {
   const [activeLabSet, setActiveLabSet] = useState("linux");
@@ -171,58 +175,21 @@ export default function PracticeLabs({ progress, setProgress }) {
         ))}
       </nav>
 
-      <section className="interview-progress terminal-card">
-        <span>{stats.startedCount} started</span>
-        <span>{stats.completedCount} complete</span>
-        <span>{stats.completionPercentage}% done</span>
-        <span>{stats.difficultyCompletion.Beginner?.percentage || 0}% beginner</span>
-        <span>{stats.difficultyCompletion.Advanced?.percentage || 0}% advanced</span>
-      </section>
+      <PracticeProgress stats={stats} />
 
-      <div className="library-toolbar terminal-card">
-        <label>
-          <span>search labs</span>
-          <input
-            type="search"
-            value={query}
-            onChange={(event) => {
-              setQuery(event.target.value);
-              resetLabView(0);
-            }}
-            placeholder={labConfig.placeholder}
-          />
-        </label>
-        <label>
-          <span>category</span>
-          <select value={category} onChange={(event) => {
-            setCategory(event.target.value);
-            resetLabView(0);
-          }}>
-            <option value="all">All categories</option>
-            {labConfig.categories.map((item) => <option key={item}>{item}</option>)}
-          </select>
-        </label>
-        <label>
-          <span>difficulty</span>
-          <select value={difficulty} onChange={(event) => {
-            setDifficulty(event.target.value);
-            resetLabView(0);
-          }}>
-            <option value="all">All levels</option>
-            {practiceLabDifficulties.map((item) => <option key={item}>{item}</option>)}
-          </select>
-        </label>
-      </div>
+      <PracticeFilters
+        query={query}
+        setQuery={setQuery}
+        category={category}
+        setCategory={setCategory}
+        difficulty={difficulty}
+        setDifficulty={setDifficulty}
+        labConfig={labConfig}
+        difficulties={practiceLabDifficulties}
+        resetLabView={resetLabView}
+      />
 
-      <section className="recommended-panel terminal-card">
-        <span className="eyebrow">recommended practice areas</span>
-        <p>
-          You should practice:{" "}
-          {stats.recommendedPracticeAreas.length
-            ? stats.recommendedPracticeAreas.join(", ")
-            : "Keep going. No weak areas detected yet."}
-        </p>
-      </section>
+      <WeakAreaPanel recommendedPracticeAreas={stats.recommendedPracticeAreas} />
 
       {activeLab ? (
         <section className="practice-lab-layout">
@@ -346,18 +313,7 @@ export default function PracticeLabs({ progress, setProgress }) {
         <div className="terminal-card empty-filter-result">No Practice Labs match these filters.</div>
       )}
 
-      <section className="terminal-card practice-repo-panel">
-        <div>
-          <span className="eyebrow">practice repository</span>
-          <h2>Download {labConfig.label} Practice Repo</h2>
-          <p>Zip generation is planned for a future phase. This static practice repository defines the folder structure and files the downloadable repo will use.</p>
-        </div>
-        <code>{labConfig.repository.root}</code>
-        <code>{labConfig.repository.publicPath}</code>
-        <ul>
-          {labConfig.repository.files.map((item) => <li key={item}>{item}</li>)}
-        </ul>
-      </section>
+      <PracticeRepository labConfig={labConfig} />
     </>
   );
 }

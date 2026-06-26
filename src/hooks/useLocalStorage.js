@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 
-export function useLocalStorage(key, initialValue) {
+export function useLocalStorage(key, initialValue, migrate = (value) => value) {
   const [value, setValue] = useState(() => {
     try {
       const stored = window.localStorage.getItem(key);
-      if (!stored) return initialValue;
+      if (!stored) return migrate(initialValue);
 
       const parsed = JSON.parse(stored);
       if (
@@ -14,18 +14,18 @@ export function useLocalStorage(key, initialValue) {
         typeof initialValue === "object" &&
         !Array.isArray(parsed)
       ) {
-        return { ...initialValue, ...parsed };
+        return migrate({ ...initialValue, ...parsed });
       }
 
-      return parsed;
+      return migrate(parsed);
     } catch {
-      return initialValue;
+      return migrate(initialValue);
     }
   });
 
   useEffect(() => {
-    window.localStorage.setItem(key, JSON.stringify(value));
-  }, [key, value]);
+    window.localStorage.setItem(key, JSON.stringify(migrate(value)));
+  }, [key, value, migrate]);
 
   return [value, setValue];
 }

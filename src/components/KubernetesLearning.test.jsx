@@ -10,11 +10,11 @@ import LinuxFlashcards from "./LinuxFlashcards";
 import LinuxReference from "./LinuxReference";
 
 describe("Kubernetes reference library", () => {
-  it("renders Kubernetes Notes and Commands as separate module tabs", () => {
+  it("renders Kubernetes Notes and Commands as separate module tabs", async () => {
     render(<App />);
 
     fireEvent.click(screen.getByRole("button", { name: "Kubernetes" }));
-    expect(screen.getByRole("button", { name: "Notes" })).toBeInTheDocument();
+    expect(await screen.findByRole("button", { name: "Notes" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Commands" })).toBeInTheDocument();
     expect(screen.getAllByText("Kubernetes API").length).toBeGreaterThan(0);
 
@@ -89,7 +89,7 @@ describe("Kubernetes flashcards", () => {
   it("persists Kubernetes mastery independently", async () => {
     render(<App />);
     fireEvent.click(screen.getByRole("button", { name: "Kubernetes" }));
-    fireEvent.click(screen.getByRole("button", { name: "Flashcards" }));
+    fireEvent.click(await screen.findByRole("button", { name: "Flashcards" }));
     fireEvent.click(screen.getByRole("button", { name: "Mark mastered" }));
 
     await waitFor(() => {

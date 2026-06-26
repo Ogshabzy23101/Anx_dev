@@ -70,7 +70,7 @@ describe("Helm flashcards", () => {
   it("persists Helm mastery independently", async () => {
     render(<App />);
     fireEvent.click(screen.getByRole("button", { name: "Helm" }));
-    fireEvent.click(screen.getByRole("button", { name: "Flashcards" }));
+    fireEvent.click(await screen.findByRole("button", { name: "Flashcards" }));
     fireEvent.click(screen.getByRole("button", { name: "Mark mastered" }));
 
     await waitFor(() => {

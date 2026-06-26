@@ -558,6 +558,8 @@ npm run build
 npm audit --audit-level=high
 ```
 
+Current verification coverage: 155 Vitest tests across the learning modules, Interview Mode, Practice Labs, progress persistence, repository metadata, content validation, and deployment assumptions.
+
 ## GitHub Pages deployment
 
 The app is deployed as a Vite project site under the repository path `/Anx_dev/`. The matching `base` value is configured in `vite.config.js`, so generated JavaScript and CSS URLs resolve below the repository path instead of the domain root.
@@ -583,17 +585,40 @@ This project does not currently use React Router. If client-side routes are intr
 
 ```text
 src/
-  components/       Reusable learning activities and UI
-  data/             Tool registry, learning content, and practice tasks
+  components/       Reusable learning activities, module shells, and UI
+  components/module Generic ModuleLab architecture for tool modules
+  components/shared Shared filters, loading, empty states, progress, and comparison UI
+  components/interview
+                    Interview Mode subcomponents
+  components/practice
+                    Practice Lab subcomponents
+  data/             Tool registry, module registry, learning content, and practice tasks
   hooks/            Shared React hooks, including localStorage persistence
   test/             Shared test environment setup
-  utils/            Pure answer and practice validation functions
-  App.jsx           App shell, navigation, and overall progress
+  utils/            Answer, practice, progress migration, and content validation functions
+  App.jsx           App shell, navigation, lazy route coordination, and overall progress
   styles.css        Terminal visual system and responsive styles
 ```
 
-To add another tool, create a new data module under `src/data`, build its lab component, and connect it to the tool registry and app shell.
+### Phase 16 architecture
+
+The Linux, Docker, Kubernetes, Helm, Terraform, and Ansible modules now use a generic `ModuleLab` architecture. Module-specific differences live in `src/data/learningModuleRegistry.js`, including:
+
+- module id and display name
+- header copy and badge values
+- notes and command reference content
+- flashcards, MCQs, command challenges, and practical exercises
+- progress keys
+- module-specific labels for command and practice modes
+
+`App.jsx` now coordinates application state and navigation instead of manually importing and rendering every learning module. The active learning module is loaded through `React.lazy()` and `Suspense`, which keeps the initial app shell lighter while preserving the existing user flow.
+
+The progress model now includes `schemaVersion`, structured `modules`, `practiceLabs`, `settings`, and `stats` sections. Legacy flat localStorage keys are still written and read for backward compatibility, so existing saved progress continues to work.
+
+`src/utils/contentValidation.js` validates registered module content and Interview Mode question shape. Future content additions should keep notes, commands, flashcards, MCQs, command challenges, and exercises populated with the required fields before a module is considered ready.
+
+To add another tool later, create its data module under `src/data`, register it in the module registry, add lightweight stats metadata if it contributes to the sidebar, and let the generic `ModuleLab` render the shared learning modes.
 
 ## Future roadmap
 
-Next Practice Labs phases should add Docker, Kubernetes, Terraform, Helm, and Ansible labs using the same lab engine. A useful follow-up is downloadable zip generation from the Practice Repository metadata so learners can run realistic file-based exercises locally.
+Phase 17 recommendation: add a developer-facing content import workflow that can ingest reviewed Interview answers and future module content into the registry-backed architecture without touching app routing. Next Practice Labs phases should add Kubernetes, Terraform, Helm, and Ansible labs using the same lab engine. A useful follow-up is downloadable zip generation from the Practice Repository metadata so learners can run realistic file-based exercises locally.

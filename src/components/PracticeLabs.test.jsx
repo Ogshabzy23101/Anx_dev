@@ -100,7 +100,7 @@ describe("Practice Labs", () => {
     render(<App />);
 
     fireEvent.click(screen.getByRole("button", { name: "Practice Labs" }));
-    fireEvent.click(screen.getByRole("button", { name: "Mark Complete" }));
+    fireEvent.click(await screen.findByRole("button", { name: "Mark Complete" }));
 
     await waitFor(() => {
       const stored = JSON.parse(localStorage.getItem("devops-lab-progress-v1"));
@@ -114,7 +114,7 @@ describe("Practice Labs", () => {
     render(<App />);
 
     fireEvent.click(screen.getByRole("button", { name: "Practice Labs" }));
-    fireEvent.click(screen.getByRole("button", { name: "Docker Practice Labs" }));
+    fireEvent.click(await screen.findByRole("button", { name: "Docker Practice Labs" }));
     fireEvent.click(screen.getByRole("button", { name: "Mark Complete" }));
 
     await waitFor(() => {
@@ -129,7 +129,7 @@ describe("Practice Labs", () => {
     render(<App />);
 
     fireEvent.click(screen.getByRole("button", { name: "Practice Labs" }));
-    fireEvent.click(screen.getByRole("button", { name: "Log blocker" }));
+    fireEvent.click(await screen.findByRole("button", { name: "Log blocker" }));
     fireEvent.click(screen.getByRole("button", { name: "Log blocker" }));
 
     await waitFor(() => {
@@ -143,7 +143,7 @@ describe("Practice Labs", () => {
     render(<App />);
 
     fireEvent.click(screen.getByRole("button", { name: "Practice Labs" }));
-    fireEvent.click(screen.getByRole("button", { name: "Docker Practice Labs" }));
+    fireEvent.click(await screen.findByRole("button", { name: "Docker Practice Labs" }));
     fireEvent.click(screen.getByRole("button", { name: "Log blocker" }));
     fireEvent.click(screen.getByRole("button", { name: "Log blocker" }));
 
@@ -158,7 +158,7 @@ describe("Practice Labs", () => {
     render(<App />);
 
     fireEvent.click(screen.getByRole("button", { name: "Practice Labs" }));
-    fireEvent.click(screen.getByRole("button", { name: "Mark Complete" }));
+    fireEvent.click(await screen.findByRole("button", { name: "Mark Complete" }));
     fireEvent.click(screen.getByRole("button", { name: "Reset Progress" }));
 
     await waitFor(() => {

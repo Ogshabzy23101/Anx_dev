@@ -96,7 +96,7 @@ describe("Interview Mode", () => {
     render(<App />);
 
     fireEvent.click(screen.getByRole("button", { name: "Interview" }));
-    fireEvent.click(screen.getByText("Explain Linux file permissions."));
+    fireEvent.click(await screen.findByText("Explain Linux file permissions."));
     fireEvent.click(screen.getAllByRole("button", { name: "Mark reviewed" })[0]);
     fireEvent.click(screen.getByRole("button", { name: "Interview Flashcards" }));
     fireEvent.click(screen.getByRole("button", { name: "Mark mastered" }));

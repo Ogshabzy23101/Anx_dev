@@ -7,7 +7,7 @@ describe("Docker module", () => {
     render(<App />);
 
     fireEvent.click(screen.getByRole("button", { name: "Docker" }));
-    expect(screen.getByRole("heading", { name: "Docker workflows" })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "Docker workflows" })).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: /Flashcards/ }));
     fireEvent.click(screen.getByRole("button", { name: "Mark mastered" }));
@@ -25,7 +25,7 @@ describe("Kubernetes module", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Kubernetes" }));
     expect(
-      screen.getByRole("heading", { name: "Kubernetes operations" }),
+      await screen.findByRole("heading", { name: "Kubernetes operations" }),
     ).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: "Flashcards" }));
@@ -45,7 +45,7 @@ describe("Helm module", () => {
     render(<App />);
 
     fireEvent.click(screen.getByRole("button", { name: "Helm" }));
-    expect(screen.getByRole("heading", { name: "Helm charts" })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "Helm charts" })).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: "Flashcards" }));
     fireEvent.click(screen.getByRole("button", { name: "Mark mastered" }));
@@ -65,7 +65,7 @@ describe("Terraform module", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Terraform" }));
     expect(
-      screen.getByRole("heading", { name: "Terraform workflows" }),
+      await screen.findByRole("heading", { name: "Terraform workflows" }),
     ).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: "Flashcards" }));
@@ -86,7 +86,7 @@ describe("Ansible module", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Ansible" }));
     expect(
-      screen.getByRole("heading", { name: "Ansible automation" }),
+      await screen.findByRole("heading", { name: "Ansible automation" }),
     ).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: "Flashcards" }));

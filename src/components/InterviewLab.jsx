@@ -1,13 +1,13 @@
 import { useMemo, useState } from "react";
 import {
-  interviewCategories,
-  interviewDifficulties,
   interviewFlashcards,
   interviewMultipleChoice,
   interviewQuestions,
 } from "../data/interview";
 import { isMultipleChoiceCorrect } from "../utils/answerValidation";
 import { scoreMockInterview, validateWrittenAnswer } from "../utils/interviewValidation";
+import InterviewFeedbackModal from "./interview/InterviewFeedbackModal";
+import InterviewFilters from "./interview/InterviewFilters";
 
 const modes = [
   { id: "bank", label: "Q&A Bank", icon: "01" },
@@ -16,85 +16,6 @@ const modes = [
   { id: "written", label: "Written Practice", icon: "04" },
   { id: "mock", label: "Mock Interview", icon: "05" },
 ];
-
-function Filters({ query, setQuery, category, setCategory, difficulty, setDifficulty }) {
-  return (
-    <div className="library-toolbar terminal-card">
-      <label>
-        <span>search interview questions</span>
-        <input
-          type="search"
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-          placeholder="pods, state, outage, pipeline..."
-        />
-      </label>
-      <label>
-        <span>category</span>
-        <select value={category} onChange={(event) => setCategory(event.target.value)}>
-          <option value="all">All categories</option>
-          {interviewCategories.map((item) => <option key={item}>{item}</option>)}
-        </select>
-      </label>
-      <label>
-        <span>difficulty</span>
-        <select value={difficulty} onChange={(event) => setDifficulty(event.target.value)}>
-          <option value="all">All levels</option>
-          {interviewDifficulties.map((item) => <option key={item}>{item}</option>)}
-        </select>
-      </label>
-    </div>
-  );
-}
-
-function FeedbackModal({ feedback, onClose }) {
-  if (!feedback) return null;
-
-  const success = feedback.type === "success";
-
-  return (
-    <div className="modal-backdrop" role="presentation" onMouseDown={onClose}>
-      <section
-        className={`practice-modal ${success ? "is-success" : "is-error"}`}
-        role="alertdialog"
-        aria-modal="true"
-        aria-labelledby="interview-feedback-title"
-        onMouseDown={(event) => event.stopPropagation()}
-      >
-        <div className="modal-status">{success ? "answer_ready" : "answer_needs_work"}</div>
-        <h2 id="interview-feedback-title">
-          {success ? "Strong interview answer." : "Tighten this answer."}
-        </h2>
-        <p>{feedback.improvementSuggestion}</p>
-        <div className="validation-feedback">
-          <div className="feedback-column is-correct">
-            <span>covered points</span>
-            <ul>
-              {feedback.passed.length ? feedback.passed.map((item) => (
-                <li key={item}>✓ {item}</li>
-              )) : <li>None yet</li>}
-            </ul>
-          </div>
-          <div className="feedback-column is-missing">
-            <span>missing points</span>
-            <ul>
-              {feedback.missing.length ? feedback.missing.map((item) => (
-                <li key={item}>✗ {item}</li>
-              )) : <li>Nothing missing</li>}
-            </ul>
-          </div>
-          <div className="feedback-values">
-            <div><span>expected answer</span><pre>{feedback.expectedAnswer}</pre></div>
-            <div><span>user answer</span><pre>{feedback.userAnswer || "(empty)"}</pre></div>
-          </div>
-        </div>
-        <button className="primary-button" type="button" onClick={onClose} autoFocus>
-          Continue
-        </button>
-      </section>
-    </div>
-  );
-}
 
 export default function InterviewLab({ progress, setProgress, onWrong }) {
   const [mode, setMode] = useState("bank");
@@ -288,7 +209,7 @@ export default function InterviewLab({ progress, setProgress, onWrong }) {
 
       <section className="mode-content">
         {mode !== "mock" && (
-          <Filters
+          <InterviewFilters
             query={query}
             setQuery={setQuery}
             category={category}
@@ -482,7 +403,7 @@ export default function InterviewLab({ progress, setProgress, onWrong }) {
         )}
       </section>
 
-      <FeedbackModal feedback={feedback} onClose={() => setFeedback(null)} />
+      <InterviewFeedbackModal feedback={feedback} onClose={() => setFeedback(null)} />
     </>
   );
 }
