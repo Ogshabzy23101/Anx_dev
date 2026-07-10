@@ -2513,10 +2513,16 @@ export const helmFlashcards = helmCommandCatalog.map((item, index) => ({
   relatedConcepts: item.relatedCommands,
 }));
 
+function lowerFirst(text) {
+  return text.charAt(0).toLowerCase() + text.slice(1);
+}
+
 export const helmMultipleChoice = helmCommandCatalog.map((item, index, catalog) => ({
   id: `helm-mcq-${index + 1}`,
   category: item.category,
-  question: `Which Helm topic or command best matches: ${item.basicExplanation.toLowerCase()}`,
+  question: item.entryKind === "command"
+    ? `What does \`${item.command}\` do?`
+    : `What is \`${item.command}\`?`,
   options: [
     item.command,
     catalog[(index + 7) % catalog.length].command,
@@ -2530,7 +2536,7 @@ export const helmMultipleChoice = helmCommandCatalog.map((item, index, catalog) 
 export const helmCommandQuiz = helmCommandCatalog.map((item, index) => ({
   id: `helm-command-${index + 1}`,
   category: item.category,
-  prompt: `Write a Helm command that demonstrates or inspects this topic: ${item.command}.`,
+  prompt: `Write a Helm command for: ${lowerFirst(item.fullMeaning)}.`,
   answers: item.answers,
   explanation: `A valid workflow is \`${item.answers[0]}\`.`,
 }));
