@@ -100,10 +100,12 @@ export function splitReferenceContent(entries, module) {
       notes.push(toLectureNote(entry, module));
     }
 
+    // commonSyntax/syntax are excluded here: unlike examples, they may be a
+    // template pattern with placeholders (e.g. "helm install RELEASE_NAME
+    // CHART [flags]") rather than a concrete runnable command, and would
+    // otherwise get promoted into its own nonsensical reference card.
     const commandCandidates = [
       primaryIsCommand ? entry.command : null,
-      entry.commonSyntax,
-      entry.syntax,
       ...(entry.examples || []),
     ].filter(Boolean);
 
