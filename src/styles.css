@@ -580,7 +580,9 @@ main {
 }
 
 .use-case-panel,
-.mistake-panel {
+.mistake-panel,
+.analogy-panel,
+.tie-in-panel {
   padding: 12px;
   border-left: 2px solid var(--green);
   background: #0d1811;
@@ -589,6 +591,45 @@ main {
 .mistake-panel {
   border-left-color: var(--amber);
   background: #18150e;
+}
+
+.analogy-panel {
+  border-left-color: #6f7dff;
+  background: #0e0f1c;
+}
+
+.tie-in-panel {
+  border-left-color: var(--green);
+  background: #0a1512;
+}
+
+.reference-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.reference-table th,
+.reference-table td {
+  padding: 6px 10px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid #1c2b23;
+  color: #a2afa7;
+}
+
+.reference-table th {
+  color: #718078;
+  font: 9px "IBM Plex Mono", monospace;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.reference-table code {
+  display: inline;
+  padding: 0;
+  background: none;
+  color: var(--green);
 }
 
 .empty-filter-result {

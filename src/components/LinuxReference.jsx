@@ -97,8 +97,46 @@ export default function LinuxReference({
               </section>
               <section>
                 <h3>{flagsLabel}</h3>
-                <p>{item.commonFlags.length ? item.commonFlags.map((flag) => `\`${flag}\``).join(", ") : "No common flags for this shell form."}</p>
+                {item.commonFlags.length ? (
+                  typeof item.commonFlags[0] === "object" ? (
+                    <table className="reference-table">
+                      <thead>
+                        <tr><th>Flag</th><th>What it does</th></tr>
+                      </thead>
+                      <tbody>
+                        {item.commonFlags.map((row) => (
+                          <tr key={row.flag}>
+                            <td><code>{row.flag}</code></td>
+                            <td>{row.description}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  ) : (
+                    <p>{item.commonFlags.map((flag) => `\`${flag}\``).join(", ")}</p>
+                  )
+                ) : (
+                  <p>No common flags for this shell form.</p>
+                )}
               </section>
+              {!!item.keyTerms?.length && (
+                <section>
+                  <h3>Key terms</h3>
+                  <table className="reference-table">
+                    <thead>
+                      <tr><th>Term</th><th>What it means</th></tr>
+                    </thead>
+                    <tbody>
+                      {item.keyTerms.map((row) => (
+                        <tr key={row.term}>
+                          <td><code>{row.term}</code></td>
+                          <td>{row.meaning}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </section>
+              )}
               <section className="command-examples">
                 <h3>{examplesLabel}</h3>
                 {item.examples.map((example) => <code key={example}>{example}</code>)}
@@ -111,6 +149,36 @@ export default function LinuxReference({
                 <h3>Common mistake</h3>
                 <p>{item.commonMistake}</p>
               </section>
+              {!!item.gotchas?.length && (
+                <section>
+                  <h3>Gotchas</h3>
+                  <table className="reference-table">
+                    <thead>
+                      <tr><th>Cause</th><th>Symptom</th></tr>
+                    </thead>
+                    <tbody>
+                      {item.gotchas.map((row) => (
+                        <tr key={row.cause}>
+                          <td>{row.cause}</td>
+                          <td>{row.symptom}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </section>
+              )}
+              {item.analogy && (
+                <section className="analogy-panel">
+                  <h3>Mental model</h3>
+                  <p>{item.analogy}</p>
+                </section>
+              )}
+              {item.realWorldExample && (
+                <section className="tie-in-panel">
+                  <h3>Real-world tie-in</h3>
+                  <p>{item.realWorldExample}</p>
+                </section>
+              )}
               <section>
                 <h3>{relatedLabel}</h3>
                 <p>{item.relatedCommands.join(", ")}</p>

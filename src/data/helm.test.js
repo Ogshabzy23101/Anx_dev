@@ -28,19 +28,34 @@ describe("Helm learning data", () => {
         professionalExplanation: expect.any(String),
         commonSyntax: expect.any(String),
         commonFlags: expect.any(Array),
+        keyTerms: expect.any(Array),
         examples: expect.any(Array),
         devOpsUseCase: expect.any(String),
         commonMistake: expect.any(String),
+        gotchas: expect.any(Array),
         relatedCommands: expect.any(Array),
+        answers: expect.any(Array),
+        entryKind: expect.stringMatching(/command|concept/),
         difficulty: expect.stringMatching(/beginner|intermediate|advanced/),
       }));
+
+      // Every entry follows the style guide's required shape: command entries
+      // carry a flags table, concept entries carry key terms plus gotchas.
+      if (item.entryKind === "command") {
+        expect(item.commonFlags.length).toBeGreaterThan(0);
+      } else {
+        expect(item.keyTerms.length).toBeGreaterThan(0);
+        expect(item.gotchas.length).toBeGreaterThan(0);
+      }
+      expect(item.examples.length).toBeGreaterThanOrEqual(1);
+      expect(item.examples.length).toBeLessThanOrEqual(4);
     });
   });
 
   it("covers the requested reference topics", () => {
     const text = helmReference
       .flatMap((section) => section.commands)
-      .map((item) => `${item.command} ${item.description}`)
+      .map((item) => `${item.category} ${item.command} ${item.description} ${item.professionalExplanation} ${item.examples.join(" ")}`)
       .join(" ")
       .toLowerCase();
 
@@ -52,6 +67,17 @@ describe("Helm learning data", () => {
       "helm get values", "helm template", "helm lint", "helm dependency",
       "appversion", "version", "--set", "-f", "kubernetes",
     ].forEach((topic) => expect(text).toContain(topic));
+  });
+
+  it("only cites phone-store-3tier where a real file or workflow backs the claim", () => {
+    const tieIns = helmCommandCatalog
+      .map((item) => item.realWorldExample)
+      .filter(Boolean);
+
+    expect(tieIns.length).toBeGreaterThan(0);
+    tieIns.forEach((example) => {
+      expect(example.toLowerCase()).toContain("phone-store");
+    });
   });
 
   it("accepts primary and alternative Helm commands", () => {
