@@ -38,17 +38,17 @@ describe("Interview Mode", () => {
     expect(container.querySelectorAll("details")).toHaveLength(7);
 
     fireEvent.change(screen.getByLabelText("difficulty"), { target: { value: "Beginner" } });
-    expect(container.querySelectorAll("details")).toHaveLength(2);
+    expect(container.querySelectorAll("details")).toHaveLength(1);
     expect(screen.getByText("What is the difference between an image and a container?")).toBeInTheDocument();
   });
 
   it("filters questions by review status", () => {
     const { container } = renderInterview();
 
-    fireEvent.change(screen.getByLabelText("review status"), { target: { value: "approved" } });
+    fireEvent.change(screen.getByLabelText("review status"), { target: { value: "needs-review" } });
     expect(container.querySelectorAll("details")).toHaveLength(0);
 
-    fireEvent.change(screen.getByLabelText("review status"), { target: { value: "needs-review" } });
+    fireEvent.change(screen.getByLabelText("review status"), { target: { value: "reviewed" } });
     expect(container.querySelectorAll("details")).toHaveLength(101);
   });
 

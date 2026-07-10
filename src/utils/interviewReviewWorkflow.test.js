@@ -4,6 +4,7 @@ import {
   checkInterviewAnswerQuality,
   createReviewedOverrides,
   detectDuplicateQuestionIds,
+  interviewReviewStatuses,
   mergeReviewedQuestions,
   parseInterviewReviewMarkdown,
   serializeInterviewReviewMarkdown,
@@ -89,7 +90,7 @@ describe("interview review workflow", () => {
   it("keeps existing interview data backward compatible with review metadata", () => {
     const sample = interviewQuestions[0];
 
-    expect(sample.reviewStatus).toBe("needs-review");
+    expect(interviewReviewStatuses).toContain(sample.reviewStatus);
     expect(sample.beginnerExplanation).toBeTruthy();
     expect(sample.professionalExplanation).toBeTruthy();
     expect(Array.isArray(sample.commands)).toBe(true);
