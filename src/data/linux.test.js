@@ -31,12 +31,27 @@ describe("enriched Linux learning data", () => {
         professionalExplanation: expect.any(String),
         commonSyntax: expect.any(String),
         commonFlags: expect.any(Array),
+        keyTerms: expect.any(Array),
         examples: expect.any(Array),
         devOpsUseCase: expect.any(String),
         commonMistake: expect.any(String),
+        gotchas: expect.any(Array),
         relatedCommands: expect.any(Array),
+        answers: expect.any(Array),
+        entryKind: expect.stringMatching(/command|concept/),
         difficulty: expect.stringMatching(/beginner|intermediate|advanced/),
       }));
+
+      // Every entry follows the style guide's required shape: command entries
+      // carry a flags table, concept entries carry key terms plus gotchas.
+      if (item.entryKind === "command") {
+        expect(item.commonFlags.length).toBeGreaterThan(0);
+      } else {
+        expect(item.keyTerms.length).toBeGreaterThan(0);
+        expect(item.gotchas.length).toBeGreaterThan(0);
+      }
+      expect(item.examples.length).toBeGreaterThanOrEqual(1);
+      expect(item.examples.length).toBeLessThanOrEqual(4);
     });
 
     linuxFlashcards.forEach((card) => {
@@ -47,6 +62,17 @@ describe("enriched Linux learning data", () => {
         useCase: expect.any(String),
         relatedConcepts: expect.any(Array),
       }));
+    });
+  });
+
+  it("only cites phone-store-3tier where a real file or workflow backs the claim", () => {
+    const tieIns = linuxCommandCatalog
+      .map((item) => item.realWorldExample)
+      .filter(Boolean);
+
+    expect(tieIns.length).toBeGreaterThan(0);
+    tieIns.forEach((example) => {
+      expect(example.toLowerCase()).toContain("phone-store");
     });
   });
 
