@@ -33,7 +33,7 @@ describe("Kubernetes module", () => {
 
     await waitFor(() => {
       const progress = JSON.parse(localStorage.getItem("devops-lab-progress-v1"));
-      expect(progress.kubernetesMasteredFlashcards).toEqual(["k8s-fc-pod"]);
+      expect(progress.kubernetesMasteredFlashcards).toEqual(["kubernetes-fc-1"]);
       expect(progress.dockerMasteredFlashcards).toEqual([]);
       expect(progress.masteredFlashcards).toEqual([]);
     });

@@ -38,7 +38,7 @@ describe("Kubernetes reference library", () => {
       screen.getByRole("searchbox", {
         name: "search Kubernetes resources and explanations",
       }),
-      { target: { value: "sensitive workload values" } },
+      { target: { value: "passwords, tokens, keys" } },
     );
 
     expect(screen.getAllByText("Secret").length).toBeGreaterThan(0);
@@ -94,7 +94,7 @@ describe("Kubernetes flashcards", () => {
 
     await waitFor(() => {
       const progress = JSON.parse(localStorage.getItem("devops-lab-progress-v1"));
-      expect(progress.kubernetesMasteredFlashcards).toEqual(["k8s-fc-pod"]);
+      expect(progress.kubernetesMasteredFlashcards).toEqual(["kubernetes-fc-1"]);
       expect(progress.dockerMasteredFlashcards).toEqual([]);
       expect(progress.masteredFlashcards).toEqual([]);
     });
