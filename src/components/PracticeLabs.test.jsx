@@ -106,7 +106,7 @@ describe("Practice Labs", () => {
       const stored = JSON.parse(localStorage.getItem("devops-lab-progress-v1"));
       expect(stored.practiceLabStartedIds).toEqual(["linux-lab-beginner-1"]);
       expect(stored.practiceLabCompletedIds).toEqual(["linux-lab-beginner-1"]);
-      expect(stored.interviewMasteredFlashcards).toEqual([]);
+      expect(stored.interviewPracticedIds).toEqual([]);
     });
   });
 

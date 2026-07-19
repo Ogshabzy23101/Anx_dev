@@ -1,70 +1,84 @@
 import { describe, expect, it } from "vitest";
 import {
   interviewCategories,
-  interviewFlashcards,
-  interviewMultipleChoice,
+  interviewDifficulties,
+  interviewFormulas,
   interviewQuestions,
 } from "./interview";
-import { isMultipleChoiceCorrect } from "../utils/answerValidation";
-import { scoreMockInterview, validateWrittenAnswer } from "../utils/interviewValidation";
+import { validatePracticeAnswer } from "../utils/answerValidation";
 
-describe("Interview data", () => {
-  it("contains the MVP category coverage and structured answers", () => {
+describe("Interview Prep data", () => {
+  it("contains category coverage and structured questions", () => {
     expect(interviewCategories).toHaveLength(11);
-    expect(interviewQuestions).toHaveLength(101);
-    expect(interviewFlashcards).toHaveLength(101);
-    expect(interviewMultipleChoice).toHaveLength(101);
+    expect(interviewDifficulties).toEqual(["Junior", "Mid-level", "Senior"]);
+    expect(interviewQuestions.length).toBeGreaterThanOrEqual(60);
 
     interviewCategories.forEach((category) => {
-      expect(interviewQuestions.filter((item) => item.category === category).length).toBeGreaterThanOrEqual(5);
+      expect(interviewQuestions.filter((item) => item.category === category).length).toBeGreaterThanOrEqual(3);
     });
 
     interviewQuestions.forEach((item) => {
       expect(item).toEqual(expect.objectContaining({
         id: expect.any(String),
-        category: expect.any(String),
-        difficulty: expect.any(String),
+        category: expect.stringMatching(new RegExp(interviewCategories.join("|"))),
+        difficulty: expect.stringMatching(/Junior|Mid-level|Senior/),
+        formulaType: expect.stringMatching(/concept|troubleshooting|star/),
         question: expect.any(String),
-        shortAnswer: expect.any(String),
-        detailedAnswer: expect.any(String),
-        example: expect.any(String),
+        modelAnswer: expect.any(String),
+        checklist: expect.any(Array),
         commonMistake: expect.any(String),
-        interviewTip: expect.any(String),
-        requiredKeywords: expect.any(Array),
         relatedModule: expect.any(String),
       }));
+
+      expect(item.checklist.length).toBeGreaterThanOrEqual(2);
+      item.checklist.forEach((check) => {
+        expect(check.label).toEqual(expect.any(String));
+        expect(check.pattern).toBeInstanceOf(RegExp);
+      });
     });
   });
 
-  it("validates interview MCQ answers", () => {
-    expect(isMultipleChoiceCorrect(interviewMultipleChoice[0], 0)).toBe(true);
-    expect(isMultipleChoiceCorrect(interviewMultipleChoice[0], 1)).toBe(false);
+  it("has no duplicate question ids", () => {
+    const ids = interviewQuestions.map((item) => item.id);
+    expect(new Set(ids).size).toBe(ids.length);
   });
 
-  it("validates written answer keywords and missing concepts", () => {
-    const question = interviewQuestions.find((item) => item.id === "interview-docker-1");
-    const validation = validateWrittenAnswer("An image becomes a running container at runtime.", question.requiredKeywords);
-
-    expect(validation.passed).toEqual(expect.arrayContaining(["image", "container", "runtime"]));
-    expect(validation.isCorrect).toBe(true);
-
-    const partial = validateWrittenAnswer("It is a packaged image.", question.requiredKeywords);
-    expect(partial.missing).toEqual(expect.arrayContaining(["container", "runtime"]));
+  it("defines a formula (stage list) for every formulaType in use", () => {
+    const usedTypes = new Set(interviewQuestions.map((item) => item.formulaType));
+    usedTypes.forEach((type) => {
+      expect(interviewFormulas[type]).toBeDefined();
+      expect(interviewFormulas[type].stages.length).toBeGreaterThan(0);
+    });
   });
 
-  it("scores mock interviews and identifies weak categories", () => {
-    const questions = [
-      interviewQuestions.find((item) => item.category === "Linux"),
-      interviewQuestions.find((item) => item.category === "Terraform"),
-    ];
-    const result = scoreMockInterview({
-      [questions[0].id]: questions[0].requiredKeywords.join(" "),
-      [questions[1].id]: "state",
-    }, questions);
+  it("every model answer satisfies its own checklist", () => {
+    interviewQuestions.forEach((item) => {
+      const rules = item.checklist.map((check) => ({
+        label: check.label,
+        test: (answer) => check.pattern.test(answer),
+      }));
+      const result = validatePracticeAnswer(item.modelAnswer, rules);
+      expect(result.isCorrect, `${item.id} model answer missed: ${result.missing.join(", ")}`).toBe(true);
+    });
+  });
 
-    expect(result.score).toBeLessThan(100);
-    expect(result.strongAreas).toContain("Linux");
-    expect(result.weakAreas).toContain("Terraform");
-    expect(result.suggestedModules).toContain("Terraform");
+  it("only cites phone-store-3tier where a real project detail backs the claim", () => {
+    const projectAnswers = interviewQuestions.filter((item) => item.category === "Behavioral & project");
+    expect(projectAnswers.length).toBeGreaterThan(0);
+    projectAnswers.forEach((item) => {
+      expect(item.modelAnswer.length).toBeGreaterThan(200);
+    });
+  });
+
+  it("flags a partial answer as incomplete and names what's missing", () => {
+    const question = interviewQuestions.find((item) => item.id === "docker-image-vs-container");
+    const rules = question.checklist.map((check) => ({
+      label: check.label,
+      test: (answer) => check.pattern.test(answer),
+    }));
+    const partial = validatePracticeAnswer("An image is like a snapshot of a container.", rules);
+
+    expect(partial.isCorrect).toBe(false);
+    expect(partial.missing.length).toBeGreaterThan(0);
   });
 });

@@ -44,7 +44,27 @@ function calculatePracticeLabsProgress(progress) {
   return total ? Math.round((completed / total) * 100) : 0;
 }
 
+function calculateInterviewProgress(progress) {
+  const total = moduleStats.interview.questionTotal;
+  const practiced = lengthOf(progress.interviewPracticedIds);
+  return total ? Math.round((practiced / total) * 100) : 0;
+}
+
 function getProgressSummary(progress, trackedTool) {
+  if (trackedTool === "interview") {
+    const practiced = lengthOf(progress.interviewPracticedIds);
+    const total = moduleStats.interview.questionTotal;
+    const score = calculateInterviewProgress(progress);
+
+    return {
+      label: moduleStats.interview.label,
+      cards: practiced,
+      score,
+      commandScore: score,
+      detail: `${practiced}/${total} questions practiced`,
+    };
+  }
+
   if (trackedTool === "practice-labs") {
     const completed =
       lengthOf(progress.practiceLabCompletedIds) +
@@ -89,13 +109,14 @@ export default function App() {
   const moduleProgress = useMemo(() => {
     const trackedProgress = Object.fromEntries(
       Object.entries(moduleStats)
-        .filter(([id]) => id !== "practice-labs")
+        .filter(([id]) => id !== "practice-labs" && id !== "interview")
         .map(([id, stats]) => [id, calculateTrackedModuleProgress(progress, stats)]),
     );
 
     return {
       ...trackedProgress,
       "practice-labs": calculatePracticeLabsProgress(progress),
+      interview: calculateInterviewProgress(progress),
     };
   }, [progress]);
 

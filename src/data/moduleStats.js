@@ -73,14 +73,8 @@ export const moduleStats = {
     commandScoreKey: "ansibleCommandScore",
   },
   interview: {
-    label: "Interview",
-    flashcardTotal: 101,
-    commandTotal: 101,
-    practiceTotal: 101,
-    masteredKey: "interviewMasteredFlashcards",
-    quizScoreKey: "interviewQuizScore",
-    completedCommandKey: "interviewReviewedQuestions",
-    completedPracticeKey: "interviewCompletedWritten",
+    label: "Interview Prep",
+    questionTotal: 62,
   },
   "practice-labs": {
     label: "Practice Labs",

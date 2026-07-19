@@ -603,6 +603,27 @@ main {
   background: #0a1512;
 }
 
+.model-answer-reveal {
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: #080c0a;
+}
+
+.model-answer-reveal summary {
+  cursor: pointer;
+  color: var(--green);
+  font: 11px "IBM Plex Mono", monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.model-answer-reveal p {
+  margin: 12px 0 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
 .reference-table {
   width: 100%;
   border-collapse: collapse;
@@ -1161,6 +1182,49 @@ main {
   left: 0;
   color: var(--green);
   content: ">";
+}
+
+.formula-strip {
+  padding-top: 18px;
+  margin-top: 18px;
+  border-top: 1px solid var(--line);
+}
+
+.formula-strip > span {
+  color: #657269;
+  font: 9px "IBM Plex Mono", monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.formula-strip ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 10px 0;
+  padding: 0;
+  list-style: none;
+}
+
+.formula-strip ol li {
+  padding: 4px 9px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--green);
+  font: 10px "IBM Plex Mono", monospace;
+}
+
+.formula-strip ol li:not(:last-child)::after {
+  margin-left: 6px;
+  color: #657269;
+  content: "→";
+}
+
+.formula-strip p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
 }
 
 .practice-editor {

@@ -2,14 +2,10 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import App from "../App";
 import InterviewLab from "./InterviewLab";
+import { interviewQuestions } from "../data/interview";
 
 const progress = {
-  interviewReviewedQuestions: [],
-  interviewMasteredFlashcards: [],
-  interviewQuizScore: 0,
-  interviewCompletedWritten: [],
-  interviewCompletedMocks: 0,
-  interviewWeakCategories: [],
+  interviewPracticedIds: [],
 };
 
 function renderInterview(overrides = {}) {
@@ -17,104 +13,72 @@ function renderInterview(overrides = {}) {
     <InterviewLab
       progress={{ ...progress, ...overrides.progress }}
       setProgress={overrides.setProgress || vi.fn()}
-      onWrong={overrides.onWrong || vi.fn()}
     />,
   );
 }
 
-describe("Interview Mode", () => {
-  it("renders the Interview section and Q&A bank", () => {
+describe("Interview Prep", () => {
+  it("renders the Interview Prep section defaulting to Practice mode", () => {
     renderInterview();
 
-    expect(screen.getByRole("heading", { name: "Interview Mode" })).toBeInTheDocument();
-    expect(screen.getByText("101 prompts")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Q&A Bank" })).toHaveClass("active");
+    expect(screen.getByRole("heading", { name: "DevOps Interview Practice" })).toBeInTheDocument();
+    expect(screen.getByText(`${interviewQuestions.length} questions`)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Practice" })).toHaveClass("active");
+    expect(screen.getByRole("textbox", { name: "Your interview answer" })).toBeInTheDocument();
+  });
+
+  it("shows the formula stages for the current question", () => {
+    renderInterview();
+
+    expect(screen.getAllByText(/formula$/).length).toBeGreaterThan(0);
   });
 
   it("filters questions by category and difficulty", () => {
-    const { container } = renderInterview();
+    renderInterview();
 
     fireEvent.change(screen.getByLabelText("category"), { target: { value: "Docker" } });
-    expect(container.querySelectorAll("details")).toHaveLength(7);
-
-    fireEvent.change(screen.getByLabelText("difficulty"), { target: { value: "Beginner" } });
-    expect(container.querySelectorAll("details")).toHaveLength(1);
-    expect(screen.getByText("What is the difference between an image and a container?")).toBeInTheDocument();
+    const select = screen.getByLabelText("question");
+    expect(select.options.length).toBe(
+      interviewQuestions.filter((item) => item.category === "Docker").length,
+    );
   });
 
-  it("filters questions by review status", () => {
-    const { container } = renderInterview();
+  it("checks a written answer and shows inline feedback", () => {
+    const setProgress = vi.fn();
+    renderInterview({ setProgress });
 
-    fireEvent.change(screen.getByLabelText("review status"), { target: { value: "needs-review" } });
-    expect(container.querySelectorAll("details")).toHaveLength(0);
-
-    fireEvent.change(screen.getByLabelText("review status"), { target: { value: "reviewed" } });
-    expect(container.querySelectorAll("details")).toHaveLength(101);
-  });
-
-  it("reveals structured Q&A details", () => {
-    renderInterview();
-
-    fireEvent.click(screen.getByText("Explain Linux file permissions."));
-    expect(screen.getAllByText("Short answer").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("Detailed answer").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("Common mistake").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("Interview tip").length).toBeGreaterThan(0);
-  });
-
-  it("reveals interview flashcard answer structure", () => {
-    renderInterview();
-
-    fireEvent.click(screen.getByRole("button", { name: "Interview Flashcards" }));
-    fireEvent.click(screen.getByRole("button", { name: "Flip interview flashcard" }));
-
-    expect(screen.getByText("Short answer")).toBeInTheDocument();
-    expect(screen.getByText("Deeper explanation")).toBeInTheDocument();
-    expect(screen.getByText("Interview tip")).toBeInTheDocument();
-  });
-
-  it("opens correction modal for wrong interview MCQ answers", () => {
-    const onWrong = vi.fn();
-    renderInterview({ onWrong });
-
-    fireEvent.click(screen.getByRole("button", { name: "Interview Quiz" }));
-    fireEvent.click(screen.getAllByRole("button", { name: /^B/i })[0]);
-    fireEvent.click(screen.getByRole("button", { name: "Submit interview answer" }));
-
-    expect(onWrong).toHaveBeenCalledWith(expect.objectContaining({
-      explanation: expect.any(String),
-      answer: expect.any(String),
-    }));
-  });
-
-  it("validates written answers and shows missing points", () => {
-    renderInterview();
-
-    fireEvent.click(screen.getByRole("button", { name: "Written Practice" }));
-    fireEvent.change(screen.getByLabelText("Written interview answer"), {
-      target: { value: "Permissions are about read access." },
+    fireEvent.change(screen.getByLabelText("category"), { target: { value: "Docker" } });
+    fireEvent.change(screen.getByRole("textbox", { name: "Your interview answer" }), {
+      target: { value: "An image is a read-only template and a container is a running instance of it." },
     });
-    fireEvent.click(screen.getByRole("button", { name: "Validate answer" }));
+    fireEvent.click(screen.getByRole("button", { name: "Check my answer" }));
 
-    expect(screen.getByRole("alertdialog")).toBeInTheDocument();
-    expect(screen.getByText("covered points")).toBeInTheDocument();
-    expect(screen.getByText("missing points")).toBeInTheDocument();
-    expect(screen.getByText("expected answer")).toBeInTheDocument();
+    expect(screen.getByText("Common mistake")).toBeInTheDocument();
+    expect(screen.getByText("Show model answer")).toBeInTheDocument();
+    expect(setProgress).toHaveBeenCalled();
   });
 
-  it("persists Interview progress independently", async () => {
+  it("switches to Reference mode and renders read-only model answers", () => {
+    renderInterview();
+
+    fireEvent.click(screen.getByRole("button", { name: "Reference" }));
+    expect(screen.getAllByText("Model answer").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("A strong answer should").length).toBeGreaterThan(0);
+  });
+
+  it("persists Interview practice progress independently", async () => {
     render(<App />);
 
     fireEvent.click(screen.getByRole("button", { name: "Interview" }));
-    fireEvent.click(await screen.findByText("Explain Linux file permissions."));
-    fireEvent.click(screen.getAllByRole("button", { name: "Mark reviewed" })[0]);
-    fireEvent.click(screen.getByRole("button", { name: "Interview Flashcards" }));
-    fireEvent.click(screen.getByRole("button", { name: "Mark mastered" }));
+    await screen.findByRole("heading", { name: "DevOps Interview Practice" });
+    fireEvent.change(screen.getByRole("textbox", { name: "Your interview answer" }), {
+      target: { value: "Some practice answer text." },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Check my answer" }));
 
     await waitFor(() => {
       const stored = JSON.parse(localStorage.getItem("devops-lab-progress-v1"));
-      expect(stored.interviewReviewedQuestions).toEqual(["pdf-behavioural-intro"]);
-      expect(stored.interviewMasteredFlashcards).toEqual(["flashcard-pdf-behavioural-intro"]);
+      expect(stored.interviewPracticedIds.length).toBe(1);
       expect(stored.ansibleMasteredFlashcards).toEqual([]);
     });
   });

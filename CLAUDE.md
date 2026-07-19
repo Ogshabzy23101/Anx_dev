@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-A dark, terminal-themed React SPA (Vite) for self-study DevOps drilling: Linux, Docker, Kubernetes, Helm, Terraform, and Ansible learning modules, plus an Interview Mode and Practice Labs. Deployed to GitHub Pages at `/Anx_dev/`. No backend — all progress persists to `localStorage`.
+A dark, terminal-themed React SPA (Vite) for self-study DevOps drilling: Linux, Docker, Kubernetes, Helm, Terraform, and Ansible learning modules, plus Interview Prep and Practice Labs. Deployed to GitHub Pages at `/Anx_dev/`. No backend — all progress persists to `localStorage`.
 
 ## Commands
 
@@ -16,8 +16,6 @@ npm test                  # run the full Vitest suite once
 npm run test:watch        # Vitest watch mode
 npx vitest run src/data/linux.test.js   # run a single test file
 npx vitest run -t "test name"           # run tests matching a name
-npm run export:interview-review         # dump src/data/interview.js to docs/interview-question-review.md for human review
-npm run import:interview-review -- docs/interview-question-review.md   # re-import reviewed answers back into interview.js
 ```
 
 CI (`.github/workflows/ci.yml`) runs on every push/PR to `main`: `npm test`, `npm run build`, `npm audit --audit-level=high`, then deploys `dist/` to GitHub Pages (push only, not PRs).
@@ -42,9 +40,9 @@ For each tool there is typically `{tool}.js` (categories, flashcards, MCQs, comm
 
 All progress lives in one `localStorage` blob under key `devops-lab-progress-v1` (`useLocalStorage` hook + `initialProgress`/`migrateProgress` in `src/utils/progressMigration.js`). `src/data/moduleStats.js` defines per-module keys/totals (mastered flashcards, quiz score, completed commands, completed practices) that `App.jsx` and `ModuleLab.jsx` read/write generically — a new module needs an entry here too. `contentValidation.js` provides `validateLearningModule(s)` to sanity-check that a module's registry object actually has all required collections/fields populated.
 
-### Interview Mode has its own review workflow
+### Interview Prep is a formula-driven answer builder, not a quiz
 
-Interview questions (`src/data/interview.js`) are the only content with a `reviewStatus` field (`needs-review` / `reviewed`) instead of implicit completeness. `src/utils/interviewReviewWorkflow.js` serializes/parses questions to/from the Markdown format in `docs/interview-question-review.md`, driven by `scripts/exportInterviewReview.mjs` and `scripts/importInterviewReview.mjs` — the intended loop is export → hand-edit the Markdown → import back into `interview.js`. `CONTENT_STYLE_GUIDE.md` defines the required shape and quality bar for both "command/tool" and "concept" entries reviewed this way (comparative framing, gotchas tables, no invented real-world examples, no placeholder phrasing) — follow it when writing or reviewing any reference/flashcard/interview content, not just interview questions.
+`src/data/interview.js` holds ~60 hand-authored questions, each tagged with a `formulaType` (`concept`, `troubleshooting`, or `star`) that maps to a fixed stage list in `interviewFormulas` (e.g. concept → What it is / Why it matters / Example / Gotcha). The UI (`InterviewLab.jsx`) has two modes: **Practice** — pick a question, see its formula stages as a hint, write your own answer, and check it against a `checklist` of regex-based rules (via the same `validatePracticeAnswer` used by module practice tasks) that surface what you hit and missed inline, plus a collapsed "show model answer" — and **Reference** — a read-only browse of every question's model answer, checklist, and common mistake. There is deliberately no MCQ or flashcard mode here; the previous version's Q&A Bank/Flashcards/Quiz/Written/Mock split was replaced because multiple-choice and rote flashcards don't build the actual skill of producing a spoken answer. The `Behavioral & project` category's model answers are grounded in the real `phone-store-3tier` project (its actual stack, CI/CD chain, Kubernetes/Terraform/Ansible setup, and real bugs it hit) rather than invented scenarios — see `CONTENT_STYLE_GUIDE.md` for the no-fabrication rule that also governs this content. Progress tracks only `interviewPracticedIds` (an array of question ids checked at least once) — see `moduleStats.interview` and the `interview`-specific branches in `App.jsx`'s `getProgressSummary`/`calculateInterviewProgress`, which are special-cased outside the generic mastered/quiz/practice module-stats shape the six learning modules share.
 
 ### Practice Labs are separate from per-module practice tasks
 

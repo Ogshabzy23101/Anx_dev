@@ -21,6 +21,6 @@ describe("progress migration", () => {
   it("provides all legacy defaults for backward compatibility", () => {
     expect(initialProgress.schemaVersion).toBe(PROGRESS_SCHEMA_VERSION);
     expect(initialProgress.dockerMasteredFlashcards).toEqual([]);
-    expect(initialProgress.modules.interview.completedMocks).toBe(0);
+    expect(initialProgress.modules.interview.practicedIds).toEqual([]);
   });
 });

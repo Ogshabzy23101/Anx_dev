@@ -18,15 +18,12 @@ const requiredFields = {
     "id",
     "category",
     "difficulty",
+    "formulaType",
     "question",
-    "shortAnswer",
-    "detailedAnswer",
-    "example",
+    "modelAnswer",
+    "checklist",
     "commonMistake",
-    "interviewTip",
-    "requiredKeywords",
     "relatedModule",
-    "reviewStatus",
   ],
 };
 
